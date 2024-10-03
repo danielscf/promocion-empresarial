@@ -7,7 +7,7 @@ CREATE TABLE tbl_usuario (
     usua_apellido VARCHAR(50) NOT NULL,
     usua_dni CHAR(8) NOT NULL,
     usua_correo VARCHAR(100) NOT NULL,
-    usua_telefono VARCHAR(20) NOT NULL,
+    usua_telefono VARCHAR(9) NOT NULL,
     usua_fecha_de_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     usua_fecha_de_modificacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -28,7 +28,7 @@ CREATE TABLE tbl_usuario_rol (
 CREATE TABLE tbl_emprendedor (
     empr_id SERIAL PRIMARY KEY,
     usua_id INT NOT NULL,
-    empr_ruc VARCHAR(20) NOT NULL,
+    empr_ruc VARCHAR(11) NOT NULL,
     empr_rubro VARCHAR(100) NOT NULL,
     empr_marca VARCHAR(100) NOT NULL,
     empr_razon_social VARCHAR(100) NOT NULL,
@@ -38,13 +38,13 @@ CREATE TABLE tbl_emprendedor (
 
 CREATE TABLE tbl_firma (
     firm_id SERIAL PRIMARY KEY,
-    firm_nombre VARCHAR(100) NOT NULL
+    firm_nombre VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE tbl_diploma (
     dipl_id SERIAL PRIMARY KEY,
     firm_id INT NOT NULL,
-    dipl_nombre VARCHAR(100) NOT NULL,
+    dipl_nombre VARCHAR(255) NOT NULL,
     FOREIGN KEY (firm_id) REFERENCES tbl_firma(firm_id)
 );
 
