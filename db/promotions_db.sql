@@ -77,7 +77,8 @@ CREATE TABLE tbl_evento_emprendedor (
 CREATE TABLE tbl_producto (
     prod_id SERIAL PRIMARY KEY,
     prod_nombre VARCHAR(100) NOT NULL,
-    prod_descripcion VARCHAR(255) NOT NULL
+    prod_descripcion VARCHAR(255) NOT NULL,
+    prod_estado INT NOT NULL DEFAULT 0
 );
 
 CREATE TABLE tbl_imagen (
@@ -99,6 +100,20 @@ CREATE TABLE tbl_emprendedor_producto (
     prod_id INT NOT NULL,
     FOREIGN KEY (empr_id) REFERENCES tbl_emprendedor(empr_id),
     FOREIGN KEY (prod_id) REFERENCES tbl_producto(prod_id)
+);
+
+CREATE TABLE tbl_solicitud (
+    solic_id SERIAL PRIMARY KEY,
+    empr_id INT NOT NULL,
+    prod_id INT NOT NULL,
+    solic_descripcion VARCHAR(255),
+    solic_estado BOOLEAN NOT NULL DEFAULT FALSE,
+    solic_fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    solic_fecha_revision TIMESTAMP,
+    oper_id INT,
+    FOREIGN KEY (empr_id) REFERENCES tbl_emprendedor(empr_id),
+    FOREIGN KEY (prod_id) REFERENCES tbl_producto(prod_id),
+    FOREIGN KEY (oper_id) REFERENCES tbl_usuario(usua_id)
 );
 
 COMMIT;
