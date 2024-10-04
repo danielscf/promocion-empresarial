@@ -104,16 +104,14 @@ CREATE TABLE tbl_emprendedor_producto (
 
 CREATE TABLE tbl_solicitud (
     solic_id SERIAL PRIMARY KEY,
-    empr_id INT NOT NULL,
-    prod_id INT NOT NULL,
+    empr_prod_id INT NOT NULL,
+    usua_id INT,
     solic_descripcion VARCHAR(255),
     solic_estado BOOLEAN NOT NULL DEFAULT FALSE,
     solic_fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     solic_fecha_revision TIMESTAMP,
-    oper_id INT,
-    FOREIGN KEY (empr_id) REFERENCES tbl_emprendedor(empr_id),
-    FOREIGN KEY (prod_id) REFERENCES tbl_producto(prod_id),
-    FOREIGN KEY (oper_id) REFERENCES tbl_usuario(usua_id)
+    FOREIGN KEY (empr_prod_id) REFERENCES tbl_emprendedor_producto(empr_prod_id),
+    FOREIGN KEY (usua_id) REFERENCES tbl_usuario(usua_id)
 );
 
 COMMIT;
