@@ -102,15 +102,24 @@ CREATE TABLE tbl_emprendedor_producto (
     FOREIGN KEY (prod_id) REFERENCES tbl_producto(prod_id)
 );
 
+CREATE TABLE tbl_tipo_solicitud (
+    tipo_soli_id SERIAL PRIMARY KEY,
+    tipo_soli_nombre VARCHAR(50) NOT NULL
+);
+
 CREATE TABLE tbl_solicitud (
     soli_id SERIAL PRIMARY KEY,
     soli_descripcion VARCHAR(255),
     soli_estado INT NOT NULL DEFAULT 0,
     soli_fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     soli_fecha_revision TIMESTAMP,
-    empr_prod_id INT NOT NULL,
+    tipo_soli_id INT NOT NULL,
+    empr_id INT NOT NULL,
+    prod_id INT,
     usua_id INT,
-    FOREIGN KEY (empr_prod_id) REFERENCES tbl_emprendedor_producto(empr_prod_id),
+    FOREIGN KEY (tipo_soli_id) REFERENCES tbl_tipo_solicitud(tipo_soli_id),
+    FOREIGN KEY (empr_id) REFERENCES tbl_emprendedor(empr_id),
+    FOREIGN KEY (prod_id) REFERENCES tbl_producto(prod_id),
     FOREIGN KEY (usua_id) REFERENCES tbl_usuario(usua_id)
 );
 

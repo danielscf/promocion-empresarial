@@ -1,2 +1,7 @@
-run:
-	docker compose down -v && sleep 1 && docker compose up -d
+start:
+	docker compose up -d
+
+stop:
+	docker compose down -v
+
+run: stop start
