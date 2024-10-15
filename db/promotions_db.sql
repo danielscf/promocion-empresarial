@@ -26,8 +26,8 @@ CREATE TABLE tbl_usuario_rol (
     usua_rol_id SERIAL PRIMARY KEY,
     usua_id INT NOT NULL,
     rol_id INT NOT NULL,
-    FOREIGN KEY (usua_id) REFERENCES tbl_usuario(usua_id),
-    FOREIGN KEY (rol_id) REFERENCES tbl_rol(rol_id)
+    FOREIGN KEY (usua_id) REFERENCES tbl_usuario(usua_id) ON DELETE CASCADE,
+    FOREIGN KEY (rol_id) REFERENCES tbl_rol(rol_id) ON DELETE CASCADE
 );
 
 CREATE TABLE tbl_rubro (
@@ -35,17 +35,25 @@ CREATE TABLE tbl_rubro (
     rubr_nombre VARCHAR(100) NOT NULL
 );
 
+CREATE TABLE tbl_tipo_contribuyente (
+    tipo_cont_id SERIAL PRIMARY KEY,
+    tipo_cont_nombre VARCHAR(150) NOT NULL
+);
+
 CREATE TABLE tbl_emprendedor (
     empr_id SERIAL PRIMARY KEY,
     empr_ruc VARCHAR(11) NOT NULL,
     empr_direccion VARCHAR(255) NOT NULL,
-    empr_marca VARCHAR(100) NOT NULL,
     empr_razon_social VARCHAR(100) NOT NULL,
+    empr_estado_contribuyente INT NOT NULL DEFAULT 0,
+    empr_condicion_contribuyente INT NOT NULL DEFAULT 0,
     empr_foto VARCHAR(255),
     usua_id INT NOT NULL,
     rubr_id INT NOT NULL,
-    FOREIGN KEY (usua_id) REFERENCES tbl_usuario(usua_id),
-    FOREIGN KEY (rubr_id) REFERENCES tbl_rubro(rubr_id)
+    tipo_cont_id INT NOT NULL,
+    FOREIGN KEY (usua_id) REFERENCES tbl_usuario(usua_id) ON DELETE CASCADE,
+    FOREIGN KEY (rubr_id) REFERENCES tbl_rubro(rubr_id) ON DELETE CASCADE,
+    FOREIGN KEY (tipo_cont_id) REFERENCES tbl_tipo_contribuyente(tipo_cont_id) ON DELETE CASCADE
 );
 
 CREATE TABLE tbl_tipo_evento (
@@ -62,7 +70,7 @@ CREATE TABLE tbl_evento (
     even_lugar VARCHAR(150) NOT NULL,
     even_diploma VARCHAR(255) NOT NULL,
     tipo_even_id INT NOT NULL,
-    FOREIGN KEY (tipo_even_id) REFERENCES tbl_tipo_evento(tipo_even_id)
+    FOREIGN KEY (tipo_even_id) REFERENCES tbl_tipo_evento(tipo_even_id) ON DELETE CASCADE
 );
 
 CREATE TABLE tbl_evento_emprendedor (
@@ -70,15 +78,30 @@ CREATE TABLE tbl_evento_emprendedor (
     even_empr_asistencia INT NOT NULL DEFAULT 0,
     even_id INT NOT NULL,
     empr_id INT NOT NULL,
-    FOREIGN KEY (even_id) REFERENCES tbl_evento(even_id),
-    FOREIGN KEY (empr_id) REFERENCES tbl_emprendedor(empr_id)
+    FOREIGN KEY (even_id) REFERENCES tbl_evento(even_id) ON DELETE CASCADE,
+    FOREIGN KEY (empr_id) REFERENCES tbl_emprendedor(empr_id) ON DELETE CASCADE
+);
+
+CREATE TABLE tbl_tipo_producto (
+    tipo_prod_id SERIAL PRIMARY KEY,
+    tipo_prod_nombre VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE tbl_marca (
+    marca_id SERIAL PRIMARY KEY,
+    marca_nombre VARCHAR(50) NOT NULL,
+    marca_imagen VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE tbl_producto (
     prod_id SERIAL PRIMARY KEY,
     prod_nombre VARCHAR(100) NOT NULL,
     prod_descripcion VARCHAR(255) NOT NULL,
-    prod_estado INT NOT NULL DEFAULT 0
+    prod_estado INT NOT NULL DEFAULT 0,
+    tipo_prod_id INT NOT NULL,
+    marca_id INT,
+    FOREIGN KEY (tipo_prod_id) REFERENCES tbl_tipo_producto(tipo_prod_id) ON DELETE CASCADE,
+    FOREIGN KEY (marca_id) REFERENCES tbl_marca(marca_id) ON DELETE CASCADE
 );
 
 CREATE TABLE tbl_imagen (
@@ -90,16 +113,16 @@ CREATE TABLE tbl_imagen_producto (
     imag_prod_id SERIAL PRIMARY KEY,
     imag_id INT NOT NULL,
     prod_id INT NOT NULL,
-    FOREIGN KEY (imag_id) REFERENCES tbl_imagen(imag_id),
-    FOREIGN KEY (prod_id) REFERENCES tbl_producto(prod_id)
+    FOREIGN KEY (imag_id) REFERENCES tbl_imagen(imag_id) ON DELETE CASCADE,
+    FOREIGN KEY (prod_id) REFERENCES tbl_producto(prod_id) ON DELETE CASCADE
 );
 
 CREATE TABLE tbl_emprendedor_producto (
     empr_prod_id SERIAL PRIMARY KEY,
     empr_id INT NOT NULL,
     prod_id INT NOT NULL,
-    FOREIGN KEY (empr_id) REFERENCES tbl_emprendedor(empr_id),
-    FOREIGN KEY (prod_id) REFERENCES tbl_producto(prod_id)
+    FOREIGN KEY (empr_id) REFERENCES tbl_emprendedor(empr_id) ON DELETE CASCADE,
+    FOREIGN KEY (prod_id) REFERENCES tbl_producto(prod_id) ON DELETE CASCADE
 );
 
 CREATE TABLE tbl_tipo_solicitud (
@@ -117,10 +140,10 @@ CREATE TABLE tbl_solicitud (
     empr_id INT NOT NULL,
     prod_id INT,
     usua_id INT,
-    FOREIGN KEY (tipo_soli_id) REFERENCES tbl_tipo_solicitud(tipo_soli_id),
-    FOREIGN KEY (empr_id) REFERENCES tbl_emprendedor(empr_id),
-    FOREIGN KEY (prod_id) REFERENCES tbl_producto(prod_id),
-    FOREIGN KEY (usua_id) REFERENCES tbl_usuario(usua_id)
+    FOREIGN KEY (tipo_soli_id) REFERENCES tbl_tipo_solicitud(tipo_soli_id) ON DELETE CASCADE,
+    FOREIGN KEY (empr_id) REFERENCES tbl_emprendedor(empr_id) ON DELETE CASCADE,
+    FOREIGN KEY (prod_id) REFERENCES tbl_producto(prod_id) ON DELETE CASCADE,
+    FOREIGN KEY (usua_id) REFERENCES tbl_usuario(usua_id) ON DELETE CASCADE
 );
 
 COMMIT;
