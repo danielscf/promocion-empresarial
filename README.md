@@ -1,5 +1,7 @@
 # Sistema de promociones empresariales
 
+![Diagrama E/R](assets/er_diagram.png)
+
 Clonar o descargar el repositorio usando `git`
 
 ```console
