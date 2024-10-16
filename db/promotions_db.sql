@@ -84,7 +84,7 @@ CREATE TABLE tbl_evento_emprendedor (
     even_empr_id SERIAL PRIMARY KEY,
     even_empr_asistencia INT NOT NULL DEFAULT 0,
     even_empr_diploma VARCHAR(255) NOT NULL,
-    even_empr_diploma_firmado INT NOT NULL DEFAULT 0,
+    even_empr_estado_firma_diploma INT NOT NULL DEFAULT 0,
     even_id INT NOT NULL,
     empr_id INT NOT NULL,
     FOREIGN KEY (even_id) REFERENCES tbl_evento(even_id) ON DELETE CASCADE,
