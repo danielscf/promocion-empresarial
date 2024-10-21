@@ -17,6 +17,7 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     container_name: promotions_frontend
+    image: promotions_frontend:dev
     ports:
       - 3000:3000
     volumes:
