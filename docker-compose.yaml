@@ -11,3 +11,14 @@ services:
       - POSTGRES_DB=promotions_db
     volumes:
       - ./db/promotions_db.sql:/docker-entrypoint-initdb.d/init.sql
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: promotions_frontend
+    ports:
+      - 3000:3000
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
