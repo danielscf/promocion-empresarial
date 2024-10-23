@@ -9,73 +9,29 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
 @Entity
 @Table(name = "tbl_marca")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Marca {
 
   @Id
+  @Column(name = "marc_id", nullable = false)
   @GeneratedValue(strategy = GenerationType.AUTO)
-  private Long marc_id;
+  private Long marcaId;
 
-  @Column(nullable = false, length = 50)
-  private String marc_nombre;
+  @Column(name = "marc_nombre", nullable = false, length = 50)
+  private String marcaNombre;
 
-  @Column(nullable = false, length = 255)
-  private String marc_imagen;
+  @Column(name = "marc_imagen", nullable = false, length = 255)
+  private String marcaImagen;
 
   @OneToMany(mappedBy = "marca")
-  private Set<Producto> producto;
+  private Set<Producto> productos;
 
-  private Marca() {
-  }
-
-  public Marca(Long marc_id, String marc_nombre, String marc_imagen, Set<Producto> producto) {
-    this.marc_id = marc_id;
-    this.marc_nombre = marc_nombre;
-    this.marc_imagen = marc_imagen;
-    this.producto = producto;
-  }
-
-  public Long getMarc_id() {
-    return marc_id;
-  }
-
-  public void setMarc_id(Long marc_id) {
-    this.marc_id = marc_id;
-  }
-
-  public String getMarc_nombre() {
-    return marc_nombre;
-  }
-
-  public void setMarc_nombre(String marc_nombre) {
-    this.marc_nombre = marc_nombre;
-  }
-
-  public String getMarc_imagen() {
-    return marc_imagen;
-  }
-
-  public void setMarc_imagen(String marc_imagen) {
-    this.marc_imagen = marc_imagen;
-  }
-
-  public Set<Producto> getProducto() {
-    return producto;
-  }
-
-  public void setProducto(Set<Producto> producto) {
-    this.producto = producto;
-  }
-
-  @Override
-  public String toString() {
-    return "Marca{" +
-        "marc_id=" + marc_id +
-        ", marc_nombre='" + marc_nombre + '\'' +
-        ", marc_imagen='" + marc_imagen + '\'' +
-        ", producto=" + producto +
-        '}';
-  }
 }
