@@ -18,7 +18,7 @@ function usuariosPage() {
 
 
     return (
-        <div className="p-4">
+        <div className="p-4 h-screen bg-gray-300">
             <h1 className="mt-2 text-center text-2xl font-bold">Usuarios</h1>
             <div className="flex justify-end mb-4">
                 <button

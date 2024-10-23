@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-const Modal = ({ isOpen, title, children, onClose }) => {
+const Modal = ({ isOpen, title, children }) => {
     return (
         <>
             {isOpen && (
