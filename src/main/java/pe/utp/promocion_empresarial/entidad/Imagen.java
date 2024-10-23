@@ -1,4 +1,4 @@
-package pe.utp.promocion_empresarial.modelo;
+package pe.utp.promocion_empresarial.entidad;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
