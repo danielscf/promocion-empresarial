@@ -20,18 +20,18 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Marca {
 
-  @Id
-  @Column(name = "marc_id", nullable = false)
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private Long marcaId;
+    @Id
+    @Column(name = "marc_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long marcaId;
 
-  @Column(name = "marc_nombre", nullable = false, length = 50)
-  private String marcaNombre;
+    @Column(name = "marc_nombre", nullable = false, length = 50)
+    private String marcaNombre;
 
-  @Column(name = "marc_imagen", nullable = false, length = 255)
-  private String marcaImagen;
+    @Column(name = "marc_imagen", nullable = false, length = 255)
+    private String marcaImagen;
 
-  @OneToMany(mappedBy = "marca")
-  private Set<Producto> productos;
+    @OneToMany(mappedBy = "marca")
+    private Set<Producto> productos;
 
 }

@@ -1,4 +1,4 @@
-package pe.utp.promocion_empresarial.dto.Rol;
+package pe.utp.promocion_empresarial.dto.rol;
 
 public interface RolDto {
     Long getRolId();

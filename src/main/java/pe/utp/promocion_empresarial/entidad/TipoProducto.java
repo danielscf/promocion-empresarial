@@ -20,15 +20,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class TipoProducto {
 
-  @Id
-  @Column(name = "tipo_prod_id", nullable = false)
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private Long tipoProductoId;
+    @Id
+    @Column(name = "tipo_prod_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long tipoProductoId;
 
-  @Column(name = "tipo_prod_nombre", nullable = false, length = 50)
-  private String tipoProductoNombre;
+    @Column(name = "tipo_prod_nombre", nullable = false, length = 50)
+    private String tipoProductoNombre;
 
-  @OneToMany(mappedBy = "tipoProducto")
-  private Set<Producto> productos;
+    @OneToMany(mappedBy = "tipoProducto")
+    private Set<Producto> productos;
 
 }

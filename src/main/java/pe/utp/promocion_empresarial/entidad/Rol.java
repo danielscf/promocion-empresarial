@@ -20,15 +20,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Rol {
 
-  @Id
-  @Column(name = "rol_id")
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private Long rolId;
+    @Id
+    @Column(name = "rol_id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long rolId;
 
-  @Column(name = "rol_nombre", nullable = false, length = 50)
-  private String rolNombre;
+    @Column(name = "rol_nombre", nullable = false, length = 50)
+    private String rolNombre;
 
-  @ManyToMany
-  private Set<Usuario> usuarios;
+    @ManyToMany
+    private Set<Usuario> usuarios;
 
 }

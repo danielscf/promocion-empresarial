@@ -19,16 +19,16 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Imagen {
 
-  @Id
-  @Column(name = "imag_id", nullable = false)
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private Long imagenId;
+    @Id
+    @Column(name = "imag_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long imagenId;
 
-  @Column(name = "imag_url", nullable = false, length = 255)
-  private String imagenUrl;
+    @Column(name = "imag_url", nullable = false, length = 255)
+    private String imagenUrl;
 
-  @ManyToOne
-  @JoinColumn(name = "prod_id", nullable = false)
-  private Producto producto;
+    @ManyToOne
+    @JoinColumn(name = "prod_id", nullable = false)
+    private Producto producto;
 
 }

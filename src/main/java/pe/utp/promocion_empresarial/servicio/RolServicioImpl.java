@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import pe.utp.promocion_empresarial.dto.Rol.RolDto;
+import pe.utp.promocion_empresarial.dto.rol.RolDto;
 import pe.utp.promocion_empresarial.entidad.Rol;
 import pe.utp.promocion_empresarial.repositorio.RolRepositorio;
 

@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import pe.utp.promocion_empresarial.dto.Rol.RolDto;
+import pe.utp.promocion_empresarial.dto.rol.RolDto;
 import pe.utp.promocion_empresarial.entidad.Rol;
 
 @Repository

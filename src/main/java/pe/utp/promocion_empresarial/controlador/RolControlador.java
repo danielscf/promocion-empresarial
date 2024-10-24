@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import pe.utp.promocion_empresarial.dto.Rol.RolDto;
+import pe.utp.promocion_empresarial.dto.rol.RolDto;
 import pe.utp.promocion_empresarial.entidad.Rol;
 import pe.utp.promocion_empresarial.servicio.RolServicio;
 

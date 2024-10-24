@@ -25,30 +25,30 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Producto {
 
-  @Id
-  @Column(name = "prod_id", nullable = false)
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private Long productoId;
+    @Id
+    @Column(name = "prod_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long productoId;
 
-  @Column(name = "prod_nombre", nullable = false, length = 100)
-  private String productoNombre;
+    @Column(name = "prod_nombre", nullable = false, length = 100)
+    private String productoNombre;
 
-  @Column(name = "prod_descripcion", nullable = false, length = 255)
-  private String productoDescripcion;
+    @Column(name = "prod_descripcion", nullable = false, length = 255)
+    private String productoDescripcion;
 
-  @Column(name = "prod_estado", nullable = false)
-  @ColumnDefault(value = "0")
-  private Integer productoEstado;
+    @Column(name = "prod_estado", nullable = false)
+    @ColumnDefault(value = "0")
+    private Integer productoEstado;
 
-  @ManyToOne
-  @JoinColumn(name = "tipo_prod_id", nullable = false)
-  private TipoProducto tipoProducto;
+    @ManyToOne
+    @JoinColumn(name = "tipo_prod_id", nullable = false)
+    private TipoProducto tipoProducto;
 
-  @ManyToOne
-  @JoinColumn(name = "marc_id", nullable = false)
-  private Marca marca;
+    @ManyToOne
+    @JoinColumn(name = "marc_id", nullable = false)
+    private Marca marca;
 
-  @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL)
-  private Set<Imagen> imagenes;
+    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL)
+    private Set<Imagen> imagenes;
 
 }
