@@ -28,7 +28,7 @@ public class TipoProducto {
   @Column(name = "tipo_prod_nombre", nullable = false, length = 50)
   private String tipoProductoNombre;
 
-  @OneToMany(mappedBy = "tipo_producto")
+  @OneToMany(mappedBy = "tipoProducto")
   private Set<Producto> productos;
 
 }

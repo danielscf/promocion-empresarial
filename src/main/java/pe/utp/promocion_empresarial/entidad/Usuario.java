@@ -46,7 +46,7 @@ public class Usuario {
   @Column(name = "usua_apellido_paterno", nullable = false, length = 50)
   private String usuarioApellidoPaterno;
 
-  @Column(name = "usua_apellido_paterno", nullable = false, length = 50)
+  @Column(name = "usua_apellido_materno", nullable = false, length = 50)
   private String usuarioApellidoMaterno;
 
   @Column(name = "usua_correo", nullable = false, length = 100)
