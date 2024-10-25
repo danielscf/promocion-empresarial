@@ -15,14 +15,13 @@ import java.util.Set;
 public class TipoContribuyente {
     @Id
     @Column(name = "tipo_cont_id")
-    @GeneratedValue(strategy= GenerationType.AUTO)
-    private Long TipoContribuyenteId;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long tipoContribuyenteId;
 
-    @Column(name="tipo_cont_nombre", nullable=false, length=150)
-    private String TipoContribuyenteNombre;
+    @Column(name = "tipo_cont_nombre", nullable = false, length = 150)
+    private String tipoContribuyenteNombre;
 
     @OneToMany(mappedBy = "tipoContribuyente")
     private Set<Emprendedor> emprendedores;
-
 
 }

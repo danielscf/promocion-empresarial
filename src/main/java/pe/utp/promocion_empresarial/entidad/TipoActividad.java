@@ -15,11 +15,11 @@ import java.util.Set;
 public class TipoActividad {
     @Id
     @Column(name = "tipo_acti_id")
-    @GeneratedValue(strategy= GenerationType.AUTO)
-    private Long TipoActividadId;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long tipoActividadId;
 
-    @Column(name="tipo_acti_nombre", nullable=false, length=150)
-    private String TipoActividadNombre;
+    @Column(name = "tipo_acti_nombre", nullable = false, length = 150)
+    private String tipoActividadNombre;
 
     @OneToMany(mappedBy = "tipoActividad")
     private Set<Emprendedor> emprendedores;

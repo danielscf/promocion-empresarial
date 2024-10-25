@@ -1,6 +1,13 @@
 package pe.utp.promocion_empresarial.entidad;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,7 +15,7 @@ import org.hibernate.annotations.ColumnDefault;
 
 @Data
 @Entity
-@Table(name = "tbl_emprededor")
+@Table(name = "tbl_emprendedor")
 @NoArgsConstructor
 @AllArgsConstructor
 public class Emprendedor {
@@ -18,38 +25,38 @@ public class Emprendedor {
     private Long emprendedorId;
 
     @Column(name = "empr_ruc", nullable = false, length = 11)
-    private String emprededorRuc;
+    private String emprendedorRuc;
 
     @Column(name = "empr_direccion", nullable = false, length = 255)
-    private String emprededorDireccion;
+    private String emprendedorDireccion;
 
-    @Column(name = "empr_razon_social",nullable = false,length = 150)
-    private String emprededorRazonSocial;
+    @Column(name = "empr_razon_social", nullable = false, length = 150)
+    private String emprendedorRazonSocial;
 
     @Column(name = "empr_estado_contribuyente", nullable = false)
     @ColumnDefault(value = "0")
-    private Integer emprededorEstadoContribuyente;
+    private Integer emprendedorEstadoContribuyente;
 
     @Column(name = "empr_condicion_contribuyente", nullable = false)
     @ColumnDefault(value = "0")
-    private Integer emprededorCondicionContribuyente;
+    private Integer emprendedorCondicionContribuyente;
 
     @Column(name = "empr_foto", nullable = false, length = 255)
-    private String emprededorFoto;
+    private String emprendedorFoto;
 
     @ManyToOne
-    @Column(name = "usua_id",nullable = false)
-    private Usuario usuarioId;
+    @JoinColumn(name = "usua_id", nullable = false)
+    private Usuario usuario;
 
     @ManyToOne
-    @Column(name="rubr_id",nullable = false)
-    private Rubro rubroId;
+    @JoinColumn(name = "rubr_id", nullable = false)
+    private Rubro rubro;
 
     @ManyToOne
-    @Column(name = "tipo_cont_id",nullable = false)
-    private TipoContribuyente tipoContribuyenteId;
+    @JoinColumn(name = "tipo_cont_id", nullable = false)
+    private TipoContribuyente tipoContribuyente;
 
     @ManyToOne
-    @Column(name = "tipo_acti_id",nullable = false)
-    private TipoActividad tipoActividadId;
+    @JoinColumn(name = "tipo_acti_id", nullable = false)
+    private TipoActividad tipoActividad;
 }

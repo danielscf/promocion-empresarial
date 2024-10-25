@@ -9,7 +9,7 @@
 - Git
 - Docker
 
-Clonar o descargar el repositorio usando `git` ejemplo
+Clonar o descargar el repositorio usando `git`
 
 ```console
 git clone git@github.com:danielscf/promocion-empresarial.git

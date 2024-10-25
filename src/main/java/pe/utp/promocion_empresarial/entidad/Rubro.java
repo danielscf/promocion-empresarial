@@ -16,14 +16,13 @@ public class Rubro {
 
     @Id
     @Column(name = "rubr_id")
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long rubroId;
 
-    @Column(name="rubr_nombre", nullable=false, length=100)
+    @Column(name = "rubr_nombre", nullable = false, length = 100)
     private String rubroNombre;
 
     @OneToMany(mappedBy = "rubro")
     private Set<Emprendedor> emprendedores;
-
 
 }
