@@ -8,61 +8,27 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
 @Entity
 @Table(name = "tbl_imagen")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Imagen {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private Long imag_id;
+    @Id
+    @Column(name = "imag_id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long imagenId;
 
-  @Column(nullable = false, length = 255)
-  private String imag_url;
+    @Column(name = "imag_url", nullable = false, length = 255)
+    private String imagenUrl;
 
-  @ManyToOne
-  @JoinColumn(nullable = false, name = "prod_id")
-  private Producto producto;
+    @ManyToOne
+    @JoinColumn(name = "prod_id", nullable = false)
+    private Producto producto;
 
-  private Imagen() {
-  }
-
-  public Imagen(Long imag_id, String imag_url, Producto producto) {
-    this.imag_id = imag_id;
-    this.imag_url = imag_url;
-    this.producto = producto;
-  }
-
-  public Long getImag_id() {
-    return imag_id;
-  }
-
-  public void setImag_id(Long imag_id) {
-    this.imag_id = imag_id;
-  }
-
-  public String getImag_url() {
-    return imag_url;
-  }
-
-  public void setImag_url(String imag_url) {
-    this.imag_url = imag_url;
-  }
-
-  public Producto getProducto() {
-    return producto;
-  }
-
-  public void setProducto(Producto producto) {
-    this.producto = producto;
-  }
-
-  @Override
-  public String toString() {
-    return "Imagen{" +
-        "imag_id=" + imag_id +
-        ", imag_url='" + imag_url + '\'' +
-        ", producto=" + producto +
-        '}';
-  }
 }

@@ -7,7 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,20 +15,20 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@Table(name = "tbl_rol")
+@Table(name = "tbl_tipo_producto")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Rol {
+public class TipoProducto {
 
     @Id
-    @Column(name = "rol_id")
+    @Column(name = "tipo_prod_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long rolId;
+    private Long tipoProductoId;
 
-    @Column(name = "rol_nombre", nullable = false, length = 50)
-    private String rolNombre;
+    @Column(name = "tipo_prod_nombre", nullable = false, length = 50)
+    private String tipoProductoNombre;
 
-    @ManyToMany
-    private Set<Usuario> usuarios;
+    @OneToMany(mappedBy = "tipoProducto")
+    private Set<Producto> productos;
 
 }
