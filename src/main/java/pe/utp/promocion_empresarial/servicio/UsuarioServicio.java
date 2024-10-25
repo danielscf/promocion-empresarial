@@ -1,6 +1,7 @@
 package pe.utp.promocion_empresarial.servicio;
 
 import pe.utp.promocion_empresarial.dto.usuario.UsuarioDto;
+import pe.utp.promocion_empresarial.dto.usuario.UsuarioLoginDto;
 import pe.utp.promocion_empresarial.entidad.Usuario;
 
 import java.util.List;
@@ -14,5 +15,7 @@ public interface UsuarioServicio {
     Usuario guardarCambiosUsuario(Usuario usuario);
 
     void eliminarUsuario(Long usuarioId);
+
+    UsuarioLoginDto loginUsuario(String usuarioUsuario, String usuarioContrasena);
 
 }

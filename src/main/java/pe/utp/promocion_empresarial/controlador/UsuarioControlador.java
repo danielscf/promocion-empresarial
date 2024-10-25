@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import pe.utp.promocion_empresarial.dto.usuario.UsuarioDto;
+import pe.utp.promocion_empresarial.dto.usuario.UsuarioLoginDto;
 import pe.utp.promocion_empresarial.entidad.Usuario;
 import pe.utp.promocion_empresarial.servicio.UsuarioServicio;
 
@@ -52,9 +53,19 @@ public class UsuarioControlador {
 
     @DeleteMapping("/{usuarioId}")
     public ResponseEntity<Void> eliminarUsuario(@PathVariable Long usuarioId) {
+        // TODO: Delete updates `usua_estado`
         usuarioServicio.eliminarUsuario(usuarioId);
         return ResponseEntity.noContent()
                 .build();
+    }
+
+    @PostMapping("/login/{usuarioUsuario}/{usuarioContrasena}")
+    public ResponseEntity<UsuarioLoginDto> loginUsuario(
+            @PathVariable String usuarioUsuario,
+            @PathVariable String usuarioContrasena) {
+        UsuarioLoginDto informacionUsuario = usuarioServicio.loginUsuario(usuarioUsuario, usuarioContrasena);
+        return ResponseEntity.ok()
+                .body(informacionUsuario);
     }
 
 }
