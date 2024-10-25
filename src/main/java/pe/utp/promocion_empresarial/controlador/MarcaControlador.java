@@ -25,7 +25,7 @@ public class MarcaControlador {
     MarcaServicio marcaServicio;
 
     @GetMapping
-    public List<MarcaDto> findAllMarcaes() {
+    public List<MarcaDto> findAllMarcas() {
         return marcaServicio.findAllMarcas();
     }
 
