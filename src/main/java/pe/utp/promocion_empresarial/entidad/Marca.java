@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 public class Marca {
 
     @Id
-    @Column(name = "marc_id", nullable = false)
+    @Column(name = "marc_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long marcaId;
 
