@@ -21,7 +21,7 @@ import org.hibernate.annotations.ColumnDefault;
 public class Emprendedor {
     @Id
     @Column(name = "empr_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long emprendedorId;
 
     @Column(name = "empr_ruc", unique = true, nullable = false, length = 11)

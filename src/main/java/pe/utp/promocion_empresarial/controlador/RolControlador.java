@@ -50,7 +50,6 @@ public class RolControlador {
                 .body(rolGuardado);
     }
 
-    // TODO: Ask if `rol_estado` is necessary and if so, update the status of table
     @DeleteMapping("/{rolId}")
     public ResponseEntity<Void> eliminarRol(@PathVariable Long rolId) {
         rolServicio.eliminarRol(rolId);

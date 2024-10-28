@@ -11,6 +11,8 @@ public interface TipoSolicitudServicio {
 
     TipoSolicitudDto findTipoSolicitudById(Long tipoSolicitudId);
 
+    TipoSolicitud findTipoSolicitudByNombre(String nombre);
+
     TipoSolicitud guardarCambiosTipoSolicitud(TipoSolicitud tipoSolicitud);
 
     void eliminarTipoSolicitud(Long tipoSolicitudId);

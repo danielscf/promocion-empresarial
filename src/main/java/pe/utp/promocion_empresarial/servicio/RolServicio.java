@@ -11,6 +11,8 @@ public interface RolServicio {
 
     RolDto findRolById(Long rolId);
 
+    Rol findRolByNombre(String rolNombre);
+
     Rol guardarCambiosRol(Rol rol);
 
     void eliminarRol(Long rolId);

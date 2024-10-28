@@ -15,4 +15,6 @@ public interface TipoSolicitudRepositorio extends JpaRepository<TipoSolicitud, L
 
     TipoSolicitudDto findByTipoSolicitudId(Long tipoSolicitudId);
 
+    TipoSolicitud findByTipoSolicitudNombre(String tipoSolicitudNombre);
+
 }

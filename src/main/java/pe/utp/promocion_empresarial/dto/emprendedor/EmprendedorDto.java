@@ -1,5 +1,9 @@
 package pe.utp.promocion_empresarial.dto.emprendedor;
 
+import pe.utp.promocion_empresarial.dto.rubro.RubroDto;
+import pe.utp.promocion_empresarial.dto.tipoActividad.TipoActividadDto;
+import pe.utp.promocion_empresarial.dto.tipoContribuyente.TipoContribuyenteDto;
+import pe.utp.promocion_empresarial.dto.usuario.UsuarioDto;
 import pe.utp.promocion_empresarial.entidad.Rubro;
 import pe.utp.promocion_empresarial.entidad.TipoActividad;
 import pe.utp.promocion_empresarial.entidad.TipoContribuyente;
@@ -20,12 +24,12 @@ public interface EmprendedorDto {
 
     String getEmprendedorFoto();
 
-    Usuario getUsuario();
+    UsuarioDto getUsuario();
 
-    Rubro getRubro();
+    RubroDto getRubro();
 
-    TipoContribuyente getTipoContribuyente();
+    TipoContribuyenteDto getTipoContribuyente();
 
-    TipoActividad getTipoActividad();
+    TipoActividadDto getTipoActividad();
 
 }

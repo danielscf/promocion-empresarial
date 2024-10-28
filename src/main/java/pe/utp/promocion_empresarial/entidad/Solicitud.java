@@ -14,6 +14,7 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -26,14 +27,15 @@ public class Solicitud {
 
     @Id
     @Column(name = "soli_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long solicitudId;
 
     @Column(name = "soli_descripcion", nullable = false, length = 255)
     private String solicitudDescripcion;
 
+    @ColumnDefault(value = "0")
     @Column(name = "soli_estado", nullable = false)
-    private Integer solicitudEstado;
+    private Integer solicitudEstado = 0;
 
     @CreationTimestamp
     @Column(name = "soli_fecha_creacion", nullable = false)
@@ -52,7 +54,7 @@ public class Solicitud {
     private Emprendedor emprendedor;
 
     @ManyToOne
-    @JoinColumn(name = "usua_id", nullable = false)
+    @JoinColumn(name = "usua_operador_id", nullable = true)
     private Usuario usuario;
 
     @ManyToOne

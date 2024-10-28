@@ -1,7 +1,7 @@
 package pe.utp.promocion_empresarial.dto.usuario;
 
-import java.time.LocalDateTime;
-import java.util.Date;
+import java.time.Instant;
+import java.time.LocalDate;
 
 public interface UsuarioDto {
     Long getUsuarioId();
@@ -22,9 +22,9 @@ public interface UsuarioDto {
 
     String getUsuarioTelefono();
 
-    Date getUsuarioFechaDeNacimiento();
+    LocalDate getUsuarioFechaNacimiento();
 
     Integer getUsuarioEstado();
 
-    LocalDateTime getUsuarioFechaDeCreacion();
+    Instant getUsuarioFechaCreacion();
 }

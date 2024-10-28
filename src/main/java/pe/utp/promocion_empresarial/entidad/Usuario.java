@@ -30,7 +30,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 public class Usuario {
     @Id
     @Column(name = "usua_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long usuarioId;
 
     @Column(name = "usua_usuario", unique = true, nullable = false, length = 50)
@@ -57,16 +57,16 @@ public class Usuario {
     @Column(name = "usua_telefono", nullable = false, length = 9)
     private String usuarioTelefono;
 
-    @Column(name = "usua_fecha_de_nacimiento", nullable = false)
-    private LocalDate usuarioFechaDeNacimiento;
+    @Column(name = "usua_fecha_nacimiento", nullable = false)
+    private LocalDate usuarioFechaNacimiento;
 
     @ColumnDefault(value = "0")
     @Column(name = "usua_estado", nullable = false)
-    private Integer usuarioEstado;
+    private Integer usuarioEstado = 0;
 
     @CreationTimestamp
-    @Column(name = "usua_fecha_de_creacion", nullable = true)
-    private LocalDateTime usuarioFechaDeCreacion;
+    @Column(name = "usua_fecha_creacion", nullable = false)
+    private LocalDateTime usuarioFechaCreacion;
 
     @ManyToMany
     @JoinTable(name = "tbl_usuario_rol", joinColumns = @JoinColumn(name = "usua_id"), inverseJoinColumns = @JoinColumn(name = "rol_id"))

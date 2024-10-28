@@ -26,6 +26,11 @@ public class RolServicioImpl implements RolServicio {
     }
 
     @Override
+    public Rol findRolByNombre(String rolNombre) {
+        return rolRepositorio.findByRolNombre(rolNombre);
+    }
+
+    @Override
     public Rol guardarCambiosRol(Rol rol) {
         return rolRepositorio.save(rol);
     }

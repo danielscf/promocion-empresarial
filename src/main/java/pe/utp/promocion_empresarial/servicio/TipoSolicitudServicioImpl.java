@@ -26,6 +26,11 @@ public class TipoSolicitudServicioImpl implements TipoSolicitudServicio {
     }
 
     @Override
+    public TipoSolicitud findTipoSolicitudByNombre(String tipoSolicitudNombre) {
+        return tipoSolicitudRepositorio.findByTipoSolicitudNombre(tipoSolicitudNombre);
+    }
+
+    @Override
     public TipoSolicitud guardarCambiosTipoSolicitud(TipoSolicitud tipoSolicitud) {
         return tipoSolicitudRepositorio.save(tipoSolicitud);
     }
