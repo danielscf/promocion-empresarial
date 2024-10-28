@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import pe.utp.promocion_empresarial.dto.usuario.UsuarioDto;
-import pe.utp.promocion_empresarial.dto.usuario.UsuarioLoginDto;
 import pe.utp.promocion_empresarial.entidad.Usuario;
 import pe.utp.promocion_empresarial.servicio.UsuarioServicio;
 
@@ -51,21 +50,12 @@ public class UsuarioControlador {
                 .body(usuarioGuardado);
     }
 
-    @DeleteMapping("/{usuarioId}")
-    public ResponseEntity<Void> eliminarUsuario(@PathVariable Long usuarioId) {
-        // TODO: Delete updates `usua_estado`
-        usuarioServicio.eliminarUsuario(usuarioId);
-        return ResponseEntity.noContent()
-                .build();
-    }
+    @PatchMapping("/{usuarioId}")
+    public ResponseEntity<Usuario> actualizarEstadoUsuario(@PathVariable Long usuarioId,
+            @RequestBody Integer usuarioEstado) {
+        Usuario usuarioActualizado = usuarioServicio.actualizarEstadoUsuario(usuarioId, usuarioEstado);
 
-    @PostMapping("/login/{usuarioUsuario}/{usuarioContrasena}")
-    public ResponseEntity<UsuarioLoginDto> loginUsuario(
-            @PathVariable String usuarioUsuario,
-            @PathVariable String usuarioContrasena) {
-        UsuarioLoginDto informacionUsuario = usuarioServicio.loginUsuario(usuarioUsuario, usuarioContrasena);
-        return ResponseEntity.ok()
-                .body(informacionUsuario);
+        return ResponseEntity.ok().body(usuarioActualizado);
     }
 
 }
