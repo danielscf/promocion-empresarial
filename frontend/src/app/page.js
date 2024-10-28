@@ -26,19 +26,19 @@ function LoginPage() {
             <input
               type="text"
               id="username"
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+              className="w-full px-4 py-2 border text-neutral-950 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
               placeholder="Ingrese su usuario"
               required
             />
           </div>
           <div className="mb-4">
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="password" className="block text-sm font-medium text-normal-950 mb-2">
               Contraseña
             </label>
             <input
               type="password"
               id="password"
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+              className="w-full px-4 py-2 border border-gray-300 text-normal-950  rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
               placeholder="Ingrese su contraseña"
               required
             />
