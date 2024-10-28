@@ -24,7 +24,7 @@ public class Emprendedor {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long emprendedorId;
 
-    @Column(name = "empr_ruc", nullable = false, length = 11)
+    @Column(name = "empr_ruc", unique = true, nullable = false, length = 11)
     private String emprendedorRuc;
 
     @Column(name = "empr_direccion", nullable = false, length = 255)

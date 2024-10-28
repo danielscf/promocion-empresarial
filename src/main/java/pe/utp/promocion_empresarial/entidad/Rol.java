@@ -25,7 +25,7 @@ public class Rol {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long rolId;
 
-    @Column(name = "rol_nombre", nullable = false, length = 50)
+    @Column(name = "rol_nombre", unique = true, nullable = false, length = 50)
     private String rolNombre;
 
     @ManyToMany

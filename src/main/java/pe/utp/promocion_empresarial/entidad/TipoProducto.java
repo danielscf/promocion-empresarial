@@ -25,7 +25,7 @@ public class TipoProducto {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long tipoProductoId;
 
-    @Column(name = "tipo_prod_nombre", nullable = false, length = 50)
+    @Column(name = "tipo_prod_nombre", unique = true, nullable = false, length = 50)
     private String tipoProductoNombre;
 
     @OneToMany(mappedBy = "tipoProducto")

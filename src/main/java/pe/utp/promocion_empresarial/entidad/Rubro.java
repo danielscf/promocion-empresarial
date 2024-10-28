@@ -19,7 +19,7 @@ public class Rubro {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long rubroId;
 
-    @Column(name = "rubr_nombre", nullable = false, length = 100)
+    @Column(name = "rubr_nombre", unique = true, nullable = false, length = 100)
     private String rubroNombre;
 
     @OneToMany(mappedBy = "rubro")

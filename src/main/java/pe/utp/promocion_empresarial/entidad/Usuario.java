@@ -1,5 +1,6 @@
 package pe.utp.promocion_empresarial.entidad;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Set;
@@ -18,6 +19,8 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Data
 @Entity
@@ -25,19 +28,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Usuario {
-
     @Id
     @Column(name = "usua_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long usuarioId;
 
-    @Column(name = "usua_usuario", nullable = false, length = 50)
+    @Column(name = "usua_usuario", unique = true, nullable = false, length = 50)
     private String usuarioUsuario;
 
     @Column(name = "usua_contrasena", nullable = false, length = 50)
     private String usuarioContrasena;
 
-    @Column(name = "usua_dni", nullable = false, length = 8)
+    @Column(name = "usua_dni", unique = true, nullable = false, length = 8)
     private String usuarioDni;
 
     @Column(name = "usua_nombre", nullable = false, length = 50)
@@ -55,15 +57,14 @@ public class Usuario {
     @Column(name = "usua_telefono", nullable = false, length = 9)
     private String usuarioTelefono;
 
-    // TODO: Format date (DD-MM-YYYY)
     @Column(name = "usua_fecha_de_nacimiento", nullable = false)
-    private Date usuarioFechaDeNacimiento;
+    private LocalDate usuarioFechaDeNacimiento;
 
     @ColumnDefault(value = "0")
     @Column(name = "usua_estado", nullable = false)
     private Integer usuarioEstado;
 
-    // TODO: Default date time
+    @CreationTimestamp
     @Column(name = "usua_fecha_de_creacion", nullable = true)
     private LocalDateTime usuarioFechaDeCreacion;
 

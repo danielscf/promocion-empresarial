@@ -1,5 +1,6 @@
 package pe.utp.promocion_empresarial.entidad;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
@@ -13,6 +14,8 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Data
 @Entity
@@ -32,11 +35,13 @@ public class Solicitud {
     @Column(name = "soli_estado", nullable = false)
     private Integer solicitudEstado;
 
+    @CreationTimestamp
     @Column(name = "soli_fecha_creacion", nullable = false)
-    private LocalDateTime solicitudFechaCreacion;
+    private Instant solicitudFechaCreacion;
 
+    @UpdateTimestamp
     @Column(name = "soli_fecha_revision", nullable = false)
-    private LocalDateTime solicitudFechaRevision;
+    private Instant solicitudFechaRevision;
 
     @ManyToOne
     @JoinColumn(name = "tipo_soli_id", nullable = false)

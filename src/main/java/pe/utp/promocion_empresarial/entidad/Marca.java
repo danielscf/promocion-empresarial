@@ -25,7 +25,7 @@ public class Marca {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long marcaId;
 
-    @Column(name = "marc_nombre", nullable = false, length = 50)
+    @Column(name = "marc_nombre", unique = true, nullable = false, length = 50)
     private String marcaNombre;
 
     @Column(name = "marc_imagen", nullable = false, length = 255)
