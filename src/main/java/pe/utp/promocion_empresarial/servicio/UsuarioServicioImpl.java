@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import pe.utp.promocion_empresarial.dto.usuario.UsuarioDto;
-import pe.utp.promocion_empresarial.dto.usuario.UsuarioLoginDto;
+import pe.utp.promocion_empresarial.dto.usuario.UsuarioLoginResponseDto;
 import pe.utp.promocion_empresarial.entidad.Usuario;
 import pe.utp.promocion_empresarial.repositorio.UsuarioRepositorio;
 
@@ -37,7 +37,16 @@ public class UsuarioServicioImpl implements UsuarioServicio {
     }
 
     @Override
-    public UsuarioLoginDto loginUsuario(String usuarioUsuario, String usuarioContrasena) {
+    public UsuarioLoginResponseDto loginUsuario(String usuarioUsuario, String usuarioContrasena) {
         return usuarioRepositorio.findByUsuarioUsuarioAndUsuarioContrasena(usuarioUsuario, usuarioContrasena);
+    }
+
+    @Override
+    public Usuario actualizarEstadoUsuario(Long usuarioId, Integer usuarioEstado) {
+        Usuario informacionUsuario = usuarioRepositorio.findById(usuarioId)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        informacionUsuario.setUsuarioEstado(usuarioEstado);
+
+        return usuarioRepositorio.save(informacionUsuario);
     }
 }

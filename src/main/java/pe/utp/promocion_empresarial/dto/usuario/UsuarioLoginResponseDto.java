@@ -1,6 +1,6 @@
 package pe.utp.promocion_empresarial.dto.usuario;
 
-public interface UsuarioLoginDto {
+public interface UsuarioLoginResponseDto {
     String getUsuarioUsuario();
 
     String getUsuarioContrasena();

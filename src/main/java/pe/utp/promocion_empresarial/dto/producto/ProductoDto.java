@@ -13,8 +13,8 @@ public interface ProductoDto {
 
     Integer getProductoEstado();
 
-    TipoProducto getTipoProducto();
+//    TipoProducto getTipoProducto();
 
-    Marca getMarca();
+//    Marca getMarca();
 
 }
