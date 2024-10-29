@@ -16,6 +16,10 @@ public interface SolicitudServicio {
 
     Solicitud guardarCambiosSolicitud(Solicitud solicitud);
 
+    Solicitud actualizarEstadoSolicitud(Long solicitudId, Integer solicitudEstado);
+
+    Solicitud aprobarSolicitud(Long solicitudId);
+
     void eliminarSolicitud(Long solicitudId);
 
 }

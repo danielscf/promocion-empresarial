@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import pe.utp.promocion_empresarial.dto.solicitud.SolicitudDto;
 import pe.utp.promocion_empresarial.dto.solicitud.SolicitudPendienteDto;
 import pe.utp.promocion_empresarial.entidad.Solicitud;
+import pe.utp.promocion_empresarial.entidad.Usuario;
 import pe.utp.promocion_empresarial.repositorio.SolicitudRepositorio;
 
 @Service
@@ -34,6 +35,23 @@ public class SolicitudServicioImpl implements SolicitudServicio {
     @Override
     public Solicitud guardarCambiosSolicitud(Solicitud solicitud) {
         return solicitudRepositorio.save(solicitud);
+    }
+
+    @Override
+    public Solicitud actualizarEstadoSolicitud(Long solicitudId, Integer solicitudEstado) {
+        Solicitud informacionSolicitud = solicitudRepositorio.findById(solicitudId)
+                .orElseThrow(() -> new RuntimeException("Solicitud no encontrada"));
+        informacionSolicitud.setSolicitudEstado(solicitudEstado);
+        return solicitudRepositorio.save(informacionSolicitud);
+    }
+
+    @Override
+    public Solicitud aprobarSolicitud(Long solicitudId) {
+        Solicitud informacionSolicitud = solicitudRepositorio.findById(solicitudId)
+                .orElseThrow(() -> new RuntimeException("Solicitud no encontrada"));
+        Integer solicitudAprobada = 1;
+        informacionSolicitud.setSolicitudEstado(solicitudAprobada);
+        return solicitudRepositorio.save(informacionSolicitud);
     }
 
     @Override
