@@ -24,7 +24,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Solicitud {
-
     @Id
     @Column(name = "soli_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)

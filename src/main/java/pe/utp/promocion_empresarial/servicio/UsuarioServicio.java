@@ -1,9 +1,12 @@
 package pe.utp.promocion_empresarial.servicio;
 
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import pe.utp.promocion_empresarial.dto.usuario.UsuarioDto;
-import pe.utp.promocion_empresarial.dto.usuario.UsuarioLoginResponseDto;
+import pe.utp.promocion_empresarial.dto.usuario.UsuarioLoginRequestDto;
 import pe.utp.promocion_empresarial.dto.usuario.UsuarioNuevoDto;
 import pe.utp.promocion_empresarial.entidad.Usuario;
+import pe.utp.promocion_empresarial.entidad.UsuarioLogin;
 
 import java.util.List;
 
@@ -25,6 +28,10 @@ public interface UsuarioServicio {
 
     Usuario eliminarUsuario(Long usuarioId);
 
-    UsuarioLoginResponseDto loginUsuario(String usuarioUsuario, String usuarioContrasena);
+    UserDetails loadUserByUsername(String username);
+
+    String verificarUsuario(UsuarioLoginRequestDto credenciales);
+
+    Usuario recuperarContrasena(Long usuarioId, String nuevaContrasena);
 
 }

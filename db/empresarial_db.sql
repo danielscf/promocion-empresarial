@@ -3,7 +3,7 @@ BEGIN;
 CREATE TABLE tbl_usuario (
     usua_id SERIAL PRIMARY KEY,
     usua_usuario VARCHAR(50) UNIQUE NOT NULL,
-    usua_contrasena VARCHAR(50) NOT NULL,
+    usua_contrasena VARCHAR(100) NOT NULL,
     usua_dni CHAR(8) UNIQUE NOT NULL,
     usua_nombre VARCHAR(50) NOT NULL,
     usua_apellido_paterno VARCHAR(50) NOT NULL,

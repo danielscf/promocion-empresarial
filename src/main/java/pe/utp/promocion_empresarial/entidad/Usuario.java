@@ -35,7 +35,7 @@ public class Usuario {
     @Column(name = "usua_usuario", unique = true, nullable = false, length = 50)
     private String usuarioUsuario;
 
-    @Column(name = "usua_contrasena", nullable = false, length = 50)
+    @Column(name = "usua_contrasena", nullable = false, length = 100)
     private String usuarioContrasena;
 
     @Column(name = "usua_dni", unique = true, nullable = false, length = 8)

@@ -10,7 +10,6 @@ import pe.utp.promocion_empresarial.dto.usuario.UsuarioDto;
 import pe.utp.promocion_empresarial.dto.usuario.UsuarioLoginRequestDto;
 import pe.utp.promocion_empresarial.dto.usuario.UsuarioNuevoDto;
 import pe.utp.promocion_empresarial.entidad.Usuario;
-import pe.utp.promocion_empresarial.servicio.RolServicio;
 import pe.utp.promocion_empresarial.servicio.UsuarioServicio;
 
 @RestController
@@ -25,6 +24,13 @@ public class UsuarioControlador {
         return usuarioServicio.findAllUsuarios();
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody UsuarioLoginRequestDto credenciales) {
+        String usuarioVerificado = usuarioServicio.verificarUsuario(credenciales);
+
+        return ResponseEntity.ok().body(usuarioVerificado);
+    }
+
     @GetMapping("/{usuarioId}")
     public ResponseEntity<UsuarioDto> findUsuarioById(@PathVariable Long usuarioId) {
         UsuarioDto usuarioDto = usuarioServicio.findUsuarioById(usuarioId);
@@ -32,7 +38,7 @@ public class UsuarioControlador {
                 .body(usuarioDto);
     }
 
-    @PostMapping
+    @PostMapping("/registro")
     public ResponseEntity<Usuario> guardarUsuario(@RequestBody UsuarioNuevoDto nuevoUsuario) {
         Usuario usuarioGuardado = usuarioServicio.guardarUsuario(nuevoUsuario);
         return ResponseEntity.ok()
@@ -62,16 +68,6 @@ public class UsuarioControlador {
     public ResponseEntity<Usuario> eliminarUsuario(@PathVariable Long usuarioId) {
         Usuario usuario = usuarioServicio.eliminarUsuario(usuarioId);
         return ResponseEntity.ok().body(usuario);
-    }
-
-    @PostMapping("/login")
-    public ResponseEntity<Usuario> login(@RequestBody UsuarioLoginRequestDto credenciales) {
-        // TODO: Login
-        // Check if user and password are correct
-        // Check if user is active
-        // Check user role
-        // Return access
-        return null;
     }
 
 }

@@ -5,28 +5,46 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import pe.utp.promocion_empresarial.dto.usuario.UsuarioDto;
-import pe.utp.promocion_empresarial.dto.usuario.UsuarioLoginResponseDto;
+import pe.utp.promocion_empresarial.dto.usuario.UsuarioLoginRequestDto;
 import pe.utp.promocion_empresarial.dto.usuario.UsuarioNuevoDto;
 import pe.utp.promocion_empresarial.entidad.Rol;
 import pe.utp.promocion_empresarial.entidad.Usuario;
+import pe.utp.promocion_empresarial.entidad.UsuarioLogin;
 import pe.utp.promocion_empresarial.repositorio.UsuarioRepositorio;
 import pe.utp.promocion_empresarial.utils.Estado;
 
 @Service
-public class UsuarioServicioImpl implements UsuarioServicio {
+public class UsuarioServicioImpl implements UsuarioServicio, UserDetailsService {
 
     @Autowired
-    UsuarioRepositorio usuarioRepositorio;
+    private UsuarioRepositorio usuarioRepositorio;
 
     @Autowired
-    RolServicio rolServicio;
+    private RolServicio rolServicio;
+
+//    @Autowired
+//    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    PasswordEncoder passwordEncoder;
+    private JWTService jwtService;
+
+    @Autowired
+    @Lazy
+    private AuthenticationManager authenticationManager;
+
+    private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
     @Override
     public List<UsuarioDto> findAllUsuarios() {
@@ -47,7 +65,7 @@ public class UsuarioServicioImpl implements UsuarioServicio {
         Usuario informacionUsuario = new Usuario();
 
         informacionUsuario.setUsuarioUsuario(nuevoUsuario.getUsuarioUsuario());
-        informacionUsuario.setUsuarioContrasena(passwordEncoder.encode(nuevoUsuario.getUsuarioContrasena()));
+        informacionUsuario.setUsuarioContrasena(encoder.encode(nuevoUsuario.getUsuarioContrasena()));
         informacionUsuario.setUsuarioDni(nuevoUsuario.getUsuarioDni());
         informacionUsuario.setUsuarioNombre(nuevoUsuario.getUsuarioNombre());
         informacionUsuario.setUsuarioApellidoPaterno(nuevoUsuario.getUsuarioApellidoPaterno());
@@ -68,8 +86,9 @@ public class UsuarioServicioImpl implements UsuarioServicio {
     }
 
     @Override
-    public UsuarioLoginResponseDto loginUsuario(String usuarioUsuario, String usuarioContrasena) {
-        return usuarioRepositorio.findByUsuarioUsuarioAndUsuarioContrasena(usuarioUsuario, usuarioContrasena);
+    public Usuario recuperarContrasena(Long usuarioId, String nuevaContrasena) {
+        // TODO: recover password
+        return null;
     }
 
     @Override
@@ -97,5 +116,28 @@ public class UsuarioServicioImpl implements UsuarioServicio {
     public Usuario eliminarUsuario(Long usuarioId) {
         Usuario usuarioEliminado = actualizarEstadoUsuario(usuarioId, Estado.ELIMINADO.getValor());
         return usuarioRepositorio.save(usuarioEliminado);
+    }
+
+    @Override
+    public String verificarUsuario(UsuarioLoginRequestDto credenciales) {
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(credenciales.getUsuarioUsuario(),
+                        credenciales.getUsuarioContrasena()));
+        if (authentication.isAuthenticated()) {
+            return jwtService.generateToken(credenciales.getUsuarioUsuario());
+        } else {
+            // TODO: More appropriate handling of users
+            return "Error";
+        }
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Usuario user = usuarioRepositorio.findByUsuarioUsuario(username);
+        if (user == null) {
+            throw new UsernameNotFoundException("Usuario no encontrado");
+        }
+
+        return new UsuarioLogin(user);
     }
 }
