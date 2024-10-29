@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import pe.utp.promocion_empresarial.dto.solicitud.SolicitudDto;
+import pe.utp.promocion_empresarial.dto.solicitud.SolicitudPendienteDto;
 import pe.utp.promocion_empresarial.entidad.Solicitud;
 import pe.utp.promocion_empresarial.repositorio.SolicitudRepositorio;
 
@@ -23,6 +24,11 @@ public class SolicitudServicioImpl implements SolicitudServicio {
     @Override
     public SolicitudDto findSolicitudById(Long solicitudId) {
         return solicitudRepositorio.findBySolicitudId(solicitudId);
+    }
+
+    @Override
+    public List<SolicitudPendienteDto> findSolicitudPendiente() {
+        return solicitudRepositorio.findAllBySolicitudEstado(0);
     }
 
     @Override

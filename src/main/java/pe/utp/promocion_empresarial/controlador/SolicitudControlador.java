@@ -15,10 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import pe.utp.promocion_empresarial.dto.solicitud.DatosNuevoEmprendedorDto;
-import pe.utp.promocion_empresarial.dto.solicitud.DatosPersonalesUsuarioDto;
-import pe.utp.promocion_empresarial.dto.solicitud.SolicitudDto;
-import pe.utp.promocion_empresarial.dto.solicitud.SolicitudNuevoEmprendedorDto;
+import pe.utp.promocion_empresarial.dto.solicitud.*;
 import pe.utp.promocion_empresarial.entidad.*;
 import pe.utp.promocion_empresarial.servicio.*;
 
@@ -46,6 +43,11 @@ public class SolicitudControlador {
         return solicitudServicio.findAllSolicitudes();
     }
 
+    @GetMapping("/pendientes")
+    public List<SolicitudPendienteDto> findSolicitudPendiente() {
+        return solicitudServicio.findSolicitudPendiente();
+    }
+
     @GetMapping("/{solicitudId}")
     public ResponseEntity<SolicitudDto> findSolicitudById(@PathVariable Long solicitudId) {
         SolicitudDto solicitudDto = solicitudServicio.findSolicitudById(solicitudId);
@@ -69,6 +71,8 @@ public class SolicitudControlador {
         Rol rol = rolServicio.findRolByNombre("Emprendedor");
         Set<Rol> roles = new HashSet<Rol>();
         roles.add(rol);
+        // TODO: Hash password
+        // TODO: Mapper
 
         DatosPersonalesUsuarioDto datosUsuario = solicitudNuevoEmprendedorDto.getUsuario();
         String credencialesTemporal = "TEMP" + datosUsuario.getUsuarioDni() + datosUsuario.getUsuarioNombre();
