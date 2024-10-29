@@ -1,139 +1,130 @@
 BEGIN;
 
--- Insertar usuarios
-INSERT INTO tbl_usuario (usua_usuario, usua_contrasena, usua_dni, usua_nombre, usua_apellido_paterno, usua_apellido_materno, usua_correo, usua_telefono, usua_fecha_de_nacimiento, usua_estado) VALUES
-('jdoe', 'password123', '12345678', 'John', 'Doe', 'Smith', 'jdoe@example.com', '912345678', '1990-01-01', 1),
-('asmith', 'securePass!', '87654321', 'Alice', 'Smith', 'Johnson', 'asmith@example.com', '923456789', '1995-05-05', 1),
-('mlopez', 'Lopez@2023', '45678912', 'Maria', 'Lopez', 'Martinez', 'mlopez@example.com', '934567890', '1987-08-08', 1),
-('dperez', 'Perez#456', '78912345', 'David', 'Perez', 'Sanchez', 'dperez@example.com', '945678901', '1992-12-12', 1),
-('jmartinez', 'Martinez&789', '32165498', 'Julia', 'Martinez', 'Torres', 'jmartinez@example.com', '956789012', '1999-11-11', 0);
+INSERT INTO tbl_usuario (usua_usuario, usua_contrasena, usua_dni, usua_nombre, usua_apellido_paterno,
+                         usua_apellido_materno, usua_correo, usua_telefono, usua_fecha_nacimiento)
+VALUES ('user1', 'pass1', '12345678', 'Juan', 'Pérez', 'Gómez', 'juan.perez@example.com', '912345678', '1990-01-01'),
+       ('user2', 'pass2', '87654321', 'María', 'López', 'Fernández', 'maria.lopez@example.com', '923456789',
+        '1992-02-02'),
+       ('user3', 'pass3', '11223344', 'Carlos', 'Martín', 'Ríos', 'carlos.martin@example.com', '934567890',
+        '1988-03-03'),
+       ('user4', 'pass4', '44332211', 'Ana', 'Hernández', 'Castro', 'ana.hernandez@example.com', '945678901',
+        '1995-04-04'),
+       ('user5', 'pass5', '55667788', 'Luis', 'Díaz', 'Sánchez', 'luis.diaz@example.com', '956789012', '1991-05-05');
 
--- Insertar roles
-INSERT INTO tbl_rol (rol_nombre) VALUES
-('Administrador'),
-('Operador'),
-('Emprendedor'),
-('Moderador'),
-('Supervisor');
+INSERT INTO tbl_rol (rol_nombre)
+VALUES ('Emprendedor'),
+       ('Administrador'),
+       ('Operador'),
+       ('Cliente'),
+       ('Visitante');
 
--- Asignar roles a los usuarios
-INSERT INTO tbl_usuario_rol (usua_id, rol_id) VALUES
-(1, 1),
-(2, 3),
-(3, 3),
-(4, 2),
-(5, 4);
+INSERT INTO tbl_usuario_rol (usua_id, rol_id)
+VALUES (1, 1),
+       (2, 1),
+       (3, 1),
+       (4, 1),
+       (5, 1);
 
--- Insertar rubros
-INSERT INTO tbl_rubro (rubr_nombre) VALUES
-('Alimentos'),
-('Tecnología'),
-('Artesanía'),
-('Servicios'),
-('Educación');
+INSERT INTO tbl_rubro (rubr_nombre)
+VALUES ('Tecnología'),
+       ('Alimentos'),
+       ('Moda'),
+       ('Educación'),
+       ('Salud');
 
--- Insertar tipos de contribuyente
-INSERT INTO tbl_tipo_contribuyente (tipo_cont_nombre) VALUES
-('Persona Natural'),
-('Persona Jurídica'),
-('Microempresa'),
-('Pequeña Empresa'),
-('Mediana Empresa');
+INSERT INTO tbl_tipo_contribuyente (tipo_cont_nombre)
+VALUES ('Persona Natural con Negocio'),
+       ('Sociedad Anónima Cerrada'),
+       ('Sociedad Comercial de Responsabilidad Limitada'),
+       ('Persona Natural'),
+       ('Microempresa');
 
--- Insertar tipos de actividad
-INSERT INTO tbl_tipo_actividad (tipo_acti_nombre) VALUES
-('Venta de Productos'),
-('Prestación de Servicios'),
-('Educación'),
-('Consultoría'),
-('Fabricación');
+INSERT INTO tbl_tipo_actividad (tipo_acti_nombre)
+VALUES ('Consultoría'),
+       ('Ventas al por mayor'),
+       ('Producción artesanal'),
+       ('Servicios educativos'),
+       ('Servicios de salud');
 
--- Insertar emprendedores
-INSERT INTO tbl_emprendedor (empr_ruc, empr_direccion, empr_razon_social, empr_foto, usua_id, rubr_id, tipo_cont_id, tipo_acti_id) VALUES
-('12345678901', 'Av. Siempre Viva 123', 'John Enterprises', 'foto1.jpg', 1, 1, 2, 1),
-('98765432109', 'Calle Principal 456', 'Alice Tech Solutions', 'foto2.jpg', 2, 2, 3, 2),
-('19283746501', 'Jirón Los Andes 789', 'Maria Craftworks', 'foto3.jpg', 3, 3, 1, 3),
-('56473829102', 'Av. Los Olivos 321', 'David Services', 'foto4.jpg', 4, 4, 5, 4),
-('83729104560', 'Calle La Paz 987', 'Julia Education Center', 'foto5.jpg', 5, 5, 4, 5);
+INSERT INTO tbl_emprendedor (empr_ruc, empr_direccion, empr_razon_social, empr_foto, usua_id, rubr_id, tipo_cont_id,
+                             tipo_acti_id)
+VALUES ('20123456789', 'Av. Siempre Viva 123', 'Empresa 1', 'foto1.jpg', 1, 1, 1, 1),
+       ('20123456790', 'Calle Falsa 456', 'Empresa 2', 'foto2.jpg', 2, 2, 2, 2),
+       ('20123456791', 'Av. Real 789', 'Empresa 3', 'foto3.jpg', 3, 3, 3, 3),
+       ('20123456792', 'Jr. Ficticio 101', 'Empresa 4', 'foto4.jpg', 4, 4, 4, 4),
+       ('20123456793', 'Pasaje Inexistente 202', 'Empresa 5', 'foto5.jpg', 5, 5, 5, 5);
 
--- Insertar tipos de evento
-INSERT INTO tbl_tipo_evento (tipo_even_nombre) VALUES
-('Seminario'),
-('Workshop'),
-('Conferencia'),
-('Feria'),
-('Taller');
+INSERT INTO tbl_tipo_evento (tipo_even_nombre)
+VALUES ('Conferencia'),
+       ('Seminario'),
+       ('Taller'),
+       ('Exposición'),
+       ('Networking');
 
--- Insertar eventos
-INSERT INTO tbl_evento (even_nombre, even_descripcion, even_fecha_inicio, even_fecha_fin, even_hora_inicio, even_hora_fin, even_lugar, even_plantilla_diploma, tipo_even_id) VALUES
-('Seminario de Emprendimiento', 'Un seminario para emprendedores novatos', '2024-11-01', '2024-11-01', '09:00', '12:00', 'Auditorio Central', 'plantilla1.jpg', 1),
-('Workshop de Tecnología', 'Aprende nuevas tecnologías', '2024-11-05', '2024-11-06', '10:00', '17:00', 'Sala A', 'plantilla2.jpg', 2),
-('Conferencia de Innovación', 'Conferencia sobre innovación empresarial', '2024-12-10', '2024-12-10', '08:00', '12:00', 'Centro de Convenciones', 'plantilla3.jpg', 3),
-('Feria de Artesanías', 'Feria para promover productos artesanales', '2024-12-15', '2024-12-17', '09:00', '18:00', 'Parque Principal', 'plantilla4.jpg', 4),
-('Taller de Consultoría', 'Taller para aprender sobre consultoría', '2025-01-10', '2025-01-11', '09:00', '13:00', 'Oficina Regional', 'plantilla5.jpg', 5);
+INSERT INTO tbl_evento (even_nombre, even_descripcion, even_fecha_inicio, even_fecha_fin, even_hora_inicio,
+                        even_hora_fin, even_lugar, even_plantilla_diploma, tipo_even_id)
+VALUES ('Evento 1', 'Descripción evento 1', '2024-01-10', '2024-01-11', '09:00', '17:00', 'Lima', 'diploma1.jpg', 1),
+       ('Evento 2', 'Descripción evento 2', '2024-02-20', '2024-02-21', '10:00', '18:00', 'Arequipa', 'diploma2.jpg',
+        2),
+       ('Evento 3', 'Descripción evento 3', '2024-03-15', '2024-03-16', '11:00', '19:00', 'Cusco', 'diploma3.jpg', 3),
+       ('Evento 4', 'Descripción evento 4', '2024-04-25', '2024-04-26', '08:30', '16:30', 'Trujillo', 'diploma4.jpg',
+        4),
+       ('Evento 5', 'Descripción evento 5', '2024-05-05', '2024-05-06', '12:00', '20:00', 'Piura', 'diploma5.jpg', 5);
 
--- Insertar tipos de producto
-INSERT INTO tbl_tipo_producto (tipo_prod_nombre) VALUES
-('Electrónicos'),
-('Ropa'),
-('Alimentos'),
-('Artesanías'),
-('Muebles');
+INSERT INTO tbl_participacion_evento (part_even_asistencia, part_even_diploma, even_id, empr_id)
+VALUES (1, 'diploma1.jpg', 1, 1),
+       (1, 'diploma2.jpg', 2, 2),
+       (0, 'diploma3.jpg', 3, 3),
+       (1, 'diploma4.jpg', 4, 4),
+       (1, 'diploma5.jpg', 5, 5);
 
--- Insertar marcas
-INSERT INTO tbl_marca (marc_nombre, marc_imagen) VALUES
-('Samsung', 'samsung_logo.jpg'),
-('Nike', 'nike_logo.jpg'),
-('Nestle', 'nestle_logo.jpg'),
-('Artesanos del Sol', 'artesanos_logo.jpg'),
-('Muebles Contemporáneos', 'muebles_logo.jpg');
+INSERT INTO tbl_tipo_producto (tipo_prod_nombre)
+VALUES ('Electrónica'),
+       ('Ropa'),
+       ('Alimentos'),
+       ('Educación'),
+       ('Salud');
 
--- Insertar productos
-INSERT INTO tbl_producto (prod_nombre, prod_descripcion, prod_estado, tipo_prod_id, marc_id) VALUES
-('Smartphone Galaxy', 'Smartphone Samsung Galaxy S20', 1, 1, 1),
-('Zapatillas Air Max', 'Zapatillas deportivas Nike Air Max', 1, 2, 2),
-('Chocolate Nestlé', 'Barra de chocolate Nestlé', 1, 3, 3),
-('Artesanía de Barro', 'Vasija de barro hecha a mano', 1, 4, 4),
-('Silla Contemporánea', 'Silla de diseño contemporáneo', 1, 5, 5);
+INSERT INTO tbl_marca (marc_nombre, marc_imagen)
+VALUES ('Marca 1', 'marca1.jpg'),
+       ('Marca 2', 'marca2.jpg'),
+       ('Marca 3', 'marca3.jpg'),
+       ('Marca 4', 'marca4.jpg'),
+       ('Marca 5', 'marca5.jpg');
 
--- Insertar imágenes de productos
-INSERT INTO tbl_imagen (imag_url, prod_id) VALUES
-('galaxy_s20.jpg', 1),
-('air_max.jpg', 2),
-('nestle_chocolate.jpg', 3),
-('vasija_barro.jpg', 4),
-('silla_contemporanea.jpg', 5);
+INSERT INTO tbl_producto (prod_nombre, prod_descripcion, tipo_prod_id, marc_id)
+VALUES ('Producto 1', 'Descripción producto 1', 1, 1),
+       ('Producto 2', 'Descripción producto 2', 2, 2),
+       ('Producto 3', 'Descripción producto 3', 3, 3),
+       ('Producto 4', 'Descripción producto 4', 4, 4),
+       ('Producto 5', 'Descripción producto 5', 5, 5);
 
--- Relacionar emprendedores con productos
-INSERT INTO tbl_emprendedor_producto (empr_id, prod_id) VALUES
-(1, 1),
-(2, 2),
-(3, 3),
-(4, 4),
-(5, 5);
+INSERT INTO tbl_imagen (imag_url, prod_id)
+VALUES ('img1.jpg', 1),
+       ('img2.jpg', 2),
+       ('img3.jpg', 3),
+       ('img4.jpg', 4),
+       ('img5.jpg', 5);
 
--- Insertar tipos de solicitud
-INSERT INTO tbl_tipo_solicitud (tipo_soli_nombre) VALUES
-('Registro de producto'),
-('Modificación de producto'),
-('Eliminación de producto'),
-('Solicitud de evento'),
-('Actualización de datos de usuario');
+INSERT INTO tbl_emprendedor_producto (empr_id, prod_id)
+VALUES (1, 1),
+       (2, 2),
+       (3, 3),
+       (4, 4),
+       (5, 5);
 
--- Insertar solicitudes
-INSERT INTO tbl_solicitud (soli_descripcion, soli_estado, soli_fecha_revision, tipo_soli_id, empr_id, prod_id, usua_id) VALUES
-('Solicitud para registrar un nuevo producto', 0, NULL, 1, 1, 1, 1),
-('Modificación de la descripción del producto', 1, '2024-10-15 12:30:00', 2, 2, 2, 2),
-('Eliminación de un producto obsoleto', 0, NULL, 3, 3, 3, 3),
-('Solicitud para participar en un evento', 1, '2024-10-16 10:00:00', 4, 4, NULL, 4),
-('Actualización de datos personales', 1, '2024-10-17 14:00:00', 5, 5, NULL, 5);
+INSERT INTO tbl_tipo_solicitud (tipo_soli_nombre)
+VALUES ('Nuevo usuario emprendedor'),
+       ('Solicitud de revisión'),
+       ('Actualización de datos'),
+       ('Certificación de evento'),
+       ('Consulta general');
 
--- Insertar eventos de emprendedores
-INSERT INTO tbl_evento_emprendedor (even_empr_asistencia, even_empr_diploma, even_empr_estado_firma_diploma, even_id, empr_id) VALUES
-(1, 'diploma1.jpg', 1, 1, 1),
-(0, 'diploma2.jpg', 0, 2, 2),
-(1, 'diploma3.jpg', 1, 3, 3),
-(0, 'diploma4.jpg', 0, 4, 4),
-(1, 'diploma5.jpg', 1, 5, 5);
+INSERT INTO tbl_solicitud (soli_descripcion, soli_estado, tipo_soli_id, empr_id, usua_operador_id, prod_id)
+VALUES ('Solicitud para nuevo usuario emprendedor 1', 1, 1, 1, 1, 1),
+       ('Solicitud para nuevo usuario emprendedor 2', 1, 1, 2, 2, 2),
+       ('Solicitud para nuevo usuario emprendedor 3', 0, 1, 3, 3, 3),
+       ('Solicitud para nuevo usuario emprendedor 4', 0, 1, 4, 4, 4),
+       ('Solicitud para nuevo usuario emprendedor 5', 1, 1, 5, 5, 5);
 
 COMMIT;
