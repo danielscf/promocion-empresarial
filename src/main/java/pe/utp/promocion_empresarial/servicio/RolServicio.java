@@ -9,7 +9,7 @@ public interface RolServicio {
 
     List<RolDto> findAllRoles();
 
-    RolDto findRolById(Long rolId);
+    Rol findRolById(Long rolId);
 
     Rol findRolByNombre(String rolNombre);
 

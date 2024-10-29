@@ -21,7 +21,7 @@ public class RolServicioImpl implements RolServicio {
     }
 
     @Override
-    public RolDto findRolById(Long rolId) {
+    public Rol findRolById(Long rolId) {
         return rolRepositorio.findByRolId(rolId);
     }
 

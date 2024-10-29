@@ -30,8 +30,8 @@ public class RolControlador {
     }
 
     @GetMapping("/{rolId}")
-    public ResponseEntity<RolDto> findRolById(@PathVariable Long rolId) {
-        RolDto rolDto = rolServicio.findRolById(rolId);
+    public ResponseEntity<Rol> findRolById(@PathVariable Long rolId) {
+        Rol rolDto = rolServicio.findRolById(rolId);
         return ResponseEntity.ok()
                 .body(rolDto);
     }

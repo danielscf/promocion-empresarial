@@ -13,7 +13,7 @@ public interface RolRepositorio extends JpaRepository<Rol, Long> {
 
     List<RolDto> findAllBy();
 
-    RolDto findByRolId(Long rolId);
+    Rol findByRolId(Long rolId);
 
     Rol findByRolNombre(String rolNombre);
 

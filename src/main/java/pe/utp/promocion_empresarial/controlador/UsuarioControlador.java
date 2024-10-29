@@ -1,6 +1,8 @@
 package pe.utp.promocion_empresarial.controlador;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,8 +15,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import pe.utp.promocion_empresarial.dto.rol.RolDto;
 import pe.utp.promocion_empresarial.dto.usuario.UsuarioDto;
+import pe.utp.promocion_empresarial.dto.usuario.UsuarioNuevoDto;
+import pe.utp.promocion_empresarial.entidad.Rol;
 import pe.utp.promocion_empresarial.entidad.Usuario;
+import pe.utp.promocion_empresarial.servicio.RolServicio;
 import pe.utp.promocion_empresarial.servicio.UsuarioServicio;
 
 @RestController
@@ -22,7 +28,10 @@ import pe.utp.promocion_empresarial.servicio.UsuarioServicio;
 public class UsuarioControlador {
 
     @Autowired
-    UsuarioServicio usuarioServicio;
+    private UsuarioServicio usuarioServicio;
+
+    @Autowired
+    private RolServicio rolServicio;
 
     @GetMapping
     public List<UsuarioDto> findAllUsuarioes() {
@@ -35,10 +44,25 @@ public class UsuarioControlador {
         return ResponseEntity.ok()
                 .body(usuarioDto);
     }
-
     @PostMapping
-    public ResponseEntity<Usuario> guardarUsuario(@RequestBody Usuario usuario) {
-        Usuario usuarioGuardado = usuarioServicio.guardarCambiosUsuario(usuario);
+    public ResponseEntity<Usuario> guardarUsuario(@RequestBody UsuarioNuevoDto nuevoUsuario) {
+        Usuario informacionUsuario = new Usuario();
+        Rol rol = rolServicio.findRolById(nuevoUsuario.getRolId());
+        Set<Rol> roles = new HashSet<Rol>();
+        roles.add(rol);
+
+        informacionUsuario.setUsuarioUsuario(nuevoUsuario.getUsuarioUsuario());
+        informacionUsuario.setUsuarioContrasena(nuevoUsuario.getUsuarioContrasena());
+        informacionUsuario.setUsuarioDni(nuevoUsuario.getUsuarioDni());
+        informacionUsuario.setUsuarioNombre(nuevoUsuario.getUsuarioNombre());
+        informacionUsuario.setUsuarioApellidoPaterno(nuevoUsuario.getUsuarioApellidoPaterno());
+        informacionUsuario.setUsuarioApellidoMaterno(nuevoUsuario.getUsuarioApellidoMaterno());
+        informacionUsuario.setUsuarioCorreo(nuevoUsuario.getUsuarioCorreo());
+        informacionUsuario.setUsuarioTelefono(nuevoUsuario.getUsuarioTelefono());
+        informacionUsuario.setUsuarioFechaNacimiento(nuevoUsuario.getUsuarioFechaNacimiento());
+        informacionUsuario.setRoles(roles);
+
+        Usuario usuarioGuardado = usuarioServicio.guardarCambiosUsuario(informacionUsuario);
         return ResponseEntity.ok()
                 .body(usuarioGuardado);
     }
