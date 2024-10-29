@@ -22,7 +22,7 @@ public class Rol {
 
     @Id
     @Column(name = "rol_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long rolId;
 
     @Column(name = "rol_nombre", unique = true, nullable = false, length = 50)

@@ -21,7 +21,7 @@ public class Imagen {
 
     @Id
     @Column(name = "imag_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long imagenId;
 
     @Column(name = "imag_url", nullable = false, length = 255)

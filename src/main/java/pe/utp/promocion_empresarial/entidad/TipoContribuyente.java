@@ -15,7 +15,7 @@ import java.util.Set;
 public class TipoContribuyente {
     @Id
     @Column(name = "tipo_cont_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long tipoContribuyenteId;
 
     @Column(name = "tipo_cont_nombre", nullable = false, length = 150)

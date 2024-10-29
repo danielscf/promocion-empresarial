@@ -16,7 +16,7 @@ public class TipoSolicitud {
 
     @Id
     @Column(name = "tipo_soli_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long tipoSolicitudId;
 
     @Column(name = "tipo_soli_nombre", unique = true, nullable = false, length = 50)

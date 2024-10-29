@@ -22,7 +22,7 @@ public class TipoProducto {
 
     @Id
     @Column(name = "tipo_prod_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long tipoProductoId;
 
     @Column(name = "tipo_prod_nombre", unique = true, nullable = false, length = 50)

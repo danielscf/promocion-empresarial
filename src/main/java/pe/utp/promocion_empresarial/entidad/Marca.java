@@ -22,7 +22,7 @@ public class Marca {
 
     @Id
     @Column(name = "marc_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long marcaId;
 
     @Column(name = "marc_nombre", unique = true, nullable = false, length = 50)

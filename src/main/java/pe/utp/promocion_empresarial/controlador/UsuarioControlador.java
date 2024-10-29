@@ -33,7 +33,7 @@ public class UsuarioControlador {
     private RolServicio rolServicio;
 
     @GetMapping
-    public List<UsuarioDto> findAllUsuarioes() {
+    public List<UsuarioDto> findAllUsuarios() {
         return usuarioServicio.findAllUsuarios();
     }
 
@@ -48,8 +48,11 @@ public class UsuarioControlador {
     public ResponseEntity<Usuario> guardarUsuario(@RequestBody UsuarioNuevoDto nuevoUsuario) {
         Usuario informacionUsuario = new Usuario();
         Rol rol = rolServicio.findRolById(nuevoUsuario.getRolId());
-        Set<Rol> roles = new HashSet<Rol>();
+        Set<Rol> roles = new HashSet<>();
         roles.add(rol);
+
+        // TODO: Hash password
+        // TODO: Mapper
 
         informacionUsuario.setUsuarioUsuario(nuevoUsuario.getUsuarioUsuario());
         informacionUsuario.setUsuarioContrasena(nuevoUsuario.getUsuarioContrasena());
@@ -74,9 +77,9 @@ public class UsuarioControlador {
                 .body(usuarioGuardado);
     }
 
-    @PatchMapping("/{usuarioId}")
+    @PatchMapping("/{usuarioId}/{usuarioEstado}")
     public ResponseEntity<Usuario> actualizarEstadoUsuario(@PathVariable Long usuarioId,
-                                                           @RequestBody Integer usuarioEstado) {
+                                                           @PathVariable Integer usuarioEstado) {
         Usuario usuarioActualizado = usuarioServicio.actualizarEstadoUsuario(usuarioId, usuarioEstado);
 
         return ResponseEntity.ok().body(usuarioActualizado);
