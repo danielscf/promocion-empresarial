@@ -24,13 +24,6 @@ public class UsuarioControlador {
         return usuarioServicio.findAllUsuarios();
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody UsuarioLoginRequestDto credenciales) {
-        String usuarioVerificado = usuarioServicio.verificarUsuario(credenciales);
-
-        return ResponseEntity.ok().body(usuarioVerificado);
-    }
-
     @GetMapping("/{usuarioId}")
     public ResponseEntity<UsuarioDto> findUsuarioById(@PathVariable Long usuarioId) {
         UsuarioDto usuarioDto = usuarioServicio.findUsuarioById(usuarioId);

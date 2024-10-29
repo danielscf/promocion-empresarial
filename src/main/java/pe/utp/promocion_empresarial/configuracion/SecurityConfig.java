@@ -13,13 +13,11 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import pe.utp.promocion_empresarial.servicio.UsuarioServicio;
-import pe.utp.promocion_empresarial.servicio.UsuarioServicioImpl;
 
 @Configuration
 @EnableWebSecurity
@@ -28,9 +26,9 @@ public class SecurityConfig implements WebMvcConfigurer {
     @Autowired
     private JwtFilter jwtFilter;
 
-    @Autowired
     @Lazy
-    private UsuarioServicioImpl usuarioServicioImpl;
+    @Autowired
+    private UsuarioServicio usuarioServicio;
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
@@ -41,8 +39,8 @@ public class SecurityConfig implements WebMvcConfigurer {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf(customizer -> customizer.disable()).
                 authorizeHttpRequests(request -> request
-                        .requestMatchers("usuario/login", "usuario/registro").permitAll()
-                        .anyRequest().authenticated()).
+//                        .requestMatchers("**/**").permitAll()
+                        .anyRequest().permitAll()).
                 httpBasic(Customizer.withDefaults()).
                 sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
@@ -53,7 +51,7 @@ public class SecurityConfig implements WebMvcConfigurer {
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setPasswordEncoder(new BCryptPasswordEncoder(12));
-        provider.setUserDetailsService(usuarioServicioImpl);
+        provider.setUserDetailsService(usuarioServicio);
         return provider;
     }
 

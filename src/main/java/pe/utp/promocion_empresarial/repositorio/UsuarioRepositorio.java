@@ -15,6 +15,6 @@ public interface UsuarioRepositorio extends JpaRepository<Usuario, Long> {
 
     UsuarioDto findByUsuarioId(Long usuarioId);
 
-    Usuario findByUsuarioUsuario(String usuarioUsuario);
+    Usuario findUsuarioByUsuarioUsuario(String usuarioUsuario);
 
 }
