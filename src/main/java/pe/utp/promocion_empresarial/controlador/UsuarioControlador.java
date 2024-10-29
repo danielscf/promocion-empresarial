@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import pe.utp.promocion_empresarial.dto.rol.RolDto;
 import pe.utp.promocion_empresarial.dto.usuario.UsuarioDto;
 import pe.utp.promocion_empresarial.dto.usuario.UsuarioNuevoDto;
 import pe.utp.promocion_empresarial.entidad.Rol;
@@ -44,6 +43,7 @@ public class UsuarioControlador {
         return ResponseEntity.ok()
                 .body(usuarioDto);
     }
+
     @PostMapping
     public ResponseEntity<Usuario> guardarUsuario(@RequestBody UsuarioNuevoDto nuevoUsuario) {
         Usuario informacionUsuario = new Usuario();
@@ -76,7 +76,7 @@ public class UsuarioControlador {
 
     @PatchMapping("/{usuarioId}")
     public ResponseEntity<Usuario> actualizarEstadoUsuario(@PathVariable Long usuarioId,
-            @RequestBody Integer usuarioEstado) {
+                                                           @RequestBody Integer usuarioEstado) {
         Usuario usuarioActualizado = usuarioServicio.actualizarEstadoUsuario(usuarioId, usuarioEstado);
 
         return ResponseEntity.ok().body(usuarioActualizado);
