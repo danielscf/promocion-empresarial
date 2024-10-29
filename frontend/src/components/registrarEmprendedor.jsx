@@ -1,41 +1,56 @@
-import React from 'react'
-import { useForm } from 'react-hook-form';
+import React, { useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
-import { useState } from 'react';
+import { addNewSolicitud } from '../store/solicitudSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchRubros } from '../store/rubroSlice';
+import { fetchTipoContribuyente } from '../store/tipoContribuyenteSlice';
+import { fetchTipoActividad } from '../store/tipoActividadSlice';
 
-const registrarEmprendedor = () => {
+const registrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset }) => {
 
-    const { register, handleSubmit, formState: { errors } } = useForm();
 
-    const [fotoEmprendedor, setFotoEmprendedor] = useState(null);
-    const [fotoMarca, setFotoMarca] = useState(null);
+    const dispatch = useDispatch()
+    const { rubros } = useSelector((state) => state.rubros)
+    const { tipoContribuyentes } = useSelector((state) => state.tipoContribuyentes)
+    const { tipoActividad } = useSelector((state) => state.tipoActividad)
 
-    // Función para manejar la selección de la foto del emprendedor
-    const handleEmprendedorImageChange = (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            setFotoEmprendedor(URL.createObjectURL(file));
+    useEffect(() => {
+
+        dispatch(fetchRubros())
+        dispatch(fetchTipoContribuyente())
+        dispatch(fetchTipoActividad())
+
+    }, [dispatch])
+
+    useEffect(() => {
+        if (rubros.length > 0) {
+            setValue('rubroId', rubros[0].rubroId);
+            setValue('rubroNombre', rubros[0].rubroNombre);
         }
-    };
-
-    // Función para manejar la selección de la foto de la marca
-    const handleMarcaImageChange = (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            setFotoMarca(URL.createObjectURL(file));
+        if (tipoContribuyentes.length > 0) {
+            setValue('tipoContribuyenteId', tipoContribuyentes[0].tipoContribuyenteId);
+            setValue('tipoContribuyenteNombre', tipoContribuyentes[0].tipoContribuyenteNombre);
         }
-    };
+        if (tipoActividad.length > 0) {
+            setValue('tipoActividadId', tipoActividad[0].tipoActividadId);
+            setValue('tipoActividadNombre', tipoActividad[0].tipoActividadNombre);
+        }
+    }, [rubros, tipoContribuyentes, tipoActividad, setValue]);
 
-    const onSubmit = (data) => {
 
-        console.log(data);
+    const onSubmit = async (data) => {
+
+        dispatch(addNewSolicitud(data))
+        //console.log(data);
+        reset()
+
     };
 
     return (
         <div>
             <h2 className="text-center text-2xl font-bold mb-6">Registro de Emprendedor</h2>
-           
+
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="space-y-12">
                     <div className="border-b w-full border-gray-900/10 pb-12">
@@ -44,14 +59,11 @@ const registrarEmprendedor = () => {
                             {/* Datos de Usuario */}
                             <h3 className="text-xl font-bold mb-4 col-span-6">Datos de Usuario</h3>
 
-                            <div className="flex md:flex-row justify-center items-center col-span-6">   
-                                <input
-                                    id="dni"
-                                    name="dni"
-                                    type="text"
-                                    placeholder='Ingresar dni'
+                            <div className="flex md:flex-row justify-center items-center col-span-6">
+                                <input type="text" placeholder='Ingresar dni'
                                     className="w-full md:w-64 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                />
+                                    {...register('usuarioDni', { required: true })} />
+                                {errors.usuarioDni && <span className="text-red-500">El nombre es requerido</span>}
                                 <FontAwesomeIcon className="mx-3 cursor-pointer" icon={faMagnifyingGlass} />
                             </div>
 
@@ -60,12 +72,10 @@ const registrarEmprendedor = () => {
                                 <label htmlFor="nombre_usuario" className="block text-sm font-medium leading-6 text-gray-900">
                                     Nombre de Usuario
                                 </label>
-                                <input
-                                    id="nombre_usuario"
-                                    name="nombre_usuario"
-                                    type="text"
-                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                />
+                                <input type="text" className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset 
+                                ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                    {...register('usuarioUsuario', { required: true })} />
+                                {errors.usuarioUsuario && <span className="text-red-500">El nombre de usuario es requerido</span>}
                             </div>
 
                             {/* Nombres */}
@@ -73,12 +83,10 @@ const registrarEmprendedor = () => {
                                 <label htmlFor="nombres" className="block text-sm font-medium leading-6 text-gray-900">
                                     Nombres
                                 </label>
-                                <input
-                                    id="nombres"
-                                    name="nombres"
-                                    type="text"
-                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                />
+                                <input type="text" className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm 
+                                ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                    {...register('usuarioNombre', { required: true })} />
+                                {errors.usuarioNombre && <span className="text-red-500">El nombre es requerido</span>}
                             </div>
 
                             {/* Apellido Paterno */}
@@ -86,12 +94,10 @@ const registrarEmprendedor = () => {
                                 <label htmlFor="apellido-paterno" className="block text-sm font-medium leading-6 text-gray-900">
                                     Apellido Paterno
                                 </label>
-                                <input
-                                    id="apellido-paterno"
-                                    name="apellido-paterno"
-                                    type="text"
-                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                />
+                                <input type="text" className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 
+                                ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                    {...register('usuarioApellidoPaterno', { required: true })} />
+                                {errors.usuarioApellidoPaterno && <span className="text-red-500">El apellido paterno es requerido</span>}
                             </div>
 
                             {/* Apellido Materno */}
@@ -99,12 +105,10 @@ const registrarEmprendedor = () => {
                                 <label htmlFor="apellido-materno" className="block text-sm font-medium leading-6 text-gray-900">
                                     Apellido Materno
                                 </label>
-                                <input
-                                    id="apellido-materno"
-                                    name="apellido-materno"
-                                    type="text"
-                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                />
+                                <input type="text" className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm 
+                                ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                    {...register('usuarioApellidoMaterno', { required: true })} />
+                                {errors.usuarioApellidoMaterno && <span className="text-red-500">El apellido materno es requerido</span>}
                             </div>
 
                             {/* Teléfono */}
@@ -112,12 +116,15 @@ const registrarEmprendedor = () => {
                                 <label htmlFor="telefono" className="block text-sm font-medium leading-6 text-gray-900">
                                     Teléfono
                                 </label>
-                                <input
-                                    id="telefono"
-                                    name="telefono"
-                                    type="tel"
-                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                />
+                                <input type="tel" className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm 
+                                ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                    {...register('usuarioTelefono', {
+                                        required: "El teléfono es requerido",
+                                        pattern: {
+                                            value: /^[0-9]{9}$/,
+                                            message: "El teléfono debe tener 9 dígitos"
+                                        }
+                                    })} />
                             </div>
 
                             {/* Correo */}
@@ -125,12 +132,10 @@ const registrarEmprendedor = () => {
                                 <label htmlFor="correo" className="block text-sm font-medium leading-6 text-gray-900">
                                     Correo
                                 </label>
-                                <input
-                                    id="correo"
-                                    name="correo"
-                                    type="email"
-                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                />
+                                <input type="email" className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm 
+                                ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                    {...register('usuarioCorreo', { required: true })} />
+                                {errors.usuarioCorreo && <span className="text-red-500">El correo es requerido</span>}
                             </div>
 
                             {/* Fecha de nacimiento */}
@@ -138,12 +143,10 @@ const registrarEmprendedor = () => {
                                 <label htmlFor="fecha_nacimiento" className="block text-sm font-medium leading-6 text-gray-900">
                                     Fecha de nacimiento
                                 </label>
-                                <input
-                                    id="fecha_nacimiento"
-                                    name="fecha_nacimiento"
-                                    type="date"
-                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                />
+                                <input type="date" className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset 
+                                ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                    {...register('usuarioFechaNacimiento', { required: true })} />
+                                {errors.usuarioFechaNacimiento && <span className="text-red-500">La fecha de nacimiento es requerida</span>}
                             </div>
 
                             {/* Contraseña */}
@@ -151,25 +154,20 @@ const registrarEmprendedor = () => {
                                 <label htmlFor="contrasena" className="block text-sm font-medium leading-6 text-gray-900">
                                     Contraseña
                                 </label>
-                                <input
-                                    id="contrasena"
-                                    name="contrasena"
-                                    type="password"
-                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                />
+                                <input type="password" className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset
+                                 ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                    {...register('usuarioContrasena', { required: true })} />
+                                {errors.usuarioContrasena && <span className="text-red-500">La contraseña es requerida</span>}
                             </div>
 
                             {/* Datos de Emprendedor */}
                             <h3 className="text-xl font-bold mb-4 col-span-6">Datos de Emprendedor</h3>
 
-                            <div className="flex md:flex-row justify-center items-center col-span-6">   
-                                <input
-                                    id="ruc"
-                                    name="ruc"
-                                    type="text"
-                                    placeholder='Ingresar ruc'
-                                    className="w-full md:w-64 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                />
+                            <div className="flex md:flex-row justify-center items-center col-span-6">
+                                <input type="text" placeholder='Ingresar ruc' className="w-full md:w-64 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300
+                                 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                    {...register('emprendedorRuc', { required: true })} />
+                                {errors.emprendedorRuc && <span className="text-red-500">EL ruc es requerido</span>}
                                 <FontAwesomeIcon className="mx-3 cursor-pointer" icon={faMagnifyingGlass} />
                             </div>
 
@@ -178,12 +176,10 @@ const registrarEmprendedor = () => {
                                 <label htmlFor="direccion" className="block text-sm font-medium leading-6 text-gray-900">
                                     Dirección
                                 </label>
-                                <input
-                                    id="direccion"
-                                    name="direccion"
-                                    type="text"
-                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                />
+                                <input type="text" className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset 
+                                ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                    {...register('emprendedorDireccion', { required: true })} />
+                                {errors.emprendedorDireccion && <span className="text-red-500">La direccion es requerida</span>}
                             </div>
 
                             {/* Razon Social */}
@@ -191,51 +187,32 @@ const registrarEmprendedor = () => {
                                 <label htmlFor="razon_social" className="block text-sm font-medium leading-6 text-gray-900">
                                     Razón Social
                                 </label>
-                                <input
-                                    id="razon_social"
-                                    name="razon_social"
-                                    type="text"
-                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                />
+                                <input type="text" className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 
+                                ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                    {...register('emprendedorRazonSocial', { required: true })} />
+                                {errors.emprendedorRazonSocial && <span className="text-red-500">La razon social es requerida</span>}
                             </div>
 
                             {/* Estado Contribuyente */}
                             <div className="col-span-6 md:col-span-2 lg:col-span-3">
-                                <label htmlFor="estado_contribuyente" className="block text-sm font-medium leading-6 text-gray-900">
+                                <label htmlFor="estadoContribuyente" className="block text-sm font-medium leading-6 text-gray-900">
                                     Estado Contribuyente
                                 </label>
-                                <input
-                                    id="estado_contribuyente"
-                                    name="estado_contribuyente"
-                                    type="text"
-                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                />
+                                <input type="text" className="block w-full rounded-md border-0 py-1.5 text-gray-900 
+                                shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                    {...register('emprendedorEstadoContribuyente', { required: true })} />
+                                {errors.emprendedorEstadoContribuyente && <span className="text-red-500">El estado contribuyente</span>}
                             </div>
 
                             {/* Condición Contribuyente */}
                             <div className="col-span-6 md:col-span-2 lg:col-span-3">
-                                <label htmlFor="condicion_contribuyente" className="block text-sm font-medium leading-6 text-gray-900">
+                                <label htmlFor="condicionContribuyente" className="block text-sm font-medium leading-6 text-gray-900">
                                     Condición Contribuyente
                                 </label>
-                                <input
-                                    id="condicion_contribuyente"
-                                    name="condicion_contribuyente"
-                                    type="text"
-                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                />
-                            </div>
-
-                            {/* Nombre Marca */}
-                            <div className="col-span-6 md:col-span-2 lg:col-span-3">
-                                <label htmlFor="marca" className="block text-sm font-medium leading-6 text-gray-900">
-                                    Nombre Marca
-                                </label>
-                                <input
-                                    id="marca"
-                                    name="marca"
-                                    type="text"
-                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                />
+                                <input type="text" className="block w-full rounded-md border-0 py-1.5 text-gray-900 
+                                shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                    {...register('emprendedorCondicionContribuyente', { required: true })} />
+                                {errors.emprendedorCondicionContribuyente && <span className="text-red-500">La condicion contribuyente</span>}
                             </div>
 
                             {/* Rubro */}
@@ -244,11 +221,63 @@ const registrarEmprendedor = () => {
                                     Rubro
                                 </label>
                                 <select
-                                    id="rubro"
-                                    name="rubr_nombre"
                                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                    {...register('rubroId', { required: true })}
+                                    onChange={(e) => {
+                                        const selectedOption = rubros.find(rubro => rubro.rubroId === parseInt(e.target.value));
+                                        setValue('rubroId', e.target.value);
+                                        setValue('rubroNombre', selectedOption ? selectedOption.rubroNombre : '');
+                                    }}
                                 >
-                                    <option selected>Selecciona uno de los rubros</option>
+                                    {rubros.map(rubro => (
+                                        <option key={rubro.rubroId} value={rubro.rubroId}>
+                                            {rubro.rubroNombre}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            {/* Tipo Contribuyente */}
+                            <div className="col-span-6 md:col-span-2 lg:col-span-3">
+                                <label htmlFor="tipoContribuyente" className="block text-sm font-medium leading-6 text-gray-900">
+                                    Tipo contribuyente
+                                </label>
+                                <select
+                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                    {...register('tipoContribuyenteId', { required: true })}
+                                    onChange={(e) => {
+                                        const selectedOption = tipoContribuyentes.find(tipo => tipo.tipoContribuyenteId === parseInt(e.target.value));
+                                        setValue('tipoContribuyenteId', e.target.value);
+                                        setValue('tipoContribuyenteNombre', selectedOption ? selectedOption.tipoContribuyenteNombre : '');
+                                    }}
+                                >
+                                    {tipoContribuyentes.map(tipoContribuyente => (
+                                        <option key={tipoContribuyente.tipoContribuyenteId} value={tipoContribuyente.tipoContribuyenteId}>
+                                            {tipoContribuyente.tipoContribuyenteNombre}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            {/* Tipo Actividad */}
+                            <div className="col-span-6 md:col-span-2 lg:col-span-3">
+                                <label htmlFor="tipoActividad" className="block text-sm font-medium leading-6 text-gray-900">
+                                    Tipo actividad
+                                </label>
+                                <select
+                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                    {...register('tipoActividadId', { required: true })}
+                                    onChange={(e) => {
+                                        const selectedOption = tipoActividad.find(tipo => tipo.tipoActividadId === parseInt(e.target.value));
+                                        setValue('tipoActividadId', e.target.value);
+                                        setValue('tipoActividadNombre', selectedOption ? selectedOption.tipoActividadNombre : '');
+                                    }}
+                                >
+                                    {tipoActividad.map(tipoActiv => (
+                                        <option key={tipoActiv.tipoActividadId} value={tipoActiv.tipoActividadId}>
+                                            {tipoActiv.tipoActividadNombre}
+                                        </option>
+                                    ))}
                                 </select>
                             </div>
 
@@ -257,52 +286,23 @@ const registrarEmprendedor = () => {
                                 <label htmlFor="foto" className="block text-sm font-medium leading-6 text-gray-900">
                                     Foto del emprendedor
                                 </label>
-                                {fotoEmprendedor && (
-                                    <img
-                                        src={fotoEmprendedor}
-                                        alt="Foto del Emprendedor"
-                                        className="h-16 w-16 object-cover rounded-lg shadow-lg border border-gray-200 mt-2"
-                                    />
-                                )}
                                 <input
-                                    type="file"
-                                    accept="image/*"
-                                    className="mt-2 block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50"
-                                    onChange={handleEmprendedorImageChange}
+                                    type="text"
+                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 
+                                    placeholder:text-gray-400 focus:ring-2 focus:ring-inset 
+                                focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                    {...register('emprendedorFoto', { required: true })}
                                 />
                             </div>
 
-                            {/* Foto de la Marca */}
-                            <div className="col-span-6 md:col-span-2 lg:col-span-3">
-                                <label htmlFor="marca" className="block text-sm font-medium leading-6 text-gray-900">
-                                    Foto de la Marca
-                                </label>
-                                {fotoMarca && (
-                                    <img
-                                        src={fotoMarca}
-                                        alt="Logo de la Marca"
-                                        className="h-16 w-16 object-cover rounded-lg shadow-lg border border-gray-200 mt-2"
-                                    />
-                                )}
-                                <input
-                                    type="file"
-                                    accept="image/*"
-                                    className="mt-2 block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50"
-                                    onChange={handleMarcaImageChange}
-                                />
+                            <div className="mt-6 flex justify-end col-span-6">
+                                <button type="submit" className="rounded-md w-full bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Registrar</button>
                             </div>
-
-                            {/* Botón Registrar */}
-                            <div class="mt-6 flex justify-end col-span-6">
-                                <button type="submit" class="rounded-md w-full bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Registrar</button>
-                            </div>
-
                         </div>
                     </div>
                 </div>
             </form>
         </div>
-
 
     )
 }

@@ -1,20 +1,27 @@
 import React from 'react'
-import { createUser } from '../services/userService'
+import { addNewUsuario } from '../store/userSlice';
+import {  useDispatch } from 'react-redux';
 import { getAllRol } from '../services/rolService';
-import { useState,useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
-const userForm = ({ closeModal, register, handleSubmit, errors }) => {
+
+const userForm = ({ closeModal, register, handleSubmit, errors, setValue }) => {
 
     const [roles, setroles] = useState([])
+    const dispatch = useDispatch();
 
     const onSubmit = async (data) => {
-        try {
-            const result = await createUser(data);
-            console.log('Usuario creado:', result);
-
-        } catch (error) {
-            console.error('Error al crear el usuario:', error);
-        }
+        dispatch(addNewUsuario(data));
+        closeModal()
+        setValue('usuarioUsuario',"")
+        setValue('usuarioContrasena',"")
+        setValue('usuarioNombre',"")
+        setValue('usuarioApellidoPaterno',"")
+        setValue('usuarioApellidoMaterno',"")     
+        setValue('usuarioDni',"")
+        setValue('usuarioCorreo',"")
+        setValue('usuarioTelefono',"")
+        setValue('usuarioFechaNacimiento',"")              
     };
 
     useEffect(() => {
@@ -22,10 +29,9 @@ const userForm = ({ closeModal, register, handleSubmit, errors }) => {
         const cargarRoles = async () => {
             const res = await getAllRol()
             setroles(res.data)
+
         }
-
         cargarRoles()
-
     }, [])
 
     return (
@@ -34,7 +40,7 @@ const userForm = ({ closeModal, register, handleSubmit, errors }) => {
                 <label htmlFor="nombreUsuario" className="block text-sm font-medium text-gray-700 mb-1">Nombre Usuario</label>
                 <input type="text" className="border border-gray-300 rounded-md w-full p-2 focus:outline-none focus:ring focus:ring-indigo-500"
                     {...register('usuarioUsuario', { required: true })} />
-                {errors.nombre && <span className="text-red-500">El nombre es requerido</span>}
+                {errors.suarioUsuario && <span className="text-red-500">El nombre es requerido</span>}
             </div>
 
             <div className="mb-4">
@@ -48,18 +54,18 @@ const userForm = ({ closeModal, register, handleSubmit, errors }) => {
                 <label htmlFor="nombres" className="block text-sm font-medium text-gray-700 mb-1">Nombres</label>
                 <input type="text" className="border border-gray-300 rounded-md w-full p-2 focus:outline-none focus:ring focus:ring-indigo-500"
                     {...register('usuarioNombre', { required: true })} />
-                {errors.nombre && <span className="text-red-500">El nombre es requerido</span>}
+                {errors.usuarioNombre && <span className="text-red-500">El nombre es requerido</span>}
             </div>
 
             <div className="mb-4">
-                <label htmlFor="apellidoPaterno" className="block text-sm font-medium text-gray-700 mb-1">Apellidos</label>
+                <label htmlFor="apellidoPaterno" className="block text-sm font-medium text-gray-700 mb-1">Apellido Paterno</label>
                 <input type="text" id="apellidoPaterno" className="border border-gray-300 rounded-md w-full p-2 focus:outline-none focus:ring focus:ring-indigo-500"
                     {...register('usuarioApellidoPaterno', { required: true })} />
                 {errors.apellidos && <span className="text-red-500">Los apellidos son requeridos</span>}
             </div>
 
             <div className="mb-4">
-                <label htmlFor="apellidoMaterno" className="block text-sm font-medium text-gray-700 mb-1">Apellidos</label>
+                <label htmlFor="apellidoMaterno" className="block text-sm font-medium text-gray-700 mb-1">Apellido Materno</label>
                 <input type="text" id="apellidoMaterno" className="border border-gray-300 rounded-md w-full p-2 focus:outline-none focus:ring focus:ring-indigo-500"
                     {...register('usuarioApellidoMaterno', { required: true })} />
                 {errors.apellidos && <span className="text-red-500">Los apellidos son requeridos</span>}
@@ -94,9 +100,9 @@ const userForm = ({ closeModal, register, handleSubmit, errors }) => {
 
             <div className="mb-4">
                 <label htmlFor="rol" className="block text-sm font-medium text-gray-700 mb-1">Rol</label>
-                <select id="rol" multiple className="border border-gray-300 rounded-md w-full p-2 focus:outline-none focus:ring focus:ring-indigo-500" {...register('rolId', { required: true })}>
+                <select id="rol" className="border border-gray-300 rounded-md w-full p-2 focus:outline-none focus:ring focus:ring-indigo-500" {...register('rolId', { required: true })}>
                     {roles.map(rol => (
-                        <option value={rol.rolId}>{rol.rolNombre}</option>
+                        <option key={rol.rolId} value={rol.rolId}>{rol.rolNombre}</option>
                     ))}
                 </select>
                 {errors.rol && <span className="text-red-500">El rol es requerido</span>}
@@ -105,7 +111,7 @@ const userForm = ({ closeModal, register, handleSubmit, errors }) => {
             <div className="mb-4">
                 <label htmlFor="fecha_nacimiento" className="block text-sm font-medium text-gray-700 mb-1">Fecha Nacimiento</label>
                 <input type="date" id="fecha_nacimiento" className="border border-gray-300 rounded-md w-full p-2 focus:outline-none focus:ring focus:ring-indigo-500"
-                    {...register('usuarioFechaDeNacimiento', { required: true })} />
+                    {...register('usuarioFechaNacimiento', { required: true })} />
                 {errors.fecha_nacimiento && <span className="text-red-500">La fecha de nacimiento es requerida</span>}
             </div>
 

@@ -1,44 +1,83 @@
-import React, { useState } from 'react'
-
+import React, { useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
-import { getAllUsuarios } from '../services/userService';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchUsuarios } from '../store/userSlice';
+import DataTable from 'react-data-table-component';
 
-const userTable = ({ users }) => {
+const userTable = () => {
 
-    const [usuarios, setusuarios] = useState([])
+    const dispatch = useDispatch();
+    const usuarios = useSelector((state) => state.usuarios.usuarios);
+
+    useEffect(() => {
+
+        dispatch(fetchUsuarios());
+
+    }, [dispatch]);
+
+    const columns = [
+        {
+            name: 'ID',
+            selector: row => row.usuarioId,
+            sortable: true,
+        },
+        {
+            name: 'NOMBRE',
+            selector: row => row.usuarioUsuario,
+            sortable: true,
+        },
+        {
+            name: 'APELLIDOS',
+            selector: row => `${row.usuarioApellidoPaterno} ${row.usuarioApellidoMaterno}`,
+            sortable: true,
+        },
+        {
+            name: 'DNI',
+            selector: row => row.usuarioDni,
+            sortable: true,
+        },
+        {
+            name: 'CORREO',
+            selector: row => row.usuarioCorreo,
+            sortable: true,
+        },
+        {
+            name: 'TELEFONO',
+            selector: row => row.usuarioTelefono,
+            sortable: true,
+        },
+        {
+            name: 'ELIMINAR',
+            cell: row => (
+                <FontAwesomeIcon
+                    icon={faTrash}
+                    className="text-red-600 cursor-pointer h-6 w-6"
+                    onClick={() => handleDelete(row.usuarioId)} // Implementa la lógica de eliminación aquí
+                />
+            ),
+            ignoreRowClick: true,
+            allowOverflow: true,
+            button: true,
+        },
+    ];
+
+    const handleDelete = (id) => {
+
+        console.log("Eliminar usuario con ID:", id);
+    };
 
     return (
-        <div className="overflow-x-auto">
-            <table className="min-w-full border border-gray-300 rounded-lg shadow-md">
-                <thead className="bg-gray-800 text-white">
-                    <tr>
-                        <th className="px-4 py-2 border">ID</th>
-                        <th className="px-4 py-2 border">NOMBRE</th>
-                        <th className="px-4 py-2 border">APELLIDOS</th>
-                        <th className="px-4 py-2 border">DNI</th>
-                        <th className="px-4 py-2 border">CORREO</th>
-                        <th className="px-4 py-2 border">TELEFONO</th>
-                        <th className="px-4 py-2 border text-center">ELIMINAR</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {users.map((user) => (
-                        <tr key={user.id} className="hover:bg-gray-100">
-                            <td className="px-4 py-2 border">{user.id}</td>
-                            <td className="px-4 py-2 border">{user.nombre}</td>
-                            <td className="px-4 py-2 border">{user.apellidos}</td>
-                            <td className="px-4 py-2 border">{user.dni}</td>
-                            <td className="px-4 py-2 border">{user.correo}</td>
-                            <td className="px-4 py-2 border">{user.telefono}</td>
-                            <td className="px-4 py-2 border text-center">
-                                <FontAwesomeIcon icon={faTrash} className="text-red-600 h-6 w-6" />
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+        <div className="overflow-hidden max-w-full border border-gray-300 rounded-lg shadow-md">
+            <DataTable
+                title="Lista de Usuarios"
+                columns={columns}
+                data={usuarios}
+                pagination
+                className="min-w-full"
+            />
         </div>
+
     )
 }
 

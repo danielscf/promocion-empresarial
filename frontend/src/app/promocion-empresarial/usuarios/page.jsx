@@ -16,14 +16,8 @@ function usuariosPage() {
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
 
-    const users = [
-        { id: 1, nombre: "Mark", apellidos: "Otto", dni: "7654332", correo: "@mdo", telefono: "98432842" },
-        { id: 2, nombre: "Jacob", apellidos: "Thornton", dni: "7654333", correo: "@fat", telefono: "98432843" },
-        { id: 3, nombre: "Larry", apellidos: "Bird", dni: "7654334", correo: "@twitter", telefono: "98432844" },
-    ];
-
     return (
-        <div className="p-4 h-screen bg-gray-300">
+        <div className="p-4 h-full bg-gray-300">
             <h1 className="mt-2 text-center text-2xl font-bold">Usuarios</h1>
             <div className="flex justify-end mb-4">
                 <button
@@ -34,7 +28,7 @@ function usuariosPage() {
                 </button>
             </div>
 
-            <UserTable users={users} />
+            <UserTable/>
 
             <Modal isOpen={isModalOpen} onClose={closeModal} title="Registrar Usuario">
                 <UserForm
@@ -42,6 +36,7 @@ function usuariosPage() {
                     register={register}
                     handleSubmit={handleSubmit}
                     errors={errors}
+                    setValue={setValue}
                 />
             </Modal>
         </div>
