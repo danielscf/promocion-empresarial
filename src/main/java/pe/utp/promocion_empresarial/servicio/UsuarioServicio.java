@@ -16,7 +16,11 @@ public interface UsuarioServicio {
 
     Usuario actualizarEstadoUsuario(Long usuarioId, Integer usuarioEstado);
 
-    void eliminarUsuario(Long usuarioId);
+    Usuario habilitarUsuario(Long usuarioId);
+
+    Usuario inhabilitarUsuario(Long usuarioId);
+
+    Usuario eliminarUsuario(Long usuarioId);
 
     UsuarioLoginResponseDto loginUsuario(String usuarioUsuario, String usuarioContrasena);
 

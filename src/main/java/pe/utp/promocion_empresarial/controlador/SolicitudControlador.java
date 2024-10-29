@@ -127,4 +127,18 @@ public class SolicitudControlador {
                 .body(solicitudAprobada);
     }
 
+    @PatchMapping("/{solicitudId}/rechazar")
+    public ResponseEntity<Solicitud> rechazarSolicitud(@PathVariable Long solicitudId) {
+        Solicitud solicitudRechazada = solicitudServicio.rechazarSolicitud(solicitudId);
+        return ResponseEntity.ok()
+                .body(solicitudRechazada);
+    }
+
+    @DeleteMapping("/{solicitudId}")
+    public ResponseEntity<Solicitud> eliminarSolicitud(@PathVariable Long solicitudId) {
+        Solicitud solicitudEliminada = solicitudServicio.eliminarSolicitud(solicitudId);
+        return ResponseEntity.ok()
+                .body(solicitudEliminada);
+    }
+
 }

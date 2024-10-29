@@ -20,6 +20,8 @@ public interface SolicitudServicio {
 
     Solicitud aprobarSolicitud(Long solicitudId);
 
-    void eliminarSolicitud(Long solicitudId);
+    Solicitud rechazarSolicitud(Long solicitudId);
+
+    Solicitud eliminarSolicitud(Long solicitudId);
 
 }

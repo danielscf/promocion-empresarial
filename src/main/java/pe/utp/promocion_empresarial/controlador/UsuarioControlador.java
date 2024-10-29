@@ -6,14 +6,7 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import pe.utp.promocion_empresarial.dto.usuario.UsuarioDto;
 import pe.utp.promocion_empresarial.dto.usuario.UsuarioNuevoDto;
@@ -77,12 +70,32 @@ public class UsuarioControlador {
                 .body(usuarioGuardado);
     }
 
-    @PatchMapping("/{usuarioId}/{usuarioEstado}")
-    public ResponseEntity<Usuario> actualizarEstadoUsuario(@PathVariable Long usuarioId,
-                                                           @PathVariable Integer usuarioEstado) {
-        Usuario usuarioActualizado = usuarioServicio.actualizarEstadoUsuario(usuarioId, usuarioEstado);
+//    @PatchMapping("/{usuarioId}/{usuarioEstado}")
+//    public ResponseEntity<Usuario> actualizarEstadoUsuario(@PathVariable Long usuarioId,
+//                                                           @PathVariable Integer usuarioEstado) {
+//        Usuario usuarioActualizado = usuarioServicio.actualizarEstadoUsuario(usuarioId, usuarioEstado);
+//
+//        return ResponseEntity.ok().body(usuarioActualizado);
+//    }
 
-        return ResponseEntity.ok().body(usuarioActualizado);
+    @PatchMapping("/{usuarioId}/inhabilitar")
+    public ResponseEntity<Usuario> deshabilitarUsuario(@PathVariable Long usuarioId) {
+        Usuario usuario = usuarioServicio.inhabilitarUsuario(usuarioId);
+        return ResponseEntity.ok().body(usuario);
     }
+
+    @PatchMapping("/{usuarioId}/habilitar")
+    public ResponseEntity<Usuario> habilitarUsuario(@PathVariable Long usuarioId) {
+        Usuario usuario = usuarioServicio.habilitarUsuario(usuarioId);
+        return ResponseEntity.ok().body(usuario);
+    }
+
+    @DeleteMapping("/{usuarioId}")
+    public ResponseEntity<Usuario> eliminarUsuario(@PathVariable Long usuarioId) {
+        Usuario usuario = usuarioServicio.eliminarUsuario(usuarioId);
+        return ResponseEntity.ok().body(usuario);
+    }
+
+    // TODO: Login
 
 }

@@ -10,6 +10,7 @@ import pe.utp.promocion_empresarial.dto.solicitud.SolicitudPendienteDto;
 import pe.utp.promocion_empresarial.entidad.Solicitud;
 import pe.utp.promocion_empresarial.entidad.Usuario;
 import pe.utp.promocion_empresarial.repositorio.SolicitudRepositorio;
+import pe.utp.promocion_empresarial.utils.Estado;
 
 @Service
 public class SolicitudServicioImpl implements SolicitudServicio {
@@ -47,16 +48,20 @@ public class SolicitudServicioImpl implements SolicitudServicio {
 
     @Override
     public Solicitud aprobarSolicitud(Long solicitudId) {
-        Solicitud informacionSolicitud = solicitudRepositorio.findById(solicitudId)
-                .orElseThrow(() -> new RuntimeException("Solicitud no encontrada"));
-        Integer solicitudAprobada = 1;
-        informacionSolicitud.setSolicitudEstado(solicitudAprobada);
+        Solicitud informacionSolicitud = actualizarEstadoSolicitud(solicitudId, Estado.ACTIVO.getValor());
         return solicitudRepositorio.save(informacionSolicitud);
     }
 
     @Override
-    public void eliminarSolicitud(Long solicitudId) {
-        solicitudRepositorio.deleteById(solicitudId);
+    public Solicitud rechazarSolicitud(Long solicitudId) {
+        Solicitud informacionSolicitud = actualizarEstadoSolicitud(solicitudId, Estado.INACTIVO.getValor());
+        return solicitudRepositorio.save(informacionSolicitud);
+    }
+
+    @Override
+    public Solicitud eliminarSolicitud(Long solicitudId) {
+        Solicitud informacionSolicitud = actualizarEstadoSolicitud(solicitudId, Estado.ELIMINADO.getValor());
+        return solicitudRepositorio.save(informacionSolicitud);
     }
 
 }

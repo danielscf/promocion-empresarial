@@ -9,6 +9,7 @@ import pe.utp.promocion_empresarial.dto.usuario.UsuarioDto;
 import pe.utp.promocion_empresarial.dto.usuario.UsuarioLoginResponseDto;
 import pe.utp.promocion_empresarial.entidad.Usuario;
 import pe.utp.promocion_empresarial.repositorio.UsuarioRepositorio;
+import pe.utp.promocion_empresarial.utils.Estado;
 
 @Service
 public class UsuarioServicioImpl implements UsuarioServicio {
@@ -32,11 +33,6 @@ public class UsuarioServicioImpl implements UsuarioServicio {
     }
 
     @Override
-    public void eliminarUsuario(Long usuarioId) {
-        usuarioRepositorio.deleteById(usuarioId);
-    }
-
-    @Override
     public UsuarioLoginResponseDto loginUsuario(String usuarioUsuario, String usuarioContrasena) {
         return usuarioRepositorio.findByUsuarioUsuarioAndUsuarioContrasena(usuarioUsuario, usuarioContrasena);
     }
@@ -48,5 +44,23 @@ public class UsuarioServicioImpl implements UsuarioServicio {
         informacionUsuario.setUsuarioEstado(usuarioEstado);
 
         return usuarioRepositorio.save(informacionUsuario);
+    }
+
+    @Override
+    public Usuario habilitarUsuario(Long usuarioId) {
+        Usuario usuarioHabilitado = actualizarEstadoUsuario(usuarioId, Estado.ACTIVO.getValor());
+        return usuarioRepositorio.save(usuarioHabilitado);
+    }
+
+    @Override
+    public Usuario inhabilitarUsuario(Long usuarioId) {
+        Usuario usuarioInhabilitado = actualizarEstadoUsuario(usuarioId, Estado.INACTIVO.getValor());
+        return usuarioRepositorio.save(usuarioInhabilitado);
+    }
+
+    @Override
+    public Usuario eliminarUsuario(Long usuarioId) {
+        Usuario usuarioEliminado = actualizarEstadoUsuario(usuarioId, Estado.ELIMINADO.getValor());
+        return usuarioRepositorio.save(usuarioEliminado);
     }
 }
