@@ -3,11 +3,13 @@
 import { useState } from 'react';
 import Link from 'next/link'
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
-import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { Bars3Icon,XMarkIcon } from '@heroicons/react/24/outline'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 
 const navigation = [
   { name: 'Inicio', href: '/promocion-empresarial/home', current: true },
-  { name: 'Mis Datos', href: '#', current: false },
+  { name: 'Mis Datos', href: '/promocion-empresarial/mis-datos/datos-personales', current: false },
   { name: 'Usuarios', href: '/promocion-empresarial/usuarios', current: false },
   { name: 'Emprendedor', href: '/promocion-empresarial/emprendedor/datos-emprendedor', current: false },
 ];
@@ -18,7 +20,7 @@ function classNames(...classes) {
 
 const Navbar = () => {
   const [activeLink, setActiveLink] = useState('Inicio'); // Controla el enlace activo
-  
+
   const handleLinkClick = (name) => {
     setActiveLink(name); // Actualiza el enlace activo
   };
@@ -64,17 +66,17 @@ const Navbar = () => {
             </div>
           </div>
           <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-           
-            {/* Profile dropdown */}
+
             <Menu as="div" className="relative ml-3">
-              <div>
-                <MenuButton className="relative flex rounded-full bg-blue-700 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-                  <span className="sr-only">Open user menu</span>
-                  <p className='text-white p-2'>Luis565432</p>
-                </MenuButton>
-              </div>
+
+              <MenuButton className="relative flex items-center rounded-full bg-blue-700 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+                <span className="sr-only">Open user menu</span>
+                <p className='text-white p-2 mr-1'>Luis565432</p>
+                <FontAwesomeIcon icon={faChevronDown} className="text-white mr-2" /> 
+              </MenuButton>
+
               <MenuItems className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                             
+
                 <MenuItem>
                   {({ active }) => (
                     <a href="#" className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}>

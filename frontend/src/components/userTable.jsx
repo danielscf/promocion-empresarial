@@ -2,8 +2,9 @@ import React, { useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchUsuarios } from '../store/userSlice';
+import { deleteUsuario, fetchUsuarios } from '../store/userSlice';
 import DataTable from 'react-data-table-component';
+import { showConfirmation } from '../app/utils/confirmationDialog';
 
 const userTable = () => {
 
@@ -50,21 +51,26 @@ const userTable = () => {
         {
             name: 'ELIMINAR',
             cell: row => (
+
                 <FontAwesomeIcon
                     icon={faTrash}
                     className="text-red-600 cursor-pointer h-6 w-6"
-                    onClick={() => handleDelete(row.usuarioId)} // Implementa la lógica de eliminación aquí
+                    onClick={() => handleDelete(row.usuarioId)}
                 />
+
             ),
             ignoreRowClick: true,
-            allowOverflow: true,
             button: true,
         },
     ];
+    const usuariosFiltrados = usuarios.filter(usuario => usuario.usuarioEstado !== 3);
 
-    const handleDelete = (id) => {
+    const handleDelete = async (id) => {
 
-        console.log("Eliminar usuario con ID:", id);
+        const confirmed = await showConfirmation();
+        if (confirmed) {
+            dispatch(deleteUsuario(id))
+        }
     };
 
     return (
@@ -72,7 +78,7 @@ const userTable = () => {
             <DataTable
                 title="Lista de Usuarios"
                 columns={columns}
-                data={usuarios}
+                data={usuariosFiltrados}
                 pagination
                 className="min-w-full"
             />

@@ -6,9 +6,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchRubros } from '../store/rubroSlice';
 import { fetchTipoContribuyente } from '../store/tipoContribuyenteSlice';
 import { fetchTipoActividad } from '../store/tipoActividadSlice';
+import { showErrorMessage, showSuccessMessage } from '../app/utils/messages';
 
 const registrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset }) => {
-
 
     const dispatch = useDispatch()
     const { rubros } = useSelector((state) => state.rubros)
@@ -23,25 +23,16 @@ const registrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
 
     }, [dispatch])
 
-    useEffect(() => {
-        if (rubros.length > 0) {
-            setValue('rubroId', rubros[0].rubroId);
-            setValue('rubroNombre', rubros[0].rubroNombre);
-        }
-        if (tipoContribuyentes.length > 0) {
-            setValue('tipoContribuyenteId', tipoContribuyentes[0].tipoContribuyenteId);
-            setValue('tipoContribuyenteNombre', tipoContribuyentes[0].tipoContribuyenteNombre);
-        }
-        if (tipoActividad.length > 0) {
-            setValue('tipoActividadId', tipoActividad[0].tipoActividadId);
-            setValue('tipoActividadNombre', tipoActividad[0].tipoActividadNombre);
-        }
-    }, [rubros, tipoContribuyentes, tipoActividad, setValue]);
-
-
     const onSubmit = async (data) => {
 
-        dispatch(addNewSolicitud(data))
+        dispatch(addNewSolicitud(data)).then((response) => {
+            console.log(response.type)
+            if (response.type === 'solicitud/addNewSolicitud/fulfilled') {
+                showSuccessMessage()
+            } else if (response.type === 'solicitud/addNewSolicitud/rejected') {
+                showErrorMessage()
+            }
+        })
         //console.log(data);
         reset()
 
@@ -63,7 +54,7 @@ const registrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
                                 <input type="text" placeholder='Ingresar dni'
                                     className="w-full md:w-64 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                     {...register('usuarioDni', { required: true })} />
-                                {errors.usuarioDni && <span className="text-red-500">El nombre es requerido</span>}
+                                {errors.usuarioDni && <span className="text-red-500">El dni es requerido</span>}
                                 <FontAwesomeIcon className="mx-3 cursor-pointer" icon={faMagnifyingGlass} />
                             </div>
 
@@ -125,6 +116,9 @@ const registrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
                                             message: "El teléfono debe tener 9 dígitos"
                                         }
                                     })} />
+                                {errors.usuarioTelefono && (
+                                    <p className="text-red-600 text-sm mt-1">{errors.usuarioTelefono.message}</p>
+                                )}
                             </div>
 
                             {/* Correo */}
@@ -201,7 +195,7 @@ const registrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
                                 <input type="text" className="block w-full rounded-md border-0 py-1.5 text-gray-900 
                                 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                     {...register('emprendedorEstadoContribuyente', { required: true })} />
-                                {errors.emprendedorEstadoContribuyente && <span className="text-red-500">El estado contribuyente</span>}
+                                {errors.emprendedorEstadoContribuyente && <span className="text-red-500">El estado contribuyente es requerido</span>}
                             </div>
 
                             {/* Condición Contribuyente */}
@@ -212,7 +206,7 @@ const registrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
                                 <input type="text" className="block w-full rounded-md border-0 py-1.5 text-gray-900 
                                 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                     {...register('emprendedorCondicionContribuyente', { required: true })} />
-                                {errors.emprendedorCondicionContribuyente && <span className="text-red-500">La condicion contribuyente</span>}
+                                {errors.emprendedorCondicionContribuyente && <span className="text-red-500">La condicion contribuyente es requerida</span>}
                             </div>
 
                             {/* Rubro */}
@@ -229,12 +223,14 @@ const registrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
                                         setValue('rubroNombre', selectedOption ? selectedOption.rubroNombre : '');
                                     }}
                                 >
+                                    <option value="">Selecciona un rubro</option>
                                     {rubros.map(rubro => (
                                         <option key={rubro.rubroId} value={rubro.rubroId}>
                                             {rubro.rubroNombre}
                                         </option>
                                     ))}
                                 </select>
+                                {errors.rubroId && <span className="text-red-500">El rubro es requerido</span>}
                             </div>
 
                             {/* Tipo Contribuyente */}
@@ -251,12 +247,14 @@ const registrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
                                         setValue('tipoContribuyenteNombre', selectedOption ? selectedOption.tipoContribuyenteNombre : '');
                                     }}
                                 >
+                                    <option value="">Selecciona un tipo de contribuyente</option>
                                     {tipoContribuyentes.map(tipoContribuyente => (
                                         <option key={tipoContribuyente.tipoContribuyenteId} value={tipoContribuyente.tipoContribuyenteId}>
                                             {tipoContribuyente.tipoContribuyenteNombre}
                                         </option>
                                     ))}
                                 </select>
+                                {errors.tipoContribuyenteId && <span className="text-red-500">El tipo contribuyente es requerido</span>}
                             </div>
 
                             {/* Tipo Actividad */}
@@ -273,12 +271,14 @@ const registrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
                                         setValue('tipoActividadNombre', selectedOption ? selectedOption.tipoActividadNombre : '');
                                     }}
                                 >
+                                    <option value="">Selecciona un tipo de actividad</option>
                                     {tipoActividad.map(tipoActiv => (
                                         <option key={tipoActiv.tipoActividadId} value={tipoActiv.tipoActividadId}>
                                             {tipoActiv.tipoActividadNombre}
                                         </option>
                                     ))}
                                 </select>
+                                {errors.tipoActividadId && <span className="text-red-500">El tipo de actividad es requerido</span>}
                             </div>
 
                             {/* Foto del Emprendedor */}
@@ -303,7 +303,6 @@ const registrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
                 </div>
             </form>
         </div>
-
     )
 }
 

@@ -9,7 +9,7 @@ import { useForm } from 'react-hook-form';
 
 function usuariosPage() {
 
-    const { register, handleSubmit, formState: { errors }, setValue } = useForm()
+    const { register, handleSubmit,reset, formState: { errors }, setValue } = useForm()
 
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -36,7 +36,7 @@ function usuariosPage() {
                     register={register}
                     handleSubmit={handleSubmit}
                     errors={errors}
-                    setValue={setValue}
+                    reset={reset}
                 />
             </Modal>
         </div>

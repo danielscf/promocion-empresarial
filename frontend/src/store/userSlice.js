@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getAllUsuarios, createUsuario } from '../services/userService';
+import { getAllUsuarios, deleteUsuario as apiDeleteUsuario, createUsuario } from '../services/userService';
 
 
 export const fetchUsuarios = createAsyncThunk('usuarios/fetchUsuarios', async () => {
@@ -13,6 +13,11 @@ export const addNewUsuario = createAsyncThunk('usuarios/addNewUsuario', async (n
     return response.data;
 });
 
+export const deleteUsuario = createAsyncThunk('usuarios/deleteUsuario', async (id) => {
+    const response = await apiDeleteUsuario(id)
+    return response.data;
+})
+
 const userSlice = createSlice({
     name: 'usuarios',
     initialState: {
@@ -21,7 +26,7 @@ const userSlice = createSlice({
         error: null
     },
     reducers: {
-        
+
     },
     extraReducers: (builder) => {
         builder
@@ -29,7 +34,8 @@ const userSlice = createSlice({
                 state.usuarios = action.payload;
             })
             .addCase(addNewUsuario.fulfilled, (state, action) => {
-                state.usuarios.push(action.payload); 
+                state.usuarios.push(action.payload);
+                state.error = null;
             })
             .addCase(fetchUsuarios.pending, (state) => {
                 state.status = 'loading';
@@ -37,6 +43,9 @@ const userSlice = createSlice({
             .addCase(fetchUsuarios.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.error.message;
+            })
+            .addCase(deleteUsuario.fulfilled, (state, action) => {
+                state.usuarios = state.usuarios.filter((user) => user.usuarioId !== action.payload.usuarioId);
             });
     }
 });

@@ -7,5 +7,6 @@ const usuarioApi = axios.create({
 }) 
 
 export const getAllUsuarios = () => usuarioApi.get('')
-export const createUsuario = (alumno) => usuarioApi.post('',alumno)
+export const createUsuario = (alumno) => usuarioApi.post('/registro',alumno)
+export const deleteUsuario = (id) => usuarioApi.delete(`/${id}`)
   
