@@ -30,7 +30,7 @@ public class SolicitudServicioImpl implements SolicitudServicio {
 
     @Override
     public List<SolicitudPendienteDto> findSolicitudPendiente() {
-        return solicitudRepositorio.findAllBySolicitudEstado(0);
+        return solicitudRepositorio.findAllBySolicitudEstado(Estado.PENDIENTE.getValor());
     }
 
     @Override
