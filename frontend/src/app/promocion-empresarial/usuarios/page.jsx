@@ -9,7 +9,7 @@ import { useForm } from 'react-hook-form';
 
 function usuariosPage() {
 
-    const { register, handleSubmit,reset, formState: { errors }, setValue } = useForm()
+    const { register, handleSubmit,reset, formState: { errors }} = useForm()
 
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -30,7 +30,7 @@ function usuariosPage() {
 
             <UserTable/>
 
-            <Modal isOpen={isModalOpen} onClose={closeModal} title="Registrar Usuario">
+            <Modal isOpen={isModalOpen}  handleClose={closeModal} title="Registrar Usuario">
                 <UserForm
                     closeModal={closeModal}
                     register={register}

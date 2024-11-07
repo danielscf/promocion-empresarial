@@ -19,8 +19,7 @@ const Productos = () => {
     const closeModal = () => setIsModalOpen(false);
 
     return (
-        <div className="p-4 h-screen w-screen bg-gray-300 "
-            style={{ background: 'radial-gradient(circle, rgba(238, 238, 238, 1) 0%, rgba(146, 146, 146, 1) 100%)' }}>
+        <div className="p-4 h-full min-h-screen w-full overflow-x-auto bg-gray-300">
             <h1 className="mt-2 text-center text-2xl font-bold">Productos</h1>
             <div className="flex justify-end mb-4">
                 <button
@@ -30,29 +29,29 @@ const Productos = () => {
                     Registrar Producto
                 </button>
             </div>
+            {/* Se agrega overflow-x-auto para hacer la tabla responsive */}
             <div className="overflow-x-auto">
-                <table className="min-w-full border border-gray-300 rounded-lg shadow-md">
+                <table className="min-w-full table-auto border border-gray-300 rounded-lg shadow-md">
                     <thead className="bg-gray-800 text-white">
                         <tr>
-                            <th className="px-4 py-2 border">ID</th>
-                            <th className="px-4 py-2 border">NOMBRE</th>
-                            <th className="px-4 py-2 border">DESCRIPCIÓN</th>
-                            <th className="px-4 py-2 border">IMAGEN</th>
-                            <th className="px-4 py-2 border">EDITAR</th>
-                            <th className="px-4 py-2 border text-center">ELIMINAR</th>
+                            <th className="px-4 py-2 border whitespace-nowrap">ID</th>
+                            <th className="px-4 py-2 border whitespace-nowrap">NOMBRE</th>
+                            <th className="px-4 py-2 border whitespace-nowrap">DESCRIPCIÓN</th>
+                            <th className="px-4 py-2 border whitespace-nowrap">IMAGEN</th>
+                            <th className="px-4 py-2 border whitespace-nowrap">EDITAR</th>
+                            <th className="px-4 py-2 border text-center whitespace-nowrap">ELIMINAR</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {[
-                            { id: 1, nombre: "Polo", descripcion: "color azul", imagen: "" },
-                            { id: 2, nombre: "Polo", descripcion: "color azul", imagen: "" },
-                            { id: 3, nombre: "Polo", descripcion: "color azul", imagen: "" },
-                        ].map((user) => (
-                            <tr key={user.id} className="hover:bg-gray-100">
-                                <td className="px-4 py-2 border">{user.id}</td>
-                                <td className="px-4 py-2 border">{user.nombre}</td>
-                                <td className="px-4 py-2 border">{user.descripcion}</td>
-                                <td className="px-4 py-2 border">{user.imagen}</td>
+                        {[{ id: 1, nombre: "Polo", descripcion: "color azul", imagen: "" },
+                        { id: 2, nombre: "Polo", descripcion: "color azul", imagen: "" },
+                        { id: 3, nombre: "Polo", descripcion: "color azul", imagen: "" }
+                        ].map((producto) => (
+                            <tr key={producto.id} className="hover:bg-gray-100">
+                                <td className="px-4 py-2 border">{producto.id}</td>
+                                <td className="px-4 py-2 border">{producto.nombre}</td>
+                                <td className="px-4 py-2 border">{producto.descripcion}</td>
+                                <td className="px-4 py-2 border">{producto.imagen}</td>
                                 <td className="px-4 py-2 border text-center">
                                     <FontAwesomeIcon icon={faPenToSquare} className="h-6 w-6" />
                                 </td>
@@ -64,6 +63,7 @@ const Productos = () => {
                     </tbody>
                 </table>
             </div>
+
             <Modal isOpen={isModalOpen} onClose={closeModal} title="Registrar Producto">
                 <form>
                     <div className="mb-4">

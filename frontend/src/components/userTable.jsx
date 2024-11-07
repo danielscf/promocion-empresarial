@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { useSelector, useDispatch } from 'react-redux';
@@ -12,12 +12,12 @@ const userTable = () => {
     const usuarios = useSelector((state) => state.usuarios.usuarios);
 
     useEffect(() => {
-
+        
         dispatch(fetchUsuarios());
 
     }, [dispatch]);
 
-    const columns = [
+    const columns = useMemo(() => [
         {
             name: 'ID',
             selector: row => row.usuarioId,
@@ -51,19 +51,20 @@ const userTable = () => {
         {
             name: 'ELIMINAR',
             cell: row => (
-
                 <FontAwesomeIcon
                     icon={faTrash}
                     className="text-red-600 cursor-pointer h-6 w-6"
                     onClick={() => handleDelete(row.usuarioId)}
                 />
-
             ),
             ignoreRowClick: true,
             button: true,
         },
-    ];
-    const usuariosFiltrados = usuarios.filter(usuario => usuario.usuarioEstado !== 3);
+    ], []); 
+
+    const usuariosFiltrados = useMemo(() => {
+        return usuarios.filter(usuario => usuario.usuarioEstado !== 3);
+    }, [usuarios]);
 
     const handleDelete = async (id) => {
 

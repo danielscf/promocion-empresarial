@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect,useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { addNewSolicitud } from '../store/solicitudSlice';
@@ -14,14 +14,20 @@ const registrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
     const { rubros } = useSelector((state) => state.rubros)
     const { tipoContribuyentes } = useSelector((state) => state.tipoContribuyentes)
     const { tipoActividad } = useSelector((state) => state.tipoActividad)
+    const [dni, setdni] = useState("")
 
     useEffect(() => {
 
         dispatch(fetchRubros())
         dispatch(fetchTipoContribuyente())
         dispatch(fetchTipoActividad())
+        console.log(dni)
 
     }, [dispatch])
+    useEffect(() => {
+        console.log(dni)
+    }, [dni])
+    
 
     const onSubmit = async (data) => {
 
@@ -53,13 +59,14 @@ const registrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
                             <div className="flex md:flex-row justify-center items-center col-span-6">
                                 <input type="text" placeholder='Ingresar dni'
                                     className="w-full md:w-64 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                    {...register('usuarioDni', { required: true })} />
+                                    {...register('usuarioDni', { required: true })} 
+                                    onChange={e =>setdni(e.target.value)}/>
                                 {errors.usuarioDni && <span className="text-red-500">El dni es requerido</span>}
                                 <FontAwesomeIcon className="mx-3 cursor-pointer" icon={faMagnifyingGlass} />
                             </div>
 
                             {/* Nombre de Usuario */}
-                            <div className="col-span-6 md:col-span-2 lg:col-span-3">
+                            <div className="col-span-6 md:col-span-3 lg:col-span-3">
                                 <label htmlFor="nombre_usuario" className="block text-sm font-medium leading-6 text-gray-900">
                                     Nombre de Usuario
                                 </label>
@@ -70,7 +77,7 @@ const registrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
                             </div>
 
                             {/* Nombres */}
-                            <div className="col-span-6 md:col-span-2 lg:col-span-3">
+                            <div className="col-span-6 md:col-span-3 lg:col-span-3">
                                 <label htmlFor="nombres" className="block text-sm font-medium leading-6 text-gray-900">
                                     Nombres
                                 </label>
@@ -81,7 +88,7 @@ const registrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
                             </div>
 
                             {/* Apellido Paterno */}
-                            <div className="col-span-6 md:col-span-2 lg:col-span-3">
+                            <div className="col-span-6 md:col-span-3 lg:col-span-3">
                                 <label htmlFor="apellido-paterno" className="block text-sm font-medium leading-6 text-gray-900">
                                     Apellido Paterno
                                 </label>
@@ -92,7 +99,7 @@ const registrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
                             </div>
 
                             {/* Apellido Materno */}
-                            <div className="col-span-6 md:col-span-2 lg:col-span-3">
+                            <div className="col-span-6 md:col-span-3 lg:col-span-3">
                                 <label htmlFor="apellido-materno" className="block text-sm font-medium leading-6 text-gray-900">
                                     Apellido Materno
                                 </label>
@@ -103,7 +110,7 @@ const registrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
                             </div>
 
                             {/* Teléfono */}
-                            <div className="col-span-6 md:col-span-2 lg:col-span-3">
+                            <div className="col-span-6 md:col-span-3 lg:col-span-3">
                                 <label htmlFor="telefono" className="block text-sm font-medium leading-6 text-gray-900">
                                     Teléfono
                                 </label>
@@ -122,7 +129,7 @@ const registrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
                             </div>
 
                             {/* Correo */}
-                            <div className="col-span-6 md:col-span-2 lg:col-span-3">
+                            <div className="col-span-6 md:col-span-3 lg:col-span-3">
                                 <label htmlFor="correo" className="block text-sm font-medium leading-6 text-gray-900">
                                     Correo
                                 </label>
@@ -133,7 +140,7 @@ const registrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
                             </div>
 
                             {/* Fecha de nacimiento */}
-                            <div className="col-span-6 md:col-span-2 lg:col-span-3">
+                            <div className="col-span-6 md:col-span-3 lg:col-span-3">
                                 <label htmlFor="fecha_nacimiento" className="block text-sm font-medium leading-6 text-gray-900">
                                     Fecha de nacimiento
                                 </label>
@@ -144,7 +151,7 @@ const registrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
                             </div>
 
                             {/* Contraseña */}
-                            <div className="col-span-6 md:col-span-2 lg:col-span-3">
+                            <div className="col-span-6 md:col-span-3 lg:col-span-3">
                                 <label htmlFor="contrasena" className="block text-sm font-medium leading-6 text-gray-900">
                                     Contraseña
                                 </label>
@@ -166,7 +173,7 @@ const registrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
                             </div>
 
                             {/* Dirección */}
-                            <div className="col-span-6 md:col-span-2 lg:col-span-3">
+                            <div className="col-span-6 md:col-span-3 lg:col-span-3">
                                 <label htmlFor="direccion" className="block text-sm font-medium leading-6 text-gray-900">
                                     Dirección
                                 </label>
@@ -177,7 +184,7 @@ const registrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
                             </div>
 
                             {/* Razon Social */}
-                            <div className="col-span-6 md:col-span-2 lg:col-span-3">
+                            <div className="col-span-6 md:col-span-3 lg:col-span-3">
                                 <label htmlFor="razon_social" className="block text-sm font-medium leading-6 text-gray-900">
                                     Razón Social
                                 </label>
@@ -188,7 +195,7 @@ const registrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
                             </div>
 
                             {/* Estado Contribuyente */}
-                            <div className="col-span-6 md:col-span-2 lg:col-span-3">
+                            <div className="col-span-6 md:col-span-3 lg:col-span-3">
                                 <label htmlFor="estadoContribuyente" className="block text-sm font-medium leading-6 text-gray-900">
                                     Estado Contribuyente
                                 </label>
@@ -199,7 +206,7 @@ const registrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
                             </div>
 
                             {/* Condición Contribuyente */}
-                            <div className="col-span-6 md:col-span-2 lg:col-span-3">
+                            <div className="col-span-6 md:col-span-3 lg:col-span-3">
                                 <label htmlFor="condicionContribuyente" className="block text-sm font-medium leading-6 text-gray-900">
                                     Condición Contribuyente
                                 </label>
@@ -210,7 +217,7 @@ const registrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
                             </div>
 
                             {/* Rubro */}
-                            <div className="col-span-6 md:col-span-2 lg:col-span-3">
+                            <div className="col-span-6 md:col-span-3 lg:col-span-3">
                                 <label htmlFor="rubro" className="block text-sm font-medium leading-6 text-gray-900">
                                     Rubro
                                 </label>
@@ -234,7 +241,7 @@ const registrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
                             </div>
 
                             {/* Tipo Contribuyente */}
-                            <div className="col-span-6 md:col-span-2 lg:col-span-3">
+                            <div className="col-span-6 md:col-span-3 lg:col-span-3">
                                 <label htmlFor="tipoContribuyente" className="block text-sm font-medium leading-6 text-gray-900">
                                     Tipo contribuyente
                                 </label>
@@ -258,7 +265,7 @@ const registrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
                             </div>
 
                             {/* Tipo Actividad */}
-                            <div className="col-span-6 md:col-span-2 lg:col-span-3">
+                            <div className="col-span-6 md:col-span-3 lg:col-span-3">
                                 <label htmlFor="tipoActividad" className="block text-sm font-medium leading-6 text-gray-900">
                                     Tipo actividad
                                 </label>
@@ -282,7 +289,7 @@ const registrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
                             </div>
 
                             {/* Foto del Emprendedor */}
-                            <div className="col-span-6 md:col-span-2 lg:col-span-3">
+                            <div className="col-span-6 md:col-span-3 lg:col-span-3">
                                 <label htmlFor="foto" className="block text-sm font-medium leading-6 text-gray-900">
                                     Foto del emprendedor
                                 </label>

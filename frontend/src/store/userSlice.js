@@ -30,22 +30,38 @@ const userSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(fetchUsuarios.fulfilled, (state, action) => {
-                state.usuarios = action.payload;
-            })
-            .addCase(addNewUsuario.fulfilled, (state, action) => {
-                state.usuarios.push(action.payload);
-                state.error = null;
-            })
             .addCase(fetchUsuarios.pending, (state) => {
                 state.status = 'loading';
+            })
+            .addCase(fetchUsuarios.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.usuarios = action.payload;
             })
             .addCase(fetchUsuarios.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.error.message;
             })
+            .addCase(addNewUsuario.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(addNewUsuario.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.usuarios.push(action.payload);
+            })
+            .addCase(addNewUsuario.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message;
+            })
+            .addCase(deleteUsuario.pending, (state) => {
+                state.status = 'loading';
+            })
             .addCase(deleteUsuario.fulfilled, (state, action) => {
+                state.status = 'succeeded';
                 state.usuarios = state.usuarios.filter((user) => user.usuarioId !== action.payload.usuarioId);
+            })
+            .addCase(deleteUsuario.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message;
             });
     }
 });

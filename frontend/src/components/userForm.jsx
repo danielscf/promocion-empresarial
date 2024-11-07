@@ -1,31 +1,28 @@
 import React from 'react'
 import { addNewUsuario } from '../store/userSlice';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { getAllRol } from '../services/rolService';
 import { useState, useEffect } from 'react';
-import { showSuccessMessage ,showErrorMessage} from '../app/utils/messages';
+import { showSuccessMessage, showErrorMessage } from '../app/utils/messages';
 
 
 const userForm = ({ closeModal, register, handleSubmit, errors, reset }) => {
 
     const [roles, setroles] = useState([])
     const dispatch = useDispatch();
-   
+
     const onSubmit = async (data) => {
-        
+
         dispatch(addNewUsuario(data)).then((response) => {
-            //console.log(response)
-            
-            if(response.type === "usuarios/addNewUsuario/fulfilled"){
-                showSuccessMessage()
-            }else if(response.type === "usuarios/addNewUsuario/rejected"){
-                showErrorMessage()
+
+            if (response.type === "usuarios/addNewUsuario/fulfilled") {
+                showSuccessMessage();
+                reset();
+                closeModal();
+            } else if (response.type === "usuarios/addNewUsuario/rejected") {
+                showErrorMessage();
             }
-          
         });
-      
-        closeModal()
-        reset()
     };
 
     useEffect(() => {
@@ -36,8 +33,8 @@ const userForm = ({ closeModal, register, handleSubmit, errors, reset }) => {
 
         }
         cargarRoles()
-  
-    },)
+
+    }, [])
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -45,7 +42,7 @@ const userForm = ({ closeModal, register, handleSubmit, errors, reset }) => {
                 <label htmlFor="nombreUsuario" className="block text-sm font-medium text-gray-700 mb-1">Nombre Usuario</label>
                 <input type="text" className="border border-gray-300 rounded-md w-full p-2 focus:outline-none focus:ring focus:ring-indigo-500"
                     {...register('usuarioUsuario', { required: true })} />
-                {errors.usuarioUsuario && <span className="text-red-500">El nombre es requerido</span>}
+                {errors.usuarioUsuario && <span className="text-red-500">El nombre de usuario es requerido</span>}
             </div>
 
             <div className="mb-4">
@@ -78,22 +75,31 @@ const userForm = ({ closeModal, register, handleSubmit, errors, reset }) => {
 
             <div className="mb-4">
                 <label htmlFor="dni" className="block text-sm font-medium text-gray-700 mb-1">DNI</label>
-                <input type="text" className="border border-gray-300 rounded-md w-full p-2 focus:outline-none focus:ring focus:ring-indigo-500"
-                    {...register('usuarioDni',  {
+                <input
+                    type="text"
+                    className="border border-gray-300 rounded-md w-full p-2 focus:outline-none focus:ring focus:ring-indigo-500"
+                    {...register('usuarioDni', {
                         required: "El Dni es requerido",
                         pattern: {
-                            value: /^[0-8]{8}$/,
-                            message: "El dni debe tener 8 dígitos"
+                            value: /^\d{8}$/,
+                            message: "El DNI debe tener 8 dígitos"
                         }
-                    })} />
+                    })}
+                />
                 {errors.usuarioDni && <p className="text-red-600 text-sm mt-1">{errors.usuarioDni.message}</p>}
             </div>
 
             <div className="mb-4">
                 <label htmlFor="correo" className="block text-sm font-medium text-gray-700 mb-1">Correo</label>
                 <input type="email" id="correo" className="border border-gray-300 rounded-md w-full p-2 focus:outline-none focus:ring focus:ring-indigo-500"
-                    {...register('usuarioCorreo', { required: true })} />
-                {errors.usuarioCorreo && <span className="text-red-500">El correo es requerido</span>}
+                    {...register('usuarioCorreo', {
+                        required: "El correo es requerido",
+                        pattern: {
+                            value: /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/,
+                            message: "Formato de correo inválido"
+                        }
+                    })} />
+                {errors.usuarioCorreo && <p className="text-red-600 text-sm mt-1">{errors.usuarioCorreo.message}</p>}
             </div>
 
             <div className="mb-4">
