@@ -8,10 +8,8 @@ const usuarioApi = axios.create({
 
 usuarioApi.interceptors.request.use(
     (config) => {
-        const token = localStorage.getItem('token');
-        if (token) {
-            config.headers.Authorization = `Bearer ${token}`;
-        }
+        
+        config.withCredentials = true;
         return config;
     },
     (error) => Promise.reject(error)

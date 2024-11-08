@@ -58,7 +58,7 @@ const userTable = () => {
                 />
             ),
             ignoreRowClick: true,
-            button: true,
+            button: "true",
         },
     ], []); 
 

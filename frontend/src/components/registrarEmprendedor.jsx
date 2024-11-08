@@ -51,10 +51,10 @@ const registrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="space-y-12">
                     <div className="border-b w-full border-gray-900/10 pb-12">
-                        <div className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-8">
+                        <div className="mt-10 grid grid-cols-1 md:grid-cols-6 lg:grid-cols-6 gap-x-6 gap-y-8">
 
                             {/* Datos de Usuario */}
-                            <h3 className="text-xl font-bold mb-4 col-span-6">Datos de Usuario</h3>
+                            <h3 className="text-xl font-bold mb-4 col-span-6 md:col-span-3">Datos de Usuario</h3>
 
                             <div className="flex md:flex-row justify-center items-center col-span-6">
                                 <input type="text" placeholder='Ingresar dni'
