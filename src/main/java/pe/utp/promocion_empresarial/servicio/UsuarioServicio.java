@@ -15,8 +15,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import pe.utp.promocion_empresarial.dto.login.AuthenticatedUserDto;
 import pe.utp.promocion_empresarial.dto.usuario.UsuarioDto;
 import pe.utp.promocion_empresarial.dto.usuario.UsuarioLoginRequestDto;
+import pe.utp.promocion_empresarial.dto.usuario.UsuarioNoContrasenaDto;
 import pe.utp.promocion_empresarial.dto.usuario.UsuarioNuevoDto;
 import pe.utp.promocion_empresarial.entidad.Rol;
 import pe.utp.promocion_empresarial.entidad.Usuario;
@@ -115,18 +117,22 @@ public class UsuarioServicio implements UserDetailsService {
         return new UsuarioLogin(user);
     }
 
-    public String verificarUsuario(UsuarioLoginRequestDto credenciales) {
+    public AuthenticatedUserDto verificarUsuario(UsuarioLoginRequestDto credenciales) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         credenciales.getUsuarioUsuario(),
                         credenciales.getUsuarioContrasena()
                 )
         );
-        if (authentication.isAuthenticated()) {
-            return jwtService.generateToken(credenciales.getUsuarioUsuario());
-        } else {
-            return "Error";
+
+        if (!authentication.isAuthenticated()){
+            throw new RuntimeException("Credenciales incorrectas");
         }
+
+        String token = jwtService.generateToken(credenciales.getUsuarioUsuario());
+        Usuario usuario = usuarioRepositorio.findUsuarioByUsuarioUsuario(credenciales.getUsuarioUsuario());
+
+        return new AuthenticatedUserDto(token, usuario);
     }
 
 }
