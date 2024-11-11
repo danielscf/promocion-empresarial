@@ -25,7 +25,7 @@ const userTable = () => {
         },
         {
             name: 'NOMBRE',
-            selector: row => row.usuarioUsuario,
+            selector: row => row.usuarioNombre,
             sortable: true,
         },
         {
@@ -62,11 +62,9 @@ const userTable = () => {
         },
     ], []); 
 
-    const usuariosFiltrados = useMemo(() => {
-        return usuarios.filter(usuario => usuario.usuarioEstado !== 3);
-    }, [usuarios]);
+    const usuariosFiltrados = usuarios.filter(usuario => usuario.usuarioEstado !== 3 && usuario.usuarioEstado !== 0);
 
-    const handleDelete = async (id) => {
+    const handleDelete = async(id) => {
 
         const confirmed = await showConfirmation();
         if (confirmed) {

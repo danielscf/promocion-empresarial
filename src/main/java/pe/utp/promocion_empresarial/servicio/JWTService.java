@@ -19,6 +19,7 @@ import java.util.function.Function;
 @Service
 public class JWTService {
     private String secretkey = "";
+    private long expirationTime = 30 * 60 * 1000;
 
     public JWTService() {
         try {
@@ -37,7 +38,7 @@ public class JWTService {
                 .add(claims)
                 .subject(username)
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 60 * 60 * 30))
+                .expiration(new Date(System.currentTimeMillis() + expirationTime))
                 .and()
                 .signWith(getKey())
                 .compact();
@@ -78,5 +79,8 @@ public class JWTService {
 
     private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
+    }
+    public long getExpirationTime() {
+        return expirationTime;
     }
 }

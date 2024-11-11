@@ -1,4 +1,4 @@
-import React, { useEffect,useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { addNewSolicitud } from '../store/solicitudSlice';
@@ -8,6 +8,7 @@ import { fetchTipoContribuyente } from '../store/tipoContribuyenteSlice';
 import { fetchTipoActividad } from '../store/tipoActividadSlice';
 import { showErrorMessage, showSuccessMessage } from '../app/utils/messages';
 
+
 const registrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset }) => {
 
     const dispatch = useDispatch()
@@ -15,7 +16,12 @@ const registrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
     const { tipoContribuyentes } = useSelector((state) => state.tipoContribuyentes)
     const { tipoActividad } = useSelector((state) => state.tipoActividad)
     const [dni, setdni] = useState("")
+    const [selectedFile, setSelectedFile] = useState(null);
 
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        setSelectedFile(file);
+    };
     useEffect(() => {
 
         dispatch(fetchRubros())
@@ -27,23 +33,88 @@ const registrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
     useEffect(() => {
         console.log(dni)
     }, [dni])
-    
 
     const onSubmit = async (data) => {
-
-        dispatch(addNewSolicitud(data)).then((response) => {
-            console.log(response.type)
-            if (response.type === 'solicitud/addNewSolicitud/fulfilled') {
-                showSuccessMessage()
-            } else if (response.type === 'solicitud/addNewSolicitud/rejected') {
-                showErrorMessage()
+        try {
+        
+            const formData = new FormData();
+           
+            const nuevaSolicitud= {
+                usuario: {
+                    "usuarioDni": data.usuarioDni,
+                    "usuarioUsuario": data.usuarioUsuario,
+                    "usuarioContrasena": data.usuarioContrasena,
+                    "usuarioNombre": data.usuarioNombre,
+                    "usuarioApellidoPaterno": data.usuarioApellidoPaterno,
+                    "usuarioApellidoMaterno": data.usuarioApellidoMaterno,
+                    "usuarioCorreo": data.usuarioCorreo,
+                    "usuarioTelefono": data.usuarioTelefono,
+                    "usuarioFechaNacimiento": data.usuarioFechaNacimiento
+                },
+                emprendedor: {
+                    "emprendedorRuc": data.emprendedorRuc,
+                    "emprendedorDireccion": data.emprendedorDireccion,
+                    "emprendedorRazonSocial": data.emprendedorRazonSocial,
+                    "emprendedorEstadoContribuyente": 0,
+                    "emprendedorCondicionContribuyente": 0,
+                    "rubro": {
+                        "rubroId": data.rubroId,
+                        "rubroNombre": data.rubroNombre
+                    },
+                    "tipoContribuyente": {
+                        "tipoContribuyenteId": data.tipoContribuyenteId,
+                        "tipoContribuyenteNombre": data.tipoContribuyenteNombre
+                    },
+                    "tipoActividad": {
+                        "tipoActividadId": data.tipoActividadId,
+                        "tipoActividadNombre": data.tipoActividadNombre
+                    }
+                }
+            };
+    
+            formData.append('nuevaSolicitud', JSON.stringify(nuevaSolicitud));
+            
+            if (selectedFile) {
+                formData.append('foto', selectedFile);
+            } else {
+                throw new Error('No se seleccionó una foto.');
             }
-        })
-        //console.log(data);
-        reset()
+    
+            formData.append('emprendedorRuc', data.emprendedorRuc);
+    
+            dispatch(addNewSolicitud({nuevoSolicitud: nuevaSolicitud,selectedFile: selectedFile,emprendedorRuc: data.emprendedorRuc})).then((response) => {
+                if (response.type === 'solicitudes/addNewSolicitud/fulfilled') {
+                    showSuccessMessage('Registro exitoso', 'La registro se ha realizado con exito')
+                    reset()
+                } else if (response.type === 'solicitudes/addNewSolicitud/rejected') {
+                    showErrorMessage('Error en el registro', 'Hubo un problema en realizar el registro')
+                }
+            });
+            
+        } catch (error) {
+            console.error('Error al registrar solicitud:', error);
+    
+            if (error.response) {
+                showErrorMessage(
+                    'Error del servidor',
+                    `Hubo un error al procesar tu solicitud. Detalles: ${error.response.data.message || error.response.statusText}`
+                );
+            } else if (error.request) {
 
-    };
+                showErrorMessage(
+                    'Error de red',
+                    `No se pudo conectar con el servidor. Por favor, revisa tu conexión a Internet y vuelve a intentarlo. Detalles: ${error.message}`
+                );
+            } else {
 
+                showErrorMessage(
+                    'Error desconocido',
+                    `Hubo un error desconocido: ${error.message}. Intenta de nuevo más tarde.`
+                );
+            }
+        }
+    }; 
+    
     return (
         <div>
             <h2 className="text-center text-2xl font-bold mb-6">Registro de Emprendedor</h2>
@@ -59,8 +130,8 @@ const registrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
                             <div className="flex md:flex-row justify-center items-center col-span-6">
                                 <input type="text" placeholder='Ingresar dni'
                                     className="w-full md:w-64 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                    {...register('usuarioDni', { required: true })} 
-                                    onChange={e =>setdni(e.target.value)}/>
+                                    {...register('usuarioDni', { required: true })}
+                                    onChange={e => setdni(e.target.value)} />
                                 {errors.usuarioDni && <span className="text-red-500">El dni es requerido</span>}
                                 <FontAwesomeIcon className="mx-3 cursor-pointer" icon={faMagnifyingGlass} />
                             </div>
@@ -74,6 +145,17 @@ const registrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
                                 ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                     {...register('usuarioUsuario', { required: true })} />
                                 {errors.usuarioUsuario && <span className="text-red-500">El nombre de usuario es requerido</span>}
+                            </div>
+
+                            {/* Contraseña */}
+                            <div className="col-span-6 md:col-span-3 lg:col-span-3">
+                                <label htmlFor="contrasena" className="block text-sm font-medium leading-6 text-gray-900">
+                                    Contraseña
+                                </label>
+                                <input type="password" className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset
+                                 ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                    {...register('usuarioContrasena', { required: true })} />
+                                {errors.usuarioContrasena && <span className="text-red-500">La contraseña es requerida</span>}
                             </div>
 
                             {/* Nombres */}
@@ -148,17 +230,6 @@ const registrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
                                 ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                     {...register('usuarioFechaNacimiento', { required: true })} />
                                 {errors.usuarioFechaNacimiento && <span className="text-red-500">La fecha de nacimiento es requerida</span>}
-                            </div>
-
-                            {/* Contraseña */}
-                            <div className="col-span-6 md:col-span-3 lg:col-span-3">
-                                <label htmlFor="contrasena" className="block text-sm font-medium leading-6 text-gray-900">
-                                    Contraseña
-                                </label>
-                                <input type="password" className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset
-                                 ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                    {...register('usuarioContrasena', { required: true })} />
-                                {errors.usuarioContrasena && <span className="text-red-500">La contraseña es requerida</span>}
                             </div>
 
                             {/* Datos de Emprendedor */}
@@ -293,13 +364,11 @@ const registrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
                                 <label htmlFor="foto" className="block text-sm font-medium leading-6 text-gray-900">
                                     Foto del emprendedor
                                 </label>
-                                <input
-                                    type="text"
-                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 
-                                    placeholder:text-gray-400 focus:ring-2 focus:ring-inset 
-                                focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                    {...register('emprendedorFoto', { required: true })}
+                                <input type="file" accept="image/*" className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300  
+                                    placeholder:text-gray-400 focus:ring-2 focus:ring-inset  focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                    onChange={handleFileChange}
                                 />
+                                {errors.emprendedorFoto && <span className="text-red-500">La foto es requerida</span>}
                             </div>
 
                             <div className="mt-6 flex justify-end col-span-6">

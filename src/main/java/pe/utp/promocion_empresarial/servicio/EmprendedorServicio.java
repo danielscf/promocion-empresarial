@@ -4,6 +4,8 @@ import pe.utp.promocion_empresarial.dto.emprendedor.EmprendedorDto;
 import pe.utp.promocion_empresarial.entidad.Emprendedor;
 
 import java.util.List;
+import java.util.Optional;
+
 
 public interface EmprendedorServicio {
 
@@ -11,8 +13,12 @@ public interface EmprendedorServicio {
 
     EmprendedorDto findEmprendedorById(Long empredorId);
 
+    Optional<EmprendedorDto> findByUsuarioUsername(String usuarioUsuario);
+
     Emprendedor guardarCambiosEmprendedor(Emprendedor emprendedor);
 
     void eliminarEmprendedor(Long emprendedorId);
+
+    EmprendedorDto findEmprendedorByRuc(String ruc);
 
 }

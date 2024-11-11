@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getAllTipoActividad } from '../services/tipoActividadService';
+import { getAllTipoActividad } from '../api/tipoActividadApi';
 
 export const fetchTipoActividad = createAsyncThunk('tipoActividad/fetchTipoActividad',async () => {
 

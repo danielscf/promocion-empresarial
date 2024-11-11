@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 export default function EmprendedorLayout({ children }) {
     return (
-
+      
         <div className="flex flex-row justify-between">
             <NavbarUser>
                 <div className="flex flex-col">

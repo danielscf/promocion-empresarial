@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getAllRubro } from '../services/rubroService';
+import { getAllRubro } from '../api/rubroApi';
 
 export const fetchRubros = createAsyncThunk('rubros/fetchRubros',async () => {
 

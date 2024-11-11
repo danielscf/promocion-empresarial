@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getAllTipoContribuyente } from '../services/tipoContribuyenteService';
+import { getAllTipoContribuyente } from '../api/tipoContribuyenteApi';
 
 export const fetchTipoContribuyente = createAsyncThunk('tipoContribuyentes/fetchTipoContribuyente',async () => {
 

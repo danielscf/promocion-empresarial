@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import pe.utp.promocion_empresarial.dto.usuario.UsuarioDto;
 import pe.utp.promocion_empresarial.dto.usuario.UsuarioLoginRequestDto;
 import pe.utp.promocion_empresarial.dto.usuario.UsuarioNuevoDto;
+import pe.utp.promocion_empresarial.dto.usuario.UsuarioRolDto;
 import pe.utp.promocion_empresarial.entidad.Rol;
 import pe.utp.promocion_empresarial.entidad.Usuario;
 import pe.utp.promocion_empresarial.entidad.UsuarioLogin;
@@ -114,6 +115,7 @@ public class UsuarioServicio implements UserDetailsService {
 
         return new UsuarioLogin(user);
     }
+
 
     public String verificarUsuario(UsuarioLoginRequestDto credenciales) {
         Authentication authentication = authenticationManager.authenticate(

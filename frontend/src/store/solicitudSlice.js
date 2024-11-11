@@ -1,48 +1,41 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { createSolicitud } from '../services/solicitudService';
+import { createSolicitud,getAllSolicitud,getSolicitudById as apigetSolicitudById, aprobarSolicitud, rechazarSolicitud, eliminarSolicitud } from '../api/solicitudApi';
 
-export const addNewSolicitud = createAsyncThunk('solicitud/addNewSolicitud', async (nuevoSolicitud) => {
-
-    const datos = {
-        "usuario": {
-            "usuarioDni": nuevoSolicitud.usuarioDni,
-            "usuarioNombre": nuevoSolicitud.usuarioNombre,
-            "usuarioApellidoPaterno": nuevoSolicitud.usuarioApellidoPaterno,
-            "usuarioApellidoMaterno": nuevoSolicitud.usuarioApellidoMaterno,
-            "usuarioCorreo": nuevoSolicitud.usuarioCorreo,
-            "usuarioTelefono": nuevoSolicitud.usuarioTelefono,
-            "usuarioFechaNacimiento": nuevoSolicitud.usuarioFechaNacimiento
-        },
-        "emprendedor": {
-            "emprendedorRuc": nuevoSolicitud.emprendedorRuc,
-            "emprendedorDireccion": nuevoSolicitud.emprendedorDireccion,
-            "emprendedorRazonSocial": nuevoSolicitud.emprendedorRazonSocial,
-            "emprendedorEstadoContribuyente": 0,
-            "emprendedorCondicionContribuyente": 0,
-            "emprendedorFoto": nuevoSolicitud.emprendedorFoto,
-            "rubro": {
-                "rubroId": nuevoSolicitud.rubroId,
-                "rubroNombre": nuevoSolicitud.rubroNombre
-            },
-            "tipoContribuyente": {
-                "tipoContribuyenteId": nuevoSolicitud.tipoContribuyenteId,
-                "tipoContribuyenteNombre": nuevoSolicitud.tipoContribuyenteNombre
-            },
-            "tipoActividad": {
-                "tipoActividadId": nuevoSolicitud.tipoActividadId,
-                "tipoActividadNombre": nuevoSolicitud.tipoActividadNombre
-            }
-        }
-    }
-
-    const response = await createSolicitud(datos)
+export const addNewSolicitud = createAsyncThunk('solicitudes/addNewSolicitud', async ({ nuevoSolicitud, selectedFile, emprendedorRuc }) => {
+    const response = await createSolicitud(nuevoSolicitud, selectedFile, emprendedorRuc);
     return response.data;
 });
 
+export const fetchSolicitudes = createAsyncThunk('solicitudes/fetchSolicitudes',async () => {
+   const response = await getAllSolicitud()
+   return response.data
+})
+
+export const getSolicitudById = createAsyncThunk('solicitudes/getSolicitudById',async (solicitudId) => {
+    const response = await apigetSolicitudById(solicitudId)
+    return response.data
+})
+
+export const approveSolicitud = createAsyncThunk('solicitudes/approveSolicitud',async (solicitudId) => {
+    const response = await aprobarSolicitud(solicitudId)
+    return response.data
+})
+
+export const declineSolicitud = createAsyncThunk('solicitud/declineSolicitud',async (solicitudId) => {
+    const response = await rechazarSolicitud(solicitudId)
+    return response.data
+})
+
+export const deleteSolicitud = createAsyncThunk('solicitud/deleteSolicitud', async (solicitudId) => {
+    const response = await eliminarSolicitud(solicitudId)
+    return response.data
+})
+
 const solicitudSlice = createSlice({
-    name: 'solicitud',
+    name: 'solicitudes',
     initialState: {
-        solicitud: [],
+        solicitudes: [],
+        nuevaSolicitud: null,
         status: 'idle',
         error: null
     },
@@ -56,11 +49,42 @@ const solicitudSlice = createSlice({
             })
             .addCase(addNewSolicitud.fulfilled, (state, action) => {
                 state.status = 'succeeded';
-                state.solicitud.push(action.payload);
+                state.nuevaSolicitud = action.payload;
             })
             .addCase(addNewSolicitud.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.payload;
+            })
+            .addCase(fetchSolicitudes.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.solicitudes = action.payload; 
+            })
+            .addCase(fetchSolicitudes.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message;
+            })
+            .addCase(getSolicitudById.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(getSolicitudById.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.nuevaSolicitud = action.payload;
+            })
+            .addCase(getSolicitudById.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message;
+            })
+            .addCase(approveSolicitud.fulfilled, (state, action) => {
+                state.status = 'succeeded'
+                state.nuevaSolicitud = action.payload
+            })
+            .addCase(declineSolicitud.fulfilled, (state, action) => {
+                state.status = 'succeeded'
+                state.nuevaSolicitud = action.payload
+            })
+            .addCase(deleteSolicitud.fulfilled,(state, action) => {
+                state.status = 'succeeded'
+                state.solicitudes = state.solicitudes.filter(solicitud => solicitud.solicitudId !== action.payload.solicitudId )
             });
     }
 });

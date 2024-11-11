@@ -1,23 +1,23 @@
 package pe.utp.promocion_empresarial.dto.usuario;
 
-public interface UsuarioPreviewDto {
+import java.time.LocalDate;
+
+public interface UsuarioUpdateDto {
 
     Long getUsuarioId();
 
     String getUsuarioUsuario();
 
-    String getUsuarioNombre();
-
-    String getUsuarioCorreo();
-
     String getUsuarioDni();
 
-    String getUsuarioTelefono();
+    String getUsuarioNombre();
 
     String getUsuarioApellidoPaterno();
 
     String getUsuarioApellidoMaterno();
 
-    Integer getUsuarioEstado();
+    String getUsuarioCorreo();
+
+    String getUsuarioTelefono();
 
 }

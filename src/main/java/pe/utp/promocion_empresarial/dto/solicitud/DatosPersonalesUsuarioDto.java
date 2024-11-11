@@ -10,6 +10,8 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DatosPersonalesUsuarioDto {
+    private String usuarioUsuario;
+    private String usuarioContrasena;
     private String usuarioDni;
     private String usuarioNombre;
     private String usuarioApellidoPaterno;

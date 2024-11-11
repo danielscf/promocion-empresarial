@@ -29,7 +29,7 @@ const Productos = () => {
                     Registrar Producto
                 </button>
             </div>
-            {/* Se agrega overflow-x-auto para hacer la tabla responsive */}
+            
             <div className="overflow-x-auto">
                 <table className="min-w-full table-auto border border-gray-300 rounded-lg shadow-md">
                     <thead className="bg-gray-800 text-white">

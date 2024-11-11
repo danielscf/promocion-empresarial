@@ -3,27 +3,41 @@
 import { useState } from 'react';
 import Link from 'next/link'
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
-import { Bars3Icon,XMarkIcon } from '@heroicons/react/24/outline'
+import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';
+
 
 const navigation = [
-  { name: 'Inicio', href: '/promocion-empresarial/home', current: true },
-  { name: 'Mis Datos', href: '/promocion-empresarial/mis-datos/datos-personales', current: false },
-  { name: 'Usuarios', href: '/promocion-empresarial/usuarios', current: false },
-  { name: 'Emprendedor', href: '/promocion-empresarial/emprendedor/datos-emprendedor', current: false },
+  { name: 'Inicio', href: '/promocion-empresarial/home' },
+  { name: 'Mis Datos', href: '/promocion-empresarial/mis-datos/datos-personales' },
+  { name: 'Usuarios', href: '/promocion-empresarial/usuarios' },
+  { name: 'Emprendedor', href: '/promocion-empresarial/emprendedor/datos-emprendedor' },
 ];
+
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
 
 const Navbar = () => {
-  const [activeLink, setActiveLink] = useState('Inicio'); // Controla el enlace activo
-
+  const [activeLink, setActiveLink] = useState('Inicio');
+  const { logout, user } = useContext(AuthContext)
   const handleLinkClick = (name) => {
-    setActiveLink(name); // Actualiza el enlace activo
+    setActiveLink(name);
   };
+
+  const filteredNavigation = navigation.filter(item => {
+
+    if (user.roles[0].rolNombre === 'Administrador') {
+      return item.name !== 'Emprendedor'
+    } else if (user.roles[0].rolNombre === 'Emprendedor') {
+      return item.name === 'Inicio' || item.name === 'Emprendedor'
+    }
+
+  });
 
   return (
     <Disclosure as="nav" className="bg-blue-500">
@@ -47,14 +61,14 @@ const Navbar = () => {
             </div>
             <div className="hidden sm:ml-6 sm:block">
               <div className="flex space-x-4">
-                {navigation.map((item) => (
+                {filteredNavigation.map((item) => (
                   <Link
                     key={item.name}
                     href={item.href}
-                    onClick={() => handleLinkClick(item.name)} // Cambia el enlace activo cuando se hace clic
+                    onClick={() => handleLinkClick(item.name)}
                     className={classNames(
                       activeLink === item.name
-                        ? 'bg-blue-700 text-white' // Color más oscuro para el enlace activo
+                        ? 'bg-blue-700 text-white'
                         : 'text-gray-200 hover:bg-blue-600 hover:text-white',
                       'rounded-md px-3 py-2 text-sm font-medium'
                     )}
@@ -71,15 +85,15 @@ const Navbar = () => {
 
               <MenuButton className="relative flex items-center rounded-full bg-blue-700 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                 <span className="sr-only">Open user menu</span>
-                <p className='text-white p-2 mr-1'>Luis565432</p>
-                <FontAwesomeIcon icon={faChevronDown} className="text-white mr-2" /> 
+                <p className='text-white p-2 mr-1'>{user.usuarioUsuario}</p>
+                <FontAwesomeIcon icon={faChevronDown} className="text-white mr-2" />
               </MenuButton>
 
               <MenuItems className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
 
                 <MenuItem>
                   {({ active }) => (
-                    <a href="#" className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}>
+                    <a onClick={() => logout()} className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}>
                       Cerrar sesion
                     </a>
                   )}
@@ -92,12 +106,12 @@ const Navbar = () => {
 
       <DisclosurePanel className="sm:hidden">
         <div className="space-y-1 px-2 pb-3 pt-2">
-          {navigation.map((item) => (
-            <DisclosureButton
+          {filteredNavigation.map((item) => (
+            <Disclosure.Button
               key={item.name}
               as="a"
               href={item.href}
-              onClick={() => handleLinkClick(item.name)} // Cambia el enlace activo en vista móvil
+              onClick={() => handleLinkClick(item.name)}
               className={classNames(
                 activeLink === item.name
                   ? 'bg-blue-700 text-white'
@@ -106,7 +120,7 @@ const Navbar = () => {
               )}
             >
               {item.name}
-            </DisclosureButton>
+            </Disclosure.Button>
           ))}
         </div>
       </DisclosurePanel>

@@ -34,6 +34,7 @@ public class JwtFilter extends OncePerRequestFilter {
         String token = null;
         String username = null;
 
+
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {
@@ -44,20 +45,39 @@ public class JwtFilter extends OncePerRequestFilter {
             }
         }
 
-        if (token != null) {
-            username = jwtService.extractUserName(token);
-        }
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = context.getBean(UsuarioServicio.class).loadUserByUsername(username);
 
-            if (jwtService.validateToken(token, userDetails)) {
-                UsernamePasswordAuthenticationToken authToken =
-                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authToken);
+        if (token != null) {
+            try {
+                username = jwtService.extractUserName(token);
+            } catch (Exception e) {
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token inválido");
+                return;
+            }
+        }
+
+
+        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            try {
+                UserDetails userDetails = context.getBean(UsuarioServicio.class).loadUserByUsername(username);
+
+
+                if (jwtService.validateToken(token, userDetails)) {
+
+                    UsernamePasswordAuthenticationToken authToken =
+                            new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                }
+            } catch (Exception e) {
+
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Usuario no encontrado o token inválido");
+                return;
             }
         }
 
         filterChain.doFilter(request, response);
     }
+
 }

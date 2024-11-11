@@ -1,15 +1,15 @@
 import React from 'react'
 import { addNewUsuario } from '../store/userSlice';
 import { useDispatch } from 'react-redux';
-import { getAllRol } from '../services/rolService';
+import { getAllRol } from '../api/rolApi';
 import { useState, useEffect } from 'react';
 import { showSuccessMessage, showErrorMessage } from '../app/utils/messages';
-
 
 const userForm = ({ closeModal, register, handleSubmit, errors, reset }) => {
 
     const [roles, setroles] = useState([])
     const dispatch = useDispatch();
+
 
     const onSubmit = async (data) => {
 
@@ -63,14 +63,14 @@ const userForm = ({ closeModal, register, handleSubmit, errors, reset }) => {
                 <label htmlFor="apellidoPaterno" className="block text-sm font-medium text-gray-700 mb-1">Apellido Paterno</label>
                 <input type="text" id="apellidoPaterno" className="border border-gray-300 rounded-md w-full p-2 focus:outline-none focus:ring focus:ring-indigo-500"
                     {...register('usuarioApellidoPaterno', { required: true })} />
-                {errors.usuarioApellidoPaterno && <span className="text-red-500">Los apellidos son requeridos</span>}
+                {errors.usuarioApellidoPaterno && <span className="text-red-500">El apellido paterno es requerido</span>}
             </div>
 
             <div className="mb-4">
                 <label htmlFor="apellidoMaterno" className="block text-sm font-medium text-gray-700 mb-1">Apellido Materno</label>
                 <input type="text" className="border border-gray-300 rounded-md w-full p-2 focus:outline-none focus:ring focus:ring-indigo-500"
                     {...register('usuarioApellidoMaterno', { required: true })} />
-                {errors.usuarioApellidoMaterno && <span className="text-red-500">Los apellidos son requeridos</span>}
+                {errors.usuarioApellidoMaterno && <span className="text-red-500">El apellido materno es requerido</span>}
             </div>
 
             <div className="mb-4">

@@ -1,6 +1,6 @@
 'use client'
 
-import React,{useState} from 'react'
+import React, { useState } from 'react'
 import './styles/login.css'
 import { useForm } from 'react-hook-form'
 import { useRouter } from 'next/navigation';
@@ -15,7 +15,7 @@ function LoginPage() {
   const { login } = useContext(AuthContext);
 
   const onSubmit = async (data) => {
-    setError(''); 
+    setError('');
 
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/login`, {
@@ -30,11 +30,15 @@ function LoginPage() {
       });
 
       if (response.ok) {
-        const token = await response.text(); 
-        login(token);
+
+        const { token, expiration, usuario } = await response.json();
+        console.log('Token:', token);
+        console.log('Expiration Time:', expiration);
+        login(token, expiration, usuario);
+        
         router.push('/promocion-empresarial/home');
       } else {
-        const errorData = await response.json();  
+        const errorData = await response.json();
         console.log('Error en la respuesta:', errorData);
         setError('Credenciales incorrectas. Intenta nuevamente.');
       }
@@ -47,13 +51,8 @@ function LoginPage() {
   return (
     <div
       className="login-page min-h-screen flex items-center justify-center"
-      style={{
-        backgroundImage: `url(${'/images/parque.jpeg'})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        width: '100vw',
-        height: '100vh',
-      }}
+      style={{backgroundImage: `url(${'/images/parque.jpeg'})`,backgroundSize: 'cover',backgroundPosition: 'center',
+        width: '100vw',height: '100vh'}}
     >
       <div className="login-box p-10 shadow-lg bg-white rounded-lg">
         <div className="text-center mb-6">

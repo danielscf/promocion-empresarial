@@ -1,15 +1,27 @@
 package pe.utp.promocion_empresarial.controlador;
 
-import java.util.HashSet;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+//import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+//import java.util.Set;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.web.multipart.MultipartFile;
 import pe.utp.promocion_empresarial.dto.solicitud.*;
+import pe.utp.promocion_empresarial.dto.usuario.UsuarioDto;
+import pe.utp.promocion_empresarial.dto.usuario.UsuarioNuevoDto;
 import pe.utp.promocion_empresarial.entidad.*;
+import pe.utp.promocion_empresarial.repositorio.UsuarioRepositorio;
 import pe.utp.promocion_empresarial.servicio.*;
 
 @RestController
@@ -24,6 +36,12 @@ public class SolicitudControlador {
 
     @Autowired
     private RolServicio rolServicio;
+
+    @Autowired
+    private SolicitudServicioImpl solicitudServicioImpl;
+
+    @Autowired
+    private UsuarioRepositorio usuarioRepositorio;
 
     @Autowired
     private UsuarioServicio usuarioServicio;
@@ -55,63 +73,55 @@ public class SolicitudControlador {
                 .body(solicitudGuardado);
     }
 
-    @PostMapping("/emprendedor/usuario")
-    public ResponseEntity<Solicitud> registrarSolicitudUsuarioEmprendedor(@RequestBody SolicitudNuevoEmprendedorDto solicitudNuevoEmprendedorDto) {
-        Usuario informacionUsuario = new Usuario();
-        Emprendedor informacionEmprendedor = new Emprendedor();
-        Solicitud solicitudUsuario = new Solicitud();
+    @PostMapping(value = "/emprendedor/usuario", consumes = {"multipart/form-data"})
+    public ResponseEntity<?> registrarSolicitudUsuarioEmprendedor(
+            @RequestParam("foto") MultipartFile foto,
+            @RequestParam("emprendedorRuc") String emprendedorRuc,
+            @RequestParam("solicitud") String solicitudJson) {
 
-        Rol rol = rolServicio.findRolByNombre("Emprendedor");
-        Set<Rol> roles = new HashSet<Rol>();
-        roles.add(rol);
-        // TODO: Hash password
-        // TODO: Mapper
+        try {
+            // Crear y configurar ObjectMapper para manejar Java 8 LocalDate
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.registerModule(new JavaTimeModule());
+            objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
-        DatosPersonalesUsuarioDto datosUsuario = solicitudNuevoEmprendedorDto.getUsuario();
-        String credencialesTemporal = "TEMP" + datosUsuario.getUsuarioDni() + datosUsuario.getUsuarioNombre();
+            // Convertir JSON recibido de 'solicitud' a objeto SolicitudNuevoEmprendedorDto
+            SolicitudNuevoEmprendedorDto solicitudNuevoEmprendedorDto = objectMapper.readValue(solicitudJson, SolicitudNuevoEmprendedorDto.class);
 
-        informacionUsuario.setUsuarioUsuario(credencialesTemporal);
-        informacionUsuario.setUsuarioContrasena(credencialesTemporal);
-        informacionUsuario.setUsuarioDni(datosUsuario.getUsuarioDni());
-        informacionUsuario.setUsuarioNombre(datosUsuario.getUsuarioNombre());
-        informacionUsuario.setUsuarioApellidoPaterno(datosUsuario.getUsuarioApellidoPaterno());
-        informacionUsuario.setUsuarioApellidoMaterno(datosUsuario.getUsuarioApellidoMaterno());
-        informacionUsuario.setUsuarioCorreo(datosUsuario.getUsuarioCorreo());
-        informacionUsuario.setUsuarioTelefono(datosUsuario.getUsuarioTelefono());
-        informacionUsuario.setUsuarioFechaNacimiento(datosUsuario.getUsuarioFechaNacimiento());
-        informacionUsuario.setRoles(roles);
+            Usuario usuarioExistente = usuarioRepositorio.findUsuarioByUsuarioUsuario(solicitudNuevoEmprendedorDto.getUsuario().getUsuarioUsuario());
+            if (usuarioExistente != null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El usuario ya existe");
+            }
 
-        Usuario usuarioGuardado = usuarioServicio.guardarCambiosUsuario(informacionUsuario);
+            UsuarioNuevoDto nuevoUsuario = solicitudServicioImpl.convertirADtoUsuario(solicitudNuevoEmprendedorDto.getUsuario());
+            Usuario usuarioGuardado = usuarioServicio.guardarUsuario(nuevoUsuario);
+            Emprendedor informacionEmprendedor = solicitudServicioImpl.convertirADtoEmprendedor(solicitudNuevoEmprendedorDto.getEmprendedor(), usuarioGuardado);
 
-        DatosNuevoEmprendedorDto datosEmprendedor = solicitudNuevoEmprendedorDto.getEmprendedor();
-        informacionEmprendedor.setEmprendedorRuc(datosEmprendedor.getEmprendedorRuc());
-        informacionEmprendedor.setEmprendedorDireccion(datosEmprendedor.getEmprendedorDireccion());
-        informacionEmprendedor.setEmprendedorRazonSocial(datosEmprendedor.getEmprendedorRazonSocial());
-        informacionEmprendedor.setEmprendedorEstadoContribuyente(datosEmprendedor.getEmprendedorEstadoContribuyente());
-        informacionEmprendedor.setEmprendedorCondicionContribuyente(datosEmprendedor.getEmprendedorCondicionContribuyente());
-        informacionEmprendedor.setEmprendedorFoto(datosEmprendedor.getEmprendedorFoto());
-        informacionEmprendedor.setUsuario(usuarioGuardado);
-        informacionEmprendedor.setRubro(datosEmprendedor.getRubro());
-        informacionEmprendedor.setTipoContribuyente(datosEmprendedor.getTipoContribuyente());
-        informacionEmprendedor.setTipoActividad(datosEmprendedor.getTipoActividad());
+            // Subir la foto del emprendedor
+            if (!foto.isEmpty()) {
+                String directorioFotos = "D:\\fotos";
+                String nombreArchivo = emprendedorRuc + "_" + foto.getOriginalFilename();
+                Path rutaFoto = Paths.get(directorioFotos).resolve(nombreArchivo).toAbsolutePath();
+                Files.copy(foto.getInputStream(), rutaFoto, StandardCopyOption.REPLACE_EXISTING);
+                informacionEmprendedor.setEmprendedorFoto(nombreArchivo);  // Asignar la foto al emprendedor
+            }
 
-        Emprendedor emprendedorGuardado = emprendedorServicio.guardarCambiosEmprendedor(informacionEmprendedor);
+            Emprendedor emprendedorGuardado = emprendedorServicio.guardarCambiosEmprendedor(informacionEmprendedor);
 
-        TipoSolicitud tipoSolicitud = tipoSolicitudServicio.findTipoSolicitudByNombre("Nuevo usuario emprendedor");
-        String solicitudDescripcion = "Solicitud de nuevo usuario: " +
-                informacionUsuario.getUsuarioNombre() +
-                informacionUsuario.getUsuarioApellidoPaterno() +
-                informacionUsuario.getUsuarioApellidoMaterno();
+            TipoSolicitud tipoSolicitud = tipoSolicitudServicio.findTipoSolicitudByNombre("Nuevo usuario emprendedor");
+            Solicitud solicitudUsuario = new Solicitud();
+            solicitudUsuario.setSolicitudDescripcion("Solicitud de nuevo usuario: " + usuarioGuardado.getUsuarioNombre() + " " + usuarioGuardado.getUsuarioApellidoPaterno() + " " + usuarioGuardado.getUsuarioApellidoMaterno());
+            solicitudUsuario.setTipoSolicitud(tipoSolicitud);
+            solicitudUsuario.setEmprendedor(emprendedorGuardado);
+            solicitudUsuario.setUsuario(usuarioGuardado);
+            Solicitud solicitudGuardada = solicitudServicio.guardarCambiosSolicitud(solicitudUsuario);
 
-        solicitudUsuario.setSolicitudDescripcion(solicitudDescripcion);
-        solicitudUsuario.setTipoSolicitud(tipoSolicitud);
-        solicitudUsuario.setEmprendedor(emprendedorGuardado);
-
-        Solicitud solicitudGuardada = solicitudServicio.guardarCambiosSolicitud(solicitudUsuario);
-
-        return ResponseEntity.ok()
-                .body(solicitudGuardada);
+            return ResponseEntity.ok().body(solicitudGuardada);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al registrar: " + e.getMessage());
+        }
     }
+
 
     @PutMapping
     public ResponseEntity<Solicitud> editarSolicitud(@RequestBody Solicitud solicitud) {

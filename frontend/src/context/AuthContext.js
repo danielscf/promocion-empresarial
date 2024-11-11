@@ -1,40 +1,58 @@
 import React, { createContext, useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
-
+import { useRouter } from 'next/navigation';
 export const AuthContext = createContext();
 
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+
   const [token, setToken] = useState(null);
+  const [user, setUser] = useState(null);
+ 
+  const router = useRouter()
 
   useEffect(() => {
 
     const savedToken = Cookies.get('token');
-    //  const savedUser = JSON.parse(localStorage.getItem('user'));
+    const tokenExpiration = Cookies.get('tokenExpiration'); 
 
-    if (savedToken) {
-      setToken(savedToken);
-      //setUser(savedUser);
-    }
+    if (savedToken && tokenExpiration) {
+      const expirationDate = new Date(Number(tokenExpiration));  
+      //console.log('expirationDate:', expirationDate);  
+  
+      if (expirationDate > new Date()) {    
+        setToken(savedToken);
+      } else {      
+        alert('Tu sesión ha expirado, por favor inicia sesión nuevamente.');
+        logout();
+      }
+    } 
+
   }, []);
+ 
 
-  const login = (token) => {
+  const login = (token, expiration, usuario) => {
     setToken(token);
-    //  setUser(userData);
+    setUser(usuario);
     Cookies.set('token', token, { expires: 1 });
-    //localStorage.setItem('user', JSON.stringify(userData));
+    Cookies.set('tokenExpiration', expiration, { expires: 1 });
+    Cookies.set('usuario', expiration, { expires: 1 });
+    //console.log("Token guardado en cookies:", token);
   };
 
   const logout = () => {
     setToken(null);
-   // setUser(null);
     Cookies.remove('token');
-    //localStorage.removeItem('user');
+    Cookies.remove('tokenExpiration');
+    Cookies.remove('usuario');
+    router.push('/');  
   };
+  const updateUserInContext = (updatedUser) => {
+    setUser(updatedUser); 
+};
 
   return (
-    <AuthContext.Provider value={{ token, login }}>
+    <AuthContext.Provider value={{ token, login,logout,user,updateUserInContext }}>
       {children}
     </AuthContext.Provider>
   );

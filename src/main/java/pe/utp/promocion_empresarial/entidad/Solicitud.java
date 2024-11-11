@@ -53,7 +53,7 @@ public class Solicitud {
     private Emprendedor emprendedor;
 
     @ManyToOne
-    @JoinColumn(name = "usua_operador_id", nullable = true)
+    @JoinColumn(name = "usua_operador_id", nullable = false)
     private Usuario usuario;
 
     @ManyToOne
