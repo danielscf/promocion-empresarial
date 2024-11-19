@@ -15,6 +15,7 @@ const navigation = [
   { name: 'Mis Datos', href: '/promocion-empresarial/mis-datos/datos-personales' },
   { name: 'Usuarios', href: '/promocion-empresarial/usuarios' },
   { name: 'Emprendedor', href: '/promocion-empresarial/emprendedor/datos-emprendedor' },
+  { name: 'Emprendedores', href: '/promocion-empresarial/emprendedores' },
 ];
 
 
@@ -29,15 +30,16 @@ const Navbar = () => {
     setActiveLink(name);
   };
 
-  const filteredNavigation = navigation.filter(item => {
-
-    if (user.roles[0].rolNombre === 'Administrador') {
-      return item.name !== 'Emprendedor'
-    } else if (user.roles[0].rolNombre === 'Emprendedor') {
-      return item.name === 'Inicio' || item.name === 'Emprendedor'
-    }
-
-  });
+  const filteredNavigation = user?.roles?.[0]?.rolNombre
+    ? navigation.filter(item => {
+        if (user.roles[0].rolNombre === 'Administrador' && 'Operador') {
+          return item.name !== 'Emprendedor' && 'Emprendedores';
+        } else if (user.roles[0].rolNombre === 'Emprendedor') {
+          return item.name === 'Inicio' || item.name === 'Emprendedor';
+        }
+        return false;
+      })
+    : [];
 
   return (
     <Disclosure as="nav" className="bg-blue-500">
@@ -85,7 +87,7 @@ const Navbar = () => {
 
               <MenuButton className="relative flex items-center rounded-full bg-blue-700 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                 <span className="sr-only">Open user menu</span>
-                <p className='text-white p-2 mr-1'>{user.usuarioUsuario}</p>
+                <p className='text-white p-2 mr-1'>{user ? user.usuarioUsuario : 'Cargando...'}</p>
                 <FontAwesomeIcon icon={faChevronDown} className="text-white mr-2" />
               </MenuButton>
 

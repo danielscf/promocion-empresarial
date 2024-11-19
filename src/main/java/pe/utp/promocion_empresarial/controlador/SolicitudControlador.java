@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 
 import org.springframework.web.multipart.MultipartFile;
 import pe.utp.promocion_empresarial.dto.solicitud.*;
-import pe.utp.promocion_empresarial.dto.usuario.UsuarioDto;
 import pe.utp.promocion_empresarial.dto.usuario.UsuarioNuevoDto;
 import pe.utp.promocion_empresarial.entidad.*;
 import pe.utp.promocion_empresarial.repositorio.UsuarioRepositorio;
@@ -80,30 +79,28 @@ public class SolicitudControlador {
             @RequestParam("solicitud") String solicitudJson) {
 
         try {
-            // Crear y configurar ObjectMapper para manejar Java 8 LocalDate
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.registerModule(new JavaTimeModule());
             objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
-            // Convertir JSON recibido de 'solicitud' a objeto SolicitudNuevoEmprendedorDto
             SolicitudNuevoEmprendedorDto solicitudNuevoEmprendedorDto = objectMapper.readValue(solicitudJson, SolicitudNuevoEmprendedorDto.class);
 
             Usuario usuarioExistente = usuarioRepositorio.findUsuarioByUsuarioUsuario(solicitudNuevoEmprendedorDto.getUsuario().getUsuarioUsuario());
             if (usuarioExistente != null) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El usuario ya existe");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El usuario con ese nombre de usuario ya existe");
             }
 
             UsuarioNuevoDto nuevoUsuario = solicitudServicioImpl.convertirADtoUsuario(solicitudNuevoEmprendedorDto.getUsuario());
             Usuario usuarioGuardado = usuarioServicio.guardarUsuario(nuevoUsuario);
+
             Emprendedor informacionEmprendedor = solicitudServicioImpl.convertirADtoEmprendedor(solicitudNuevoEmprendedorDto.getEmprendedor(), usuarioGuardado);
 
-            // Subir la foto del emprendedor
             if (!foto.isEmpty()) {
                 String directorioFotos = "D:\\fotos";
                 String nombreArchivo = emprendedorRuc + "_" + foto.getOriginalFilename();
                 Path rutaFoto = Paths.get(directorioFotos).resolve(nombreArchivo).toAbsolutePath();
                 Files.copy(foto.getInputStream(), rutaFoto, StandardCopyOption.REPLACE_EXISTING);
-                informacionEmprendedor.setEmprendedorFoto(nombreArchivo);  // Asignar la foto al emprendedor
+                informacionEmprendedor.setEmprendedorFoto(nombreArchivo);
             }
 
             Emprendedor emprendedorGuardado = emprendedorServicio.guardarCambiosEmprendedor(informacionEmprendedor);
@@ -114,13 +111,17 @@ public class SolicitudControlador {
             solicitudUsuario.setTipoSolicitud(tipoSolicitud);
             solicitudUsuario.setEmprendedor(emprendedorGuardado);
             solicitudUsuario.setUsuario(usuarioGuardado);
+
             Solicitud solicitudGuardada = solicitudServicio.guardarCambiosSolicitud(solicitudUsuario);
 
             return ResponseEntity.ok().body(solicitudGuardada);
+
         } catch (Exception e) {
+
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al registrar: " + e.getMessage());
         }
     }
+
 
 
     @PutMapping

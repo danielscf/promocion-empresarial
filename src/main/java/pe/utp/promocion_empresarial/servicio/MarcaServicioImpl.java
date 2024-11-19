@@ -1,6 +1,7 @@
 package pe.utp.promocion_empresarial.servicio;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,6 @@ public class MarcaServicioImpl implements MarcaServicio {
     public MarcaDto findMarcaById(Long marcaId) {
         return marcaRepositorio.findByMarcaId(marcaId);
     }
-
     @Override
     public Marca guardarCambiosMarca(Marca marca) {
         return marcaRepositorio.save(marca);
@@ -33,6 +33,16 @@ public class MarcaServicioImpl implements MarcaServicio {
     @Override
     public void eliminarMarca(Long marcaId) {
         marcaRepositorio.deleteById(marcaId);
+    }
+
+    @Override
+    public List<MarcaDto> findMarcasByEmprendedorId(Long emprendedorId) {
+        return marcaRepositorio.findByEmprendedorEmprendedorId(emprendedorId);
+    }
+    @Override
+    public Optional<Marca> findMarcaByNombre(String marcaNombre) {
+
+        return marcaRepositorio.findByMarcaNombre(marcaNombre);
     }
 
 }

@@ -4,13 +4,13 @@ import React from 'react'
 import Modal from '@/src/components/modal';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
+import ProductoForm from '@/src/components/productoForm';
+import ProductoTable from '@/src/components/productoTable';
 
 const Productos = () => {
 
-    const { register, handleSubmit, formState: { errors }, setValue } = useForm()
+    const { register, handleSubmit,reset, formState: { errors }, setValue } = useForm()
 
 
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -29,87 +29,18 @@ const Productos = () => {
                     Registrar Producto
                 </button>
             </div>
+
+            <ProductoTable />
             
-            <div className="overflow-x-auto">
-                <table className="min-w-full table-auto border border-gray-300 rounded-lg shadow-md">
-                    <thead className="bg-gray-800 text-white">
-                        <tr>
-                            <th className="px-4 py-2 border whitespace-nowrap">ID</th>
-                            <th className="px-4 py-2 border whitespace-nowrap">NOMBRE</th>
-                            <th className="px-4 py-2 border whitespace-nowrap">DESCRIPCIÓN</th>
-                            <th className="px-4 py-2 border whitespace-nowrap">IMAGEN</th>
-                            <th className="px-4 py-2 border whitespace-nowrap">EDITAR</th>
-                            <th className="px-4 py-2 border text-center whitespace-nowrap">ELIMINAR</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {[{ id: 1, nombre: "Polo", descripcion: "color azul", imagen: "" },
-                        { id: 2, nombre: "Polo", descripcion: "color azul", imagen: "" },
-                        { id: 3, nombre: "Polo", descripcion: "color azul", imagen: "" }
-                        ].map((producto) => (
-                            <tr key={producto.id} className="hover:bg-gray-100">
-                                <td className="px-4 py-2 border">{producto.id}</td>
-                                <td className="px-4 py-2 border">{producto.nombre}</td>
-                                <td className="px-4 py-2 border">{producto.descripcion}</td>
-                                <td className="px-4 py-2 border">{producto.imagen}</td>
-                                <td className="px-4 py-2 border text-center">
-                                    <FontAwesomeIcon icon={faPenToSquare} className="h-6 w-6" />
-                                </td>
-                                <td className="px-4 py-2 border text-center">
-                                    <FontAwesomeIcon icon={faTrash} className="text-red-600 h-6 w-6" />
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
+            <Modal isOpen={isModalOpen} handleClose={closeModal} title="Registrar Producto">
 
-            <Modal isOpen={isModalOpen} onClose={closeModal} title="Registrar Producto">
-                <form>
-                    <div className="mb-4">
-                        <label htmlFor="nombre" className="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
-                        <input
-                            type="text"
-                            id="nombre"
-                            className="border border-gray-300 rounded-md w-full p-2 focus:outline-none focus:ring focus:ring-indigo-500"
-                            {...register('nombre', { required: true })}
-                        />
-                        {errors.nombre && <span className="text-red-500">El nombre es requerido</span>}
-                    </div>
-
-                    <div className="mb-4">
-                        <label htmlFor="descripcion" className="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
-                        <input
-                            type="text"
-                            id="descripcion"
-                            className="border border-gray-300 rounded-md w-full p-2 focus:outline-none focus:ring focus:ring-indigo-500"
-                            {...register('nombre', { required: true })}
-                        />
-                        {errors.descripcion && <span className="text-red-500">La descripcion es requerido</span>}
-                    </div>
-
-                    <div className="mb-4">
-                        <label htmlFor="imagen" className="block text-sm font-medium text-gray-700 mb-1 mr-4">Imagen</label>
-                        <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-400 hover:border-gray-600 rounded-lg cursor-pointer bg-gray-100 hover:bg-gray-200 transition duration-300">
-                            <div className="flex flex-col items-center justify-center">
-                                <svg className="w-8 h-8 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16l-4-4m0 0l4-4m-4 4h18M13 12h7m0 0v8m0-8V4"></path>
-                                </svg>
-                                <p className="text-gray-600 mt-2">Subir Imagen</p>
-                            </div>
-                            <input type="file" className="hidden" accept="image/*" />
-                        </label>
-                    </div>
-
-                    <div className="flex justify-end mt-4">
-                        <button type="button" className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 mr-2" onClick={closeModal}>
-                            Cerrar
-                        </button>
-                        <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
-                            Registrar
-                        </button>
-                    </div>
-                </form>
+                <ProductoForm 
+                 register={register}
+                 handleSubmit={handleSubmit}
+                 errors={errors}
+                 reset={reset}
+                 closeModal={closeModal}
+                 />
 
             </Modal>
         </div>

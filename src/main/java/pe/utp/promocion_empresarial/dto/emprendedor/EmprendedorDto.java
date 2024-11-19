@@ -1,11 +1,13 @@
 package pe.utp.promocion_empresarial.dto.emprendedor;
 
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import pe.utp.promocion_empresarial.dto.rubro.RubroDto;
 import pe.utp.promocion_empresarial.dto.tipoActividad.TipoActividadDto;
 import pe.utp.promocion_empresarial.dto.tipoContribuyente.TipoContribuyenteDto;
 import pe.utp.promocion_empresarial.dto.usuario.UsuarioDto;
 
-
+@JsonDeserialize(as = EmprendedorDtoImpl.class)
 public interface EmprendedorDto {
     Long getEmprendedorId();
 
@@ -15,9 +17,9 @@ public interface EmprendedorDto {
 
     String getEmprendedorRazonSocial();
 
-    Integer getEmprendedorEstadoContribuyente();
+    String getEmprendedorEstadoContribuyente();
 
-    Integer getEmprendedorCondicionContribuyente();
+    String getEmprendedorCondicionContribuyente();
 
     String getEmprendedorFoto();
 

@@ -7,7 +7,7 @@ export const fetchEmprendedor = createAsyncThunk('emprendedor/fetchEmprendedor',
     return response.data;
 });
 
-export const editEmprendedor = createAsyncThunk('emprendedor/editEmprendedor', async (datos_emprendedor, { extra }) => {
+export const editEmprendedor = createAsyncThunk('emprendedor/editEmprendedor', async (datos_emprendedor) => {
 
     const response = await apiEditEmprendedor(datos_emprendedor)
     return response.data
@@ -34,10 +34,14 @@ const emprendedorSlice = createSlice({
                 state.status = 'failed';
                 state.error = action.error.message;
             })
-            .addCase(editEmprendedor.fulfilled ,(state, action) => {
-                state.status = 'succeeded'
-                state.emprendedor = action.payload
+            .addCase(editEmprendedor.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.emprendedor = {
+                    ...state.emprendedor,  
+                    ...action.payload      
+                };
             });
+            
     }
 });
 

@@ -2,13 +2,7 @@ package pe.utp.promocion_empresarial.entidad;
 
 import java.util.Set;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,7 +25,8 @@ public class Marca {
     @Column(name = "marc_imagen", nullable = false, length = 255)
     private String marcaImagen;
 
-    @OneToMany(mappedBy = "marca")
-    private Set<Producto> productos;
+    @ManyToOne
+    @JoinColumn(name = "empr_id", nullable = false)
+    private Emprendedor emprendedor;
 
 }

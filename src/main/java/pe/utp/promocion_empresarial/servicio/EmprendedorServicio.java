@@ -21,4 +21,7 @@ public interface EmprendedorServicio {
 
     EmprendedorDto findEmprendedorByRuc(String ruc);
 
+    Optional<EmprendedorDto> findByUsuarioDni(String dni);
+
+
 }

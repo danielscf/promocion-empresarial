@@ -32,7 +32,7 @@ function LoginPage() {
       if (response.ok) {
 
         const { token, expiration, usuario } = await response.json();
-        console.log('Token:', token);
+       // console.log('Token:', token);
         console.log('Expiration Time:', expiration);
         login(token, expiration, usuario);
         

@@ -9,28 +9,25 @@ const solicitudApi = axios.create({
 export const createSolicitud = async (solicitud, selectedFile, emprendedorRuc) => {
     const formData = new FormData();
     
-    // Agrega los datos del 'solicitud' al FormData
-    formData.append('solicitud', JSON.stringify(solicitud));  // Convierte la solicitud a JSON antes de enviarla
+    formData.append('solicitud', JSON.stringify(solicitud)); 
 
-    // Agrega la foto y el RUC a los parámetros
     if (selectedFile) {
         formData.append('foto', selectedFile);
     }
+
     formData.append('emprendedorRuc', emprendedorRuc);
 
-    // Configura los headers, por ejemplo para la autenticación
     const headers = {
-        'Content-Type': 'multipart/form-data',  // Aunque Axios maneja esto, es opcional agregarlo
+        'Content-Type': 'multipart/form-data',  
     
     };
 
-    // Realiza la solicitud POST usando el FormData
     try {
         const response = await solicitudApi.post('/emprendedor/usuario', formData, { headers });
-        return response;  // Devuelve la respuesta del servidor
+        return response;  
     } catch (error) {
         console.error('Error al crear solicitud:', error);
-        throw error;  // Lanza el error para manejarlo más arriba si es necesario
+        throw error;  
     }
 };
 

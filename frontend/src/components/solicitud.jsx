@@ -18,12 +18,11 @@ const Solicitud = ({ solicitudes }) => {
         }
     }
 
-    const solicitudesFiltradas = solicitudes.filter(solicitud => solicitud.solicitudEstado !== 3)
 
     return (
 
         <div className='w-full flex flex-wrap justify-center gap-4'>
-            {solicitudesFiltradas.map((solicitud) => (
+            {solicitudes.map((solicitud) => (
                 <div
                     key={solicitud.solicitudId}
                     className={`flex flex-row items-center justify-center w-full p-6 ${solicitud.solicitudEstado === 2 ? 'bg-lime-300' : solicitud.solicitudEstado === 1 ? 'bg-red-400' : 'bg-white'} 

@@ -62,7 +62,7 @@ const userTable = () => {
         },
     ], []); 
 
-    const usuariosFiltrados = usuarios.filter(usuario => usuario.usuarioEstado !== 3 && usuario.usuarioEstado !== 0);
+    const usuariosFiltrados = usuarios.filter(usuario => usuario.usuarioEstado !== 3);
 
     const handleDelete = async(id) => {
 

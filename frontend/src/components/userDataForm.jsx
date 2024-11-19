@@ -16,13 +16,13 @@ const userDataForm = () => {
 
     useEffect(() => {
         reset({
-            usuarioNombre: user.usuarioNombre,
-            usuarioApellidoPaterno: user.usuarioApellidoPaterno,
-            usuarioApellidoMaterno: user.usuarioApellidoMaterno,
-            usuarioDni: user.usuarioDni,
-            usuarioTelefono: user.usuarioTelefono,
-            usuarioCorreo: user.usuarioCorreo,
-            usuarioUsuario: user.usuarioUsuario,
+            usuarioNombre: user?.usuarioNombre,
+            usuarioApellidoPaterno: user?.usuarioApellidoPaterno,
+            usuarioApellidoMaterno: user?.usuarioApellidoMaterno,
+            usuarioDni: user?.usuarioDni,
+            usuarioTelefono: user?.usuarioTelefono,
+            usuarioCorreo: user?.usuarioCorreo,
+            usuarioUsuario: user?.usuarioUsuario,
         });
     }, [user, reset]);
 

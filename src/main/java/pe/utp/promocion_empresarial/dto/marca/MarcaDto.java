@@ -1,5 +1,9 @@
 package pe.utp.promocion_empresarial.dto.marca;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import pe.utp.promocion_empresarial.dto.emprendedor.EmprendedorDto;
+
+@JsonDeserialize(as = MarcaDtoImpl.class)
 public interface MarcaDto {
 
     Long getMarcaId();
@@ -8,4 +12,5 @@ public interface MarcaDto {
 
     String getMarcaImagen();
 
+    EmprendedorDto getEmprendedor();
 }

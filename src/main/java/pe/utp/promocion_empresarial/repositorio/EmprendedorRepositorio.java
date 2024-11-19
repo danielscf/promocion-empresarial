@@ -16,4 +16,7 @@ public interface EmprendedorRepositorio extends JpaRepository<Emprendedor, Long>
     Optional<Emprendedor> findByUsuarioUsuarioUsuario(String usuarioUsuario);
 
     Emprendedor findByEmprendedorRuc(String emprendedorRuc);
+
+    Optional<Emprendedor> findByUsuarioUsuarioDni(String dni);
+
 }

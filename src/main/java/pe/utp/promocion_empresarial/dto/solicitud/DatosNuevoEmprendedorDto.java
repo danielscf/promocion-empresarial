@@ -14,8 +14,8 @@ public class DatosNuevoEmprendedorDto {
     private String emprendedorRuc;
     private String emprendedorDireccion;
     private String emprendedorRazonSocial;
-    private Integer emprendedorEstadoContribuyente;
-    private Integer emprendedorCondicionContribuyente;
+    private String emprendedorEstadoContribuyente;
+    private String emprendedorCondicionContribuyente;
     private String emprendedorFoto;
     private Rubro rubro;
     private TipoContribuyente tipoContribuyente;

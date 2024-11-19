@@ -33,12 +33,16 @@ public class EmprendedorServicioImpl implements EmprendedorServicio {
                 .map(this::convertToDto);
     }
 
-
     private EmprendedorDto convertToDto(Emprendedor emprendedor) {
 
         return emprendedorRepositorio.findByEmprendedorId(emprendedor.getEmprendedorId());
     }
 
+    public Emprendedor convertToEntity(EmprendedorDto emprendedorDto) {
+        Emprendedor emprendedor = new Emprendedor();
+        emprendedor.setEmprendedorId(emprendedorDto.getEmprendedorId());
+        return emprendedor;
+    }
     @Override
     public Emprendedor guardarCambiosEmprendedor(Emprendedor emprendedor) {
         return emprendedorRepositorio.save(emprendedor);
@@ -56,5 +60,11 @@ public class EmprendedorServicioImpl implements EmprendedorServicio {
         }
         return null;
     }
+    @Override
+    public Optional<EmprendedorDto> findByUsuarioDni(String dni) {
+        return emprendedorRepositorio.findByUsuarioUsuarioDni(dni)
+                .map(this::convertToDto);
+    }
+
 
 }

@@ -1,23 +1,22 @@
 package pe.utp.promocion_empresarial.entidad;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.*;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
+
+import java.util.Objects;
+import java.util.Set;
 
 @Data
 @Entity
 @Table(name = "tbl_emprendedor")
 @NoArgsConstructor
 @AllArgsConstructor
+
 public class Emprendedor {
     @Id
     @Column(name = "empr_id")
@@ -34,12 +33,10 @@ public class Emprendedor {
     private String emprendedorRazonSocial;
 
     @Column(name = "empr_estado_contribuyente", nullable = false)
-    @ColumnDefault(value = "0")
-    private Integer emprendedorEstadoContribuyente;
+    private String emprendedorEstadoContribuyente;
 
     @Column(name = "empr_condicion_contribuyente", nullable = false)
-    @ColumnDefault(value = "0")
-    private Integer emprendedorCondicionContribuyente;
+    private String emprendedorCondicionContribuyente;
 
     @Column(name = "empr_foto", nullable = false, length = 255)
     private String emprendedorFoto;
@@ -59,4 +56,11 @@ public class Emprendedor {
     @ManyToOne
     @JoinColumn(name = "tipo_acti_id", nullable = false)
     private TipoActividad tipoActividad;
+
+
+
+    public Emprendedor(Long emprendedorId) {
+        this.emprendedorId = emprendedorId;
+    }
+
 }

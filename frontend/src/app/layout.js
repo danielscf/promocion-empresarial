@@ -5,6 +5,7 @@ import "./styles/globals.css";
 import { Provider } from 'react-redux';
 import { store } from "../store/store";
 import { AuthProvider } from "../context/AuthContext";
+import { EmprendedorProvider } from "../context/EmprendedorContext";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -21,16 +22,19 @@ const geistMono = localFont({
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <Provider store={store}>
-        <AuthProvider>
-          <body
-            className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-          >
-            {children}
-          </body>
-        </AuthProvider>
-      </Provider>
+    <html lang="en" style={{ height: '100vh' }}>
+      <body style={{ height: '100vh' }}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        <Provider store={store}>
+          <AuthProvider>
+            <EmprendedorProvider>
+              {children}
+            </EmprendedorProvider>
+          </AuthProvider>
+        </Provider>
+      </body>
     </html>
+
   );
 }

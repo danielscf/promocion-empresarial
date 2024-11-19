@@ -5,6 +5,9 @@ import tipoContribuyenteReducer from './tipoContribuyenteSlice'
 import tipoActividadReducer from './tipoActividadSlice'
 import solicitudReducer from './solicitudSlice'
 import emprendedorReducer from './emprendedorSlice'
+import marcaReducer from './marcaSlice'
+import productoReducer from './productoSlice'
+import imagenReducer from './imagenSlice'
 
 export const store = configureStore({
     reducer: {
@@ -13,7 +16,10 @@ export const store = configureStore({
         tipoContribuyentes: tipoContribuyenteReducer,
         tipoActividad: tipoActividadReducer,
         solicitudes: solicitudReducer,
-        emprendedor: emprendedorReducer
+        emprendedor: emprendedorReducer,
+        marcas:marcaReducer,
+        productos:productoReducer,
+        imagenes:imagenReducer
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({

@@ -10,7 +10,6 @@ const userForm = ({ closeModal, register, handleSubmit, errors, reset }) => {
     const [roles, setroles] = useState([])
     const dispatch = useDispatch();
 
-
     const onSubmit = async (data) => {
 
         dispatch(addNewUsuario(data)).then((response) => {

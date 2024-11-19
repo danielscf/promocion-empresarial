@@ -3,6 +3,7 @@ package pe.utp.promocion_empresarial.entidad;
 import java.time.Instant;
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -58,6 +59,7 @@ public class Solicitud {
 
     @ManyToOne
     @JoinColumn(name = "prod_id", nullable = true)
+    @JsonIgnore
     private Producto producto;
 
 }

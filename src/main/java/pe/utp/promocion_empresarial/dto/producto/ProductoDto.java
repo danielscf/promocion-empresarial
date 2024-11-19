@@ -1,20 +1,18 @@
 package pe.utp.promocion_empresarial.dto.producto;
 
-import pe.utp.promocion_empresarial.entidad.Marca;
-import pe.utp.promocion_empresarial.entidad.TipoProducto;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import pe.utp.promocion_empresarial.dto.imagen.ImagenDto;
+import pe.utp.promocion_empresarial.dto.tipoProducto.TipoProductoDto;
 
+import java.util.List;
+
+@JsonDeserialize(as = ProductoDtoImpl.class)
 public interface ProductoDto {
 
     Long getProductoId();
-
     String getProductoNombre();
-
     String getProductoDescripcion();
-
-    Integer getProductoEstado();
-
-//    TipoProducto getTipoProducto();
-
-//    Marca getMarca();
+    TipoProductoDto getTipoProducto();
+    List<ImagenDto> getImagenes();
 
 }

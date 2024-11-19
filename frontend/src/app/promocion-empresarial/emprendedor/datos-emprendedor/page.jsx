@@ -9,31 +9,35 @@ import EmprendedorForm from '@/src/components/emprendedorForm';
 
 const datosEmprendedor = () => {
 
-    const { register, handleSubmit, reset, formState: { errors } } = useForm();
+    const { register, handleSubmit, reset,setValue, formState: { errors } } = useForm();
     const { user } = useContext(AuthContext)
     const dispatch = useDispatch()
-    const emprendedor = useSelector((state) => state.emprendedor.emprendedor)
+    const user_emprendedor = useSelector((state) => state.emprendedor.emprendedor)
     const status = useSelector((state) => state.emprendedor.status);
 
-    useEffect(() => {
 
+    useEffect(() => {
+       
         if (status === 'idle') {
-            dispatch(fetchEmprendedor(user.usuarioUsuario));
+            dispatch(fetchEmprendedor(user?.usuarioUsuario));
+            console.log(user_emprendedor);
         }
 
-    }, [status, dispatch]);
+    }, [status]);
 
     return (
         <div className='p-4 w-screen bg-gray-300 '>
             <h1 className='mt-2 text-center text-2xl font-bold'>Datos del emprendedor</h1>
-            <EmprendedorForm 
-             register ={register}
-             handleSubmit ={handleSubmit}
-             reset={reset}
-             emprendedor ={emprendedor}
-             errors={errors}
-             dispatch={dispatch}
-             />
+            <EmprendedorForm
+                register={register}
+                handleSubmit={handleSubmit}
+                reset={reset}
+                user_emprendedor={user_emprendedor}
+                errors={errors}
+                dispatch={dispatch}
+                setValue={setValue}
+                user={user}
+            />
 
         </div >
     )
