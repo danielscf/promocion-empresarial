@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form'
 import { useRouter } from 'next/navigation';
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
+import Image from 'next/image';
 
 function LoginPage() {
 
@@ -32,10 +33,10 @@ function LoginPage() {
       if (response.ok) {
 
         const { token, expiration, usuario } = await response.json();
-       // console.log('Token:', token);
+        // console.log('Token:', token);
         console.log('Expiration Time:', expiration);
         login(token, expiration, usuario);
-        
+
         router.push('/promocion-empresarial/home');
       } else {
         const errorData = await response.json();
@@ -51,12 +52,14 @@ function LoginPage() {
   return (
     <div
       className="login-page min-h-screen flex items-center justify-center"
-      style={{backgroundImage: `url(${'/images/parque.jpeg'})`,backgroundSize: 'cover',backgroundPosition: 'center',
-        width: '100vw',height: '100vh'}}
+      style={{
+        backgroundImage: `url(${'/images/parque.jpeg'})`, backgroundSize: 'cover', backgroundPosition: 'center',
+        width: '100vw', height: '100vh'
+      }}
     >
       <div className="login-box p-10 shadow-lg bg-white rounded-lg">
         <div className="text-center mb-6">
-          <img src="/images/escudo.jpg" alt="Logo" className="mb-4 mx-auto w-16" />
+          <Image src="/images/escudo.jpg"alt="Logo" className="mb-4 mx-auto w-16" width={64} height={64} />
           <h3 className="text-red-600 font-bold text-xl">Login</h3>
         </div>
         <form onSubmit={handleSubmit(onSubmit)}>

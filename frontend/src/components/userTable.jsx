@@ -60,7 +60,7 @@ const UserTable = () => {
             ignoreRowClick: true,
             button: "true",
         },
-    ], []); 
+    ], [handleDelete]); 
 
     const usuariosFiltrados = usuarios.filter(usuario => usuario.usuarioEstado !== 3);
 

@@ -109,7 +109,7 @@ const ProductoTable = () => {
             ignoreRowClick: true,
             button: "true",
         },
-    ], [apiUrl,productos]);
+    ], [apiUrl,productos,handleDelete]);
 
     return (
         <div className="overflow-hidden max-w-full border border-gray-300 rounded-lg shadow-md">

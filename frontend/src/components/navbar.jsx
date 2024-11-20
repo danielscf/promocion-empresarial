@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
+import Image from 'next/image';
 
 
 const navigation = [
@@ -56,10 +57,11 @@ const Navbar = () => {
           </div>
           <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
             <div className="flex flex-shrink-0 items-center">
-              <img
+              <Image
                 alt="Escudo"
                 src="/images/escudo.jpg"
                 className="h-8 w-auto"
+                layout="intrinsic" 
               />
             </div>
             <div className="hidden sm:ml-6 sm:block">

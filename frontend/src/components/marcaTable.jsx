@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect,useCallback, useMemo, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteMarca, fetchMarcasByEmprendedor } from '../store/marcaSlice';
@@ -9,6 +9,7 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import Modal from './modal';
 import MarcaEditForm from './marcaEditForm';
+import Image from 'next/image';
 
 const MarcaTable = () => {
     const dispatch = useDispatch();
@@ -33,13 +34,13 @@ const MarcaTable = () => {
         }
     }, [emprendedorId, dispatch, reload]);
 
-    const handleDelete = async (marcaId) => {
+    const handleDelete = useCallback(async (marcaId) => {
         const confirmed = await showConfirmation();
         if (confirmed) {
             await dispatch(deleteMarca(marcaId));
             setReload(true); // Activar la recarga
         }
-    };
+    }, [dispatch]);
 
     const columns = useMemo(() => [
         {
@@ -56,11 +57,12 @@ const MarcaTable = () => {
             name: 'IMAGEN',
             cell: row => (
                 row?.marcaId ? (
-                    <img
+                    <Image
                         className="my-2"
                         src={`${apiUrl}/marca/${row.marcaId}/foto`}
                         alt="Imagen de Marca"
                         loading="lazy"
+                        layout="intrinsic" 
                         style={{ width: '80px', height: '80px', objectFit: 'cover' }}
                     />
                 ) : <span>Sin imagen</span>

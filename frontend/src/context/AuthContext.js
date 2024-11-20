@@ -32,7 +32,7 @@ export const AuthProvider = ({ children }) => {
       }
     }
 
-  }, []);
+  }, [logout]);
 
 
   const login = (token, expiration, usuario) => {

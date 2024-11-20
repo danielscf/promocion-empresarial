@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchEmprendedor } from '@/store/emprendedorSlice';
 import EmprendedorForm from '@/components/emprendedorForm';
 
-const datosEmprendedor = () => {
+const DatosEmprendedor = () => {
 
     const { register, handleSubmit, reset,setValue, formState: { errors } } = useForm();
     const { user } = useContext(AuthContext)
@@ -23,7 +23,7 @@ const datosEmprendedor = () => {
             console.log(user_emprendedor);
         }
 
-    }, [status]);
+    }, [status,dispatch,user?.usuarioUsuario,user_emprendedor]);
 
     return (
         <div className='p-4 w-screen bg-gray-300 '>
@@ -43,4 +43,4 @@ const datosEmprendedor = () => {
     )
 }
 
-export default datosEmprendedor
+export default DatosEmprendedor

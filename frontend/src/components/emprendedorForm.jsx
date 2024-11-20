@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { showSuccessMessage, showErrorMessage } from '../app/utils/messages'
 import { editEmprendedor,fetchEmprendedor } from '../store/emprendedorSlice'
 import { useEmprendedor } from '../context/EmprendedorContext'
+import Image from 'next/image'
 
 const EmprendedorForm = ({ user_emprendedor, handleSubmit, register, errors, dispatch, setValue,user }) => {
     const [emprendedor, setEmprendedor] = useState(user_emprendedor || {});
@@ -21,7 +22,7 @@ const EmprendedorForm = ({ user_emprendedor, handleSubmit, register, errors, dis
             setEmprendedorId(user_emprendedor.emprendedorId);
             setFormValues(user_emprendedor);
         }
-    }, [user_emprendedor]);
+    }, [user_emprendedor,setEmprendedorId,setFormValues]);
 
 
     const setFormValues = (emprendedorData) => {
@@ -103,7 +104,7 @@ const EmprendedorForm = ({ user_emprendedor, handleSubmit, register, errors, dis
                                 {/* Mostrar Foto */}
                                 {emprendedor?.emprendedorFoto && (
                                     <div className="col-span-full">
-                                        <img
+                                        <Image
                                             key={refreshFoto} 
                                             src={
                                                 selectedFoto
@@ -112,6 +113,7 @@ const EmprendedorForm = ({ user_emprendedor, handleSubmit, register, errors, dis
                                             }
                                             alt="Foto del emprendedor"
                                             className="rounded-md w-40 h-40 object-cover"
+                                            layout="intrinsic" 
                                         />
                                     </div>
                                 )}

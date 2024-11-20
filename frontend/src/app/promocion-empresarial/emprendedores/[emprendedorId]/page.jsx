@@ -8,6 +8,7 @@ import React, { useState, useEffect } from 'react';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { useRouter } from 'next/navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Image from 'next/image';
 
 const Page = ({ params }) => {
 
@@ -71,10 +72,11 @@ const Page = ({ params }) => {
                     </div>
                     <h2 className="mb-6 text-center text-2xl font-bold">Datos del Emprendedor</h2>
                     <div className="flex flex-col items-center justify-center space-y-6 mb-3 md:space-y-0 md:space-x-6">
-                        <img
+                        <Image
                             className="h-44 w-44 mb-4 rounded-full shadow-md"
                             src={`${process.env.NEXT_PUBLIC_API_URL}/emprendedor/${emprendedor.emprendedorId}/foto`}
                             alt="Foto del emprendedor"
+                            layout="intrinsic" 
                         />
                         <div className="w-full max-w-sm rounded-lg border bg-white p-4 shadow-md">
                             <p className="mb-2 text-lg"><strong>Nombre: </strong>{emprendedor.usuario.usuarioNombre}</p>

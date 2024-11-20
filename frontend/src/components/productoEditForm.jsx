@@ -8,6 +8,7 @@ import { getAllTipoProducto } from '../api/tipoProductoApi';
 import { editProducto } from '../store/productoSlice';
 import { editImagen } from '../store/imagenSlice';
 import { fetchProductoByEmprendedor } from '../store/productoSlice';
+import Image from 'next/image';
 
 
 const ProductoEditForm = ({ productoId, closeModal }) => {
@@ -148,10 +149,11 @@ const ProductoEditForm = ({ productoId, closeModal }) => {
 
             {(selectedFoto || producto?.imagenes?.[0]?.imagenId) && (
                 <div className="col-span-full my-3">
-                    <img
+                    <Image
                         src={selectedFoto ? fotoUrl : producto?.imagenes?.[0]?.imagenId ? `${process.env.NEXT_PUBLIC_API_URL}/imagen/${producto?.imagenes?.[0]?.imagenId}/foto` : ""}
                         alt="Foto del producto"
                         className="rounded-md w-40 h-40 object-cover"
+                        layout="intrinsic" 
                     />
 
                 </div>

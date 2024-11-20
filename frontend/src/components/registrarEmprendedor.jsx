@@ -28,7 +28,7 @@ const RegistrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
         dispatch(fetchTipoActividad())
         console.log(dni)
 
-    }, [dispatch])
+    }, [dispatch,dni])
     useEffect(() => {
         console.log(dni)
     }, [dni])

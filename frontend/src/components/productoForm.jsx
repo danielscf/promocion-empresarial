@@ -102,10 +102,11 @@ const ProductoForm = ({register,handleSubmit,reset,errors,closeModal}) => {
 
             {selectedFoto && (
                 <div className="col-span-full my-3">
-                    <img
+                    <Image
                         src={fotoUrl}
                         alt="Foto del emprendedor"
                         className="rounded-md w-40 h-40 object-cover"
+                        layout="intrinsic" 
                     />
                 </div>
             )}

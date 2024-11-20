@@ -5,6 +5,7 @@ import { editMarca, fetchMarcasByEmprendedor } from '../store/marcaSlice'
 import { useEmprendedor } from '../context/EmprendedorContext'
 import { showErrorMessage, showSuccessMessage } from '../app/utils/messages'
 import { useDispatch } from 'react-redux'
+import Image from 'next/image'
 
 const MarcaEditForm = ({ marcaId, closeModal }) => {
 
@@ -84,10 +85,11 @@ const MarcaEditForm = ({ marcaId, closeModal }) => {
             </div>
 
             <div className="col-span-full my-3">
-                <img
+                <Image
                     src={selectedFoto ? fotoUrl : `${process.env.NEXT_PUBLIC_API_URL}/marca/${marca?.marcaId}/foto`}
                     alt="Foto del marca"
                     className="rounded-md w-40 h-40 object-cover"
+                    layout="intrinsic" 
                 />
             </div>
 

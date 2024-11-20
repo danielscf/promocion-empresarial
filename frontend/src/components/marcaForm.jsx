@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux'
 import { addNewMarca,fetchMarcasByEmprendedor } from '../store/marcaSlice'
 import { useEmprendedor } from '../context/EmprendedorContext'
 import { showSuccessMessage, showErrorMessage } from '../app/utils/messages'
+import Image from 'next/image'
 
 const MarcaForm = ({ closeModal, register, handleSubmit, errors, reset }) => {
 
@@ -67,10 +68,11 @@ const MarcaForm = ({ closeModal, register, handleSubmit, errors, reset }) => {
 
             {selectedFoto  && (
                 <div className="col-span-full my-3">
-                    <img
+                    <Image
                          src={fotoUrl}
                         alt="Foto del emprendedor"
                         className="rounded-md w-40 h-40 object-cover"
+                        layout="intrinsic" 
                     />
                 </div>
             )}

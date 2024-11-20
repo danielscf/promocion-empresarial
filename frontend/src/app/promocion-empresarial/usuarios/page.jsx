@@ -7,7 +7,7 @@ import UserTable from '@/components/userTable';
 import UserForm from '@/components/userForm';
 import { useForm } from 'react-hook-form';
 
-function usuariosPage() {
+function UsuariosPage() {
 
     const { register, handleSubmit,reset, formState: { errors }} = useForm()
 
@@ -43,4 +43,4 @@ function usuariosPage() {
     )
 }
 
-export default usuariosPage
+export default UsuariosPage

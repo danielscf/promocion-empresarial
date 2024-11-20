@@ -1,5 +1,6 @@
 import React from 'react'
 import '../../styles/globals.css'
+import Image from 'next/image'
 
 const homePage = () => {
     return (
@@ -14,10 +15,11 @@ const homePage = () => {
 
             </div>
             <div className="flex justify-center items-center w-[350px] h-[300px]">
-                <img
+                <Image
                     src="/images/empleados.jpeg"
                     alt="empleados"
                     className="w-full h-full rounded-full object-cover"
+                    layout="intrinsic" 
                 />
             </div>
         </div>
