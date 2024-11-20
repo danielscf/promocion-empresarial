@@ -61,7 +61,8 @@ const Navbar = () => {
                 alt="Escudo"
                 src="/images/escudo.jpg"
                 className="h-8 w-auto"
-                layout="intrinsic" 
+                width={40} 
+                height={40} 
               />
             </div>
             <div className="hidden sm:ml-6 sm:block">

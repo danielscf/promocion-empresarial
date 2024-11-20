@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState,useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProductoByEmprendedor } from '../store/productoSlice';
 import { useEmprendedor } from '../context/EmprendedorContext';
@@ -11,6 +11,7 @@ import ProductoEditForm from './productoEditForm';
 import { deleteProducto } from '../store/productoSlice';
 import { deleteImagen } from '../api/imagenApi';
 import { showConfirmation } from '../app/utils/confirmationDialog';
+import Image from 'next/image';
 
 const ProductoTable = () => {
 
@@ -34,23 +35,24 @@ const ProductoTable = () => {
     }, [dispatch, emprendedorId, reload]);
 
 
-    const handleDelete = async (productoId, imagenId) => {
-        const confirmed = await showConfirmation(); 
+    const handleDelete = useCallback(async (productoId, imagenId) => {
+        const confirmed = await showConfirmation();
         if (!confirmed) return;
-
+    
         try {
             if (productoId && imagenId) {
                 await deleteImagen(imagenId);
                 console.log(`Imagen con ID ${imagenId} eliminada exitosamente.`);
                 await dispatch(deleteProducto(productoId)).unwrap();
                 console.log(`Producto con ID ${productoId} eliminado exitosamente.`);
-
+    
                 setReload(true);
             }
         } catch (error) {
             console.error("Error al eliminar el producto o imagen:", error);
         }
-    };
+    }, [dispatch, setReload]);
+    
 
     const columns = useMemo(() => [
         {
@@ -72,12 +74,13 @@ const ProductoTable = () => {
             name: 'IMAGEN',
             cell: row => (
                 row?.imagenes && row.imagenes?.[0]?.imagenId ? (
-                    <img
+                    <Image
                         className="my-2"
                         src={`${apiUrl}/imagen/${row.imagenes[0].imagenId}/foto?timestamp=${new Date().getTime()}`}
                         alt="Imagen de producto"
-                        loading="lazy"
-                        style={{ width: '80px', height: '80px', objectFit: 'cover' }}
+                        width={80}
+                        height={80}
+                        style={{ objectFit: 'cover' }}
                     />
                 ) : <span>Sin imagen</span>
             ),
@@ -89,15 +92,14 @@ const ProductoTable = () => {
                 <FontAwesomeIcon className='cursor-pointer h-6 w-6'
                     icon={faPenToSquare}
                     onClick={() => {
-                        setproductoId(row.productoId)
-                        openModal()
+                        setproductoId(row.productoId);
+                        openModal();
                     }} />
             ),
             ignoreRowClick: true,
             button: "true",
         },
         {
-
             name: 'ELIMINAR',
             cell: row => (
                 <FontAwesomeIcon
@@ -109,7 +111,8 @@ const ProductoTable = () => {
             ignoreRowClick: true,
             button: "true",
         },
-    ], [apiUrl,productos,handleDelete]);
+    ], [apiUrl, handleDelete]);
+    
 
     return (
         <div className="overflow-hidden max-w-full border border-gray-300 rounded-lg shadow-md">

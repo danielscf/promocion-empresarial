@@ -5,6 +5,7 @@ import { showSuccessMessage, showErrorMessage } from '../app/utils/messages';
 import { getAllTipoProducto } from '../api/tipoProductoApi';
 import { addNewProducto,fetchProductoByEmprendedor } from '../store/productoSlice';
 import { addNewImagen } from '../store/imagenSlice';
+import Image from 'next/image';
 
 const ProductoForm = ({register,handleSubmit,reset,errors,closeModal}) => {
 

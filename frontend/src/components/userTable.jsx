@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect, useMemo, useCallback } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { useSelector, useDispatch } from 'react-redux';
@@ -7,16 +7,22 @@ import DataTable from 'react-data-table-component';
 import { showConfirmation } from '../app/utils/confirmationDialog';
 
 const UserTable = () => {
-
     const dispatch = useDispatch();
     const usuarios = useSelector((state) => state.usuarios.usuarios);
 
     useEffect(() => {
-        
         dispatch(fetchUsuarios());
-
     }, [dispatch]);
 
+    
+    const handleDelete = useCallback(async (id) => {
+        const confirmed = await showConfirmation();
+        if (confirmed) {
+            dispatch(deleteUsuario(id));
+        }
+    }, [dispatch]);
+
+  
     const columns = useMemo(() => [
         {
             name: 'ID',
@@ -58,19 +64,11 @@ const UserTable = () => {
                 />
             ),
             ignoreRowClick: true,
-            button: "true",
+            button: true,
         },
-    ], [handleDelete]); 
+    ], [handleDelete]);
 
     const usuariosFiltrados = usuarios.filter(usuario => usuario.usuarioEstado !== 3);
-
-    const handleDelete = async(id) => {
-
-        const confirmed = await showConfirmation();
-        if (confirmed) {
-            dispatch(deleteUsuario(id))
-        }
-    };
 
     return (
         <div className="overflow-hidden max-w-full border border-gray-300 rounded-lg shadow-md">
@@ -82,8 +80,7 @@ const UserTable = () => {
                 className="min-w-full"
             />
         </div>
+    );
+};
 
-    )
-}
-
-export default UserTable
+export default UserTable;

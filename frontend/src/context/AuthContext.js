@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, useCallback } from 'react';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
 export const AuthContext = createContext();
@@ -10,6 +10,16 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
   const router = useRouter()
+
+
+  const logout = useCallback(() => {
+    setToken(null);
+    setUser(null);
+    Cookies.remove('token');
+    Cookies.remove('tokenExpiration');
+    Cookies.remove('usuario');
+    router.push('/');
+  }, [router]);
 
   useEffect(() => {
 
@@ -42,15 +52,6 @@ export const AuthProvider = ({ children }) => {
     Cookies.set('tokenExpiration', expiration, { expires: 1 });
     Cookies.set('usuario', JSON.stringify(usuario), { expires: 1 });
     //console.log("Token guardado en cookies:", token);
-  };
-
-  const logout = () => {
-    setToken(null);
-    setUser(null);
-    Cookies.remove('token');
-    Cookies.remove('tokenExpiration');
-    Cookies.remove('usuario');
-    router.push('/');
   };
   const updateUserInContext = (updatedUser) => {
     setUser(updatedUser);

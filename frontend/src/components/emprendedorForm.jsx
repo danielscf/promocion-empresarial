@@ -1,20 +1,32 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { showSuccessMessage, showErrorMessage } from '../app/utils/messages'
-import { editEmprendedor,fetchEmprendedor } from '../store/emprendedorSlice'
+import { editEmprendedor, fetchEmprendedor } from '../store/emprendedorSlice'
 import { useEmprendedor } from '../context/EmprendedorContext'
 import Image from 'next/image'
 
-const EmprendedorForm = ({ user_emprendedor, handleSubmit, register, errors, dispatch, setValue,user }) => {
-    const [emprendedor, setEmprendedor] = useState(user_emprendedor || {});
+const EmprendedorForm = ({ user_emprendedor, handleSubmit, register, errors, dispatch, setValue, user }) => {
+    const [emprendedor, setEmprendedor] = useState(user_emprendedor ?? {
+        usuario: {},
+        tipoActividad: {},
+        rubro: {},
+        tipoContribuyente: {},
+    });
+
     const [selectedFoto, setSelectedFoto] = useState(null);
-    const [refreshFoto, setRefreshFoto] = useState(false);
     const { setEmprendedorId } = useEmprendedor();
 
     const handleFotoChange = (e) => {
         setSelectedFoto(e.target.files[0]);
     };
+
+    const setFormValues = useCallback((emprendedorData) => {
+        setValue('emprendedorRuc', emprendedorData.emprendedorRuc);
+        setValue('emprendedorDireccion', emprendedorData.emprendedorDireccion);
+        setValue('emprendedorRazonSocial', emprendedorData.emprendedorRazonSocial);
+        setValue('rubroNombre', emprendedorData.rubro?.rubroNombre || '');
+    }, [setValue]);
 
     useEffect(() => {
         if (user_emprendedor) {
@@ -22,15 +34,9 @@ const EmprendedorForm = ({ user_emprendedor, handleSubmit, register, errors, dis
             setEmprendedorId(user_emprendedor.emprendedorId);
             setFormValues(user_emprendedor);
         }
-    }, [user_emprendedor,setEmprendedorId,setFormValues]);
+    }, [user_emprendedor, setEmprendedorId, setFormValues]);
 
 
-    const setFormValues = (emprendedorData) => {
-        setValue('emprendedorRuc', emprendedorData.emprendedorRuc);
-        setValue('emprendedorDireccion', emprendedorData.emprendedorDireccion);
-        setValue('emprendedorRazonSocial', emprendedorData.emprendedorRazonSocial);
-        setValue('rubroNombre', emprendedorData.rubro ? emprendedorData.rubro.rubroNombre : '');
-    };
 
     const onSubmit = async (data) => {
         try {
@@ -77,8 +83,8 @@ const EmprendedorForm = ({ user_emprendedor, handleSubmit, register, errors, dis
                     showSuccessMessage('Edición exitosa', 'La edición se ha realizado con éxito');
                     setEmprendedor((prev) => ({ ...prev, ...datos_emprendedor }));
                     setFormValues(datos_emprendedor);
-                    setSelectedFoto(null); 
-                    dispatch(fetchEmprendedor(user?.usuarioUsuario));                 
+                    setSelectedFoto(null);
+                    dispatch(fetchEmprendedor(user?.usuarioUsuario));
                 } else {
                     const errorMessage = response.error?.message || 'Hubo un problema al realizar la edición. Verifica los datos e intenta nuevamente.';
                     showErrorMessage('Error en la edición', errorMessage);
@@ -105,16 +111,17 @@ const EmprendedorForm = ({ user_emprendedor, handleSubmit, register, errors, dis
                                 {emprendedor?.emprendedorFoto && (
                                     <div className="col-span-full">
                                         <Image
-                                            key={refreshFoto} 
                                             src={
                                                 selectedFoto
-                                                    ? URL.createObjectURL(selectedFoto) 
-                                                    : `${process.env.NEXT_PUBLIC_API_URL}/emprendedor/${emprendedor?.emprendedorId}/foto?timestamp=${new Date().getTime()}` 
+                                                    ? URL.createObjectURL(selectedFoto)
+                                                    : `${process.env.NEXT_PUBLIC_API_URL}/emprendedor/${emprendedor.emprendedorId}/foto?timestamp=${new Date().getTime()}`
                                             }
                                             alt="Foto del emprendedor"
                                             className="rounded-md w-40 h-40 object-cover"
-                                            layout="intrinsic" 
+                                            width={100}
+                                            height={200}
                                         />
+
                                     </div>
                                 )}
 

@@ -20,10 +20,9 @@ const DatosEmprendedor = () => {
        
         if (status === 'idle') {
             dispatch(fetchEmprendedor(user?.usuarioUsuario));
-            console.log(user_emprendedor);
         }
 
-    }, [status,dispatch,user?.usuarioUsuario,user_emprendedor]);
+    }, [status,dispatch,user?.usuarioUsuario]);
 
     return (
         <div className='p-4 w-screen bg-gray-300 '>

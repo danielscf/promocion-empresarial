@@ -19,7 +19,8 @@ const homePage = () => {
                     src="/images/empleados.jpeg"
                     alt="empleados"
                     className="w-full h-full rounded-full object-cover"
-                    layout="intrinsic" 
+                    width={300} 
+                    height={300} 
                 />
             </div>
         </div>
