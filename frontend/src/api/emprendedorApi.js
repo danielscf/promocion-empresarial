@@ -20,6 +20,8 @@ export const getEmprendorByUsername = (username) => emprendedorApi.get(`/usuario
 
 export const findEmprendedorByDni = (dni) => emprendedorApi.get(`/dni/${dni}`)
 
+export const findEmprendedorById = (emprendedorId) => emprendedorApi.get(`/${emprendedorId}`)
+
 export const getAllEmprendedores = () => emprendedorApi.get('')
 
 export const findEmprendedorByRuc = (ruc) => emprendedorApi.get(`/ruc/${ruc}`)

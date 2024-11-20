@@ -20,7 +20,7 @@ const Page = ({ params }) => {
     useEffect(() => {
 
         dispatch(getSolicitudById(params.solicitudId));
-        console.log(solicitud)
+        //console.log(solicitud)
     }, [dispatch, params.solicitudId]);
 
     const handleClikAprobar = () => {

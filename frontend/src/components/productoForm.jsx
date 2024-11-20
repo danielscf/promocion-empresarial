@@ -51,10 +51,10 @@ const ProductoForm = ({register,handleSubmit,reset,errors,closeModal}) => {
                     formData.append('productoId', response.payload.productoId);
                     dispatch(addNewImagen(formData))
                     showSuccessMessage('Registro exitoso', 'El registro se ha realizado con éxito');
+                    dispatch(fetchProductoByEmprendedor(emprendedorId));
                     reset()
                     closeModal()
                     setSelectedFoto(null);
-                    dispatch(fetchProductoByEmprendedor(emprendedorId));
                 } else {
                     const errorMessage = response.error?.message || 'Hubo un problema al realizar el registro. Verifica los datos e intenta nuevamente.';
                     showErrorMessage('Error en el registro', errorMessage);

@@ -1,5 +1,5 @@
 import React from 'react'
-import { addNewUsuario } from '../store/userSlice';
+import { addNewUsuario, habilitarUsuario } from '../store/userSlice';
 import { useDispatch } from 'react-redux';
 import { getAllRol } from '../api/rolApi';
 import { useState, useEffect } from 'react';
@@ -15,6 +15,7 @@ const userForm = ({ closeModal, register, handleSubmit, errors, reset }) => {
         dispatch(addNewUsuario(data)).then((response) => {
 
             if (response.type === "usuarios/addNewUsuario/fulfilled") {
+                dispatch(habilitarUsuario(response.payload.usuarioId))
                 showSuccessMessage();
                 reset();
                 closeModal();

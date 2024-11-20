@@ -12,6 +12,8 @@ export const getAllProductosByEmprendedor = (emprendedorId) => productoApi.get(`
 
 export const getProductoById = (productoId) => productoApi.get(`/${productoId}`)
 
+export const deleteProducto = (productoId) => productoApi.delete(`/${productoId}`)
+
 
 export const editarProducto = async (formData) => {
     try {

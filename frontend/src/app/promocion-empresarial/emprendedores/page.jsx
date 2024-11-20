@@ -66,6 +66,10 @@ const EmprendedoresPage = () => {
         }
     };
 
+    const handlePageChange = (pageNumber) => {
+        setCurrentPage(pageNumber);
+    };
+
     return (
         <div className="text-center bg-gray-300 min-h-screen p-6">
             <h1 className="text-2xl font-bold text-black mb-4">CONSULTAR EMPRENDEDOR</h1>
@@ -106,6 +110,7 @@ const EmprendedoresPage = () => {
                         totalPages={totalPages}
                         handleNextPage={handleNextPage}
                         handlePreviousPage={handlePreviousPage}
+                        onPageChange={handlePageChange}
                     />
                 </>
             )}

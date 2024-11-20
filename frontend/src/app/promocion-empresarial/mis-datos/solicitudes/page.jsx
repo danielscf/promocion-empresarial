@@ -31,6 +31,10 @@ const SolicitudesPage = () => {
       setCurrentPage(currentPage - 1);
     }
   };
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+};
+
 
   useEffect(() => {
 
@@ -47,6 +51,7 @@ const SolicitudesPage = () => {
         totalPages={totalPages}
         handleNextPage={handleNextPage}
         handlePreviousPage={handlePreviousPage}
+        onPageChange={handlePageChange}
       />
     </div>
   )

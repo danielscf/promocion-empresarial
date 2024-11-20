@@ -29,6 +29,8 @@ export const registerImagen = async (formData) => {
     });
 }
 
+export const deleteImagen = (imagenId) => imagenApi.delete(`/${imagenId}`)
+
 export const editarImagen = async (formData) => {
     
     return imagenApi.put('', formData, {
