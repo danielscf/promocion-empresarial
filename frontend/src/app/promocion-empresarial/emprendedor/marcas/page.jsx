@@ -1,10 +1,10 @@
 'use client';
 
-import MarcaTable from '@/src/components/marcaTable'
+import MarcaTable from '@/components/marcaTable';
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import MarcaForm from '@/src/components/marcaForm'
-import Modal from '@/src/components/modal'
+import MarcaForm from '@/components/marcaForm';
+import Modal from '@/components/modal';
 
 const MarcasPage = () => {
 

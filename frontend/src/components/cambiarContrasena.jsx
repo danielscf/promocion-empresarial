@@ -1,6 +1,6 @@
 import React from 'react'
 
-const cambiarContrasena = () => {
+const CambiarContrasena = () => {
     return (
         <form class="max-w-sm mx-auto">       
             <div class="mb-5">
@@ -20,4 +20,4 @@ const cambiarContrasena = () => {
     )
 }
 
-export default cambiarContrasena
+export default CambiarContrasena

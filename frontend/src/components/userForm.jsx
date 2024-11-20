@@ -5,7 +5,7 @@ import { getAllRol } from '../api/rolApi';
 import { useState, useEffect } from 'react';
 import { showSuccessMessage, showErrorMessage } from '../app/utils/messages';
 
-const userForm = ({ closeModal, register, handleSubmit, errors, reset }) => {
+const UserForm = ({ closeModal, register, handleSubmit, errors, reset }) => {
 
     const [roles, setroles] = useState([])
     const dispatch = useDispatch();
@@ -145,4 +145,4 @@ const userForm = ({ closeModal, register, handleSubmit, errors, reset }) => {
     )
 }
 
-export default userForm
+export default UserForm

@@ -1,11 +1,11 @@
 'use client'
 
 import React, { useState, useEffect } from 'react';
-import EmprendedorList from '@/src/components/emprendedorList';
-import Pagination from '@/src/components/pagination';
+import EmprendedorList from '@/components/emprendedorList';
+import Pagination from '@/components/pagination';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
-import { getAllEmprendedores, findEmprendedorByDni, findEmprendedorByRuc } from '@/src/api/emprendedorApi';
+import { getAllEmprendedores,findEmprendedorByDni,findEmprendedorByRuc } from '@/api/emprendedorApi';
 
 const EmprendedoresPage = () => {
     const [selectedOption, setSelectedOption] = useState('');

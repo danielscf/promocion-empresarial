@@ -1,9 +1,9 @@
 'use client';
 
-import { findEmprendedorById } from '@/src/api/emprendedorApi';
-import { getAllProductosByEmprendedor } from '@/src/api/productoApi';
-import ProductoList from '@/src/components/productoList';
-import Pagination from '@/src/components/pagination';
+import { findEmprendedorById } from '@/api/emprendedorApi';
+import { getAllProductosByEmprendedor } from '@/api/productoApi';
+import ProductoList from '@/components/productoList';
+import Pagination from '@/components/pagination';
 import React, { useState, useEffect } from 'react';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { useRouter } from 'next/navigation';

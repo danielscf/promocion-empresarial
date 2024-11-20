@@ -1,12 +1,11 @@
 'use client'
 
 import React from 'react'
-import Modal from '@/src/components/modal';
+import Modal from '@/components/modal';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
-import ProductoForm from '@/src/components/productoForm';
-import ProductoTable from '@/src/components/productoTable';
+import ProductoForm from '@/components/productoForm';
+import ProductoTable from '@/components/productoTable';
 
 const Productos = () => {
 

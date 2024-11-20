@@ -7,7 +7,7 @@ import { AuthContext } from '../context/AuthContext';
 import { useForm } from 'react-hook-form';
 import { showSuccessMessage, showErrorMessage } from '../app/utils/messages';
 
-const userDataForm = () => {
+const UserDataForm = () => {
 
     const { user,updateUserInContext } = useContext(AuthContext)
 
@@ -186,4 +186,4 @@ const userDataForm = () => {
     )
 }
 
-export default userDataForm
+export default UserDataForm

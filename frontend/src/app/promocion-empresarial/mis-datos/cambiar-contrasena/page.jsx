@@ -1,5 +1,5 @@
 import React from 'react'
-import CambiarContrasena from '@/src/components/cambiarContrasena'
+import CambiarContrasena from '@/components/cambiarContrasena'
 const CambiarContrasenaPage = () => {
     return (
         <div className='p-4 w-screen h-screen bg-gray-300 '>

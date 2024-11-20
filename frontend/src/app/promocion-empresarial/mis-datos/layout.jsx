@@ -1,5 +1,5 @@
 import React from 'react'
-import NavbarUser from '@/src/components/navbarUser'
+import NavbarUser from '@/components/navbarUser'
 import Link from 'next/link'
 
 export default function MisDatoslayout({ children }) {

@@ -2,10 +2,10 @@
 
 import React, { useContext, useEffect } from 'react'
 import { useForm } from 'react-hook-form';
-import { AuthContext } from '@/src/context/AuthContext';
+import { AuthContext } from '@/context/AuthContext';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchEmprendedor } from '@/src/store/emprendedorSlice';
-import EmprendedorForm from '@/src/components/emprendedorForm';
+import { fetchEmprendedor } from '@/store/emprendedorSlice';
+import EmprendedorForm from '@/components/emprendedorForm';
 
 const datosEmprendedor = () => {
 

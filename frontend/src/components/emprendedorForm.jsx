@@ -108,7 +108,7 @@ const EmprendedorForm = ({ user_emprendedor, handleSubmit, register, errors, dis
                                             src={
                                                 selectedFoto
                                                     ? URL.createObjectURL(selectedFoto) 
-                                                    : `${process.env.NEXT_PUBLIC_API_URL}/emprendedor/${emprendedor.emprendedorId}/foto?timestamp=${new Date().getTime()}` 
+                                                    : `${process.env.NEXT_PUBLIC_API_URL}/emprendedor/${emprendedor?.emprendedorId}/foto?timestamp=${new Date().getTime()}` 
                                             }
                                             alt="Foto del emprendedor"
                                             className="rounded-md w-40 h-40 object-cover"

@@ -3,9 +3,9 @@
 import React from 'react'
 import { useForm } from 'react-hook-form';
 
-import RegistrarEmprendedor from '@/src/components/registrarEmprendedor';
+import RegistrarEmprendedor from '@/components/registrarEmprendedor';
 
-const registrarEmprendedorPage = () => {
+const RegistrarEmprendedorPage = () => {
 
   const { register, handleSubmit,reset, formState: { errors },setValue } = useForm();
 
@@ -24,4 +24,4 @@ const registrarEmprendedorPage = () => {
   )
 }
 
-export default registrarEmprendedorPage
+export default RegistrarEmprendedorPage

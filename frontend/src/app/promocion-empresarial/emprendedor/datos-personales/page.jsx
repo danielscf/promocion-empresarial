@@ -1,5 +1,5 @@
 import React from 'react'
-import UserDataForm from '@/src/components/userDataForm'
+import UserDataForm from '@/components/userDataForm'
 const DatosPersonales = () => {
     return (
         <div className='p-4 w-screen bg-gray-300'>

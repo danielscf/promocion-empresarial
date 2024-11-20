@@ -6,7 +6,7 @@ import { deleteUsuario, fetchUsuarios } from '../store/userSlice';
 import DataTable from 'react-data-table-component';
 import { showConfirmation } from '../app/utils/confirmationDialog';
 
-const userTable = () => {
+const UserTable = () => {
 
     const dispatch = useDispatch();
     const usuarios = useSelector((state) => state.usuarios.usuarios);
@@ -86,4 +86,4 @@ const userTable = () => {
     )
 }
 
-export default userTable
+export default UserTable

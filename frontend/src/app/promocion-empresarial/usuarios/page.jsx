@@ -2,9 +2,9 @@
 
 import React from 'react'
 import { useState } from 'react';
-import Modal from '@/src/components/modal';
-import UserTable from '@/src/components/userTable';
-import UserForm from '@/src/components/userForm';
+import Modal from '@/components/modal';
+import UserTable from '@/components/userTable';
+import UserForm from '@/components/userForm';
 import { useForm } from 'react-hook-form';
 
 function usuariosPage() {

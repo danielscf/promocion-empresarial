@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 
-const navbarUser = ({ children }) => {
+const NavbarUser = ({ children }) => {
 
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -38,4 +38,4 @@ const navbarUser = ({ children }) => {
   )
 }
 
-export default navbarUser
+export default NavbarUser

@@ -2,9 +2,9 @@
 
 import React, { useEffect,useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchSolicitudes } from '@/src/store/solicitudSlice';
-import Solicitud from '@/src/components/solicitud';
-import Pagination from '@/src/components/pagination';
+import { fetchSolicitudes } from '@/store/solicitudSlice';
+import Solicitud from '@/components/solicitud';
+import Pagination from '@/components/pagination';
 
 const SolicitudesPage = () => {
 

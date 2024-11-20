@@ -8,7 +8,7 @@ import { fetchTipoContribuyente } from '../store/tipoContribuyenteSlice';
 import { fetchTipoActividad } from '../store/tipoActividadSlice';
 import { showErrorMessage, showSuccessMessage } from '../app/utils/messages';
 
-const registrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset }) => {
+const RegistrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset }) => {
 
     const dispatch = useDispatch()
     const { rubros } = useSelector((state) => state.rubros)
@@ -385,4 +385,4 @@ const registrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
     )
 }
 
-export default registrarEmprendedor
+export default RegistrarEmprendedor

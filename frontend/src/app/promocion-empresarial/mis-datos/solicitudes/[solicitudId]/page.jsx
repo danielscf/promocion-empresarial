@@ -2,13 +2,13 @@
 
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { approveSolicitud, declineSolicitud, getSolicitudById } from '@/src/store/solicitudSlice'
+import { approveSolicitud,declineSolicitud,getSolicitudById } from '@/store/solicitudSlice'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { useRouter } from 'next/navigation';
-import { habilitarUsuario } from '@/src/store/userSlice';
-import { showSuccessMessage } from '@/src/app/utils/messages';
-import { deleteUsuario } from '@/src/store/userSlice';
+import { habilitarUsuario } from '@/store/userSlice';
+import { showSuccessMessage } from '@/app/utils/messages';
+import { deleteUsuario } from '@/store/userSlice';
 
 const Page = ({ params }) => {
 

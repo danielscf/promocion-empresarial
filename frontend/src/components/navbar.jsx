@@ -32,14 +32,15 @@ const Navbar = () => {
 
   const filteredNavigation = user?.roles?.[0]?.rolNombre
     ? navigation.filter(item => {
-        if (user.roles[0].rolNombre === 'Administrador' || 'Operador') {
-          return item.name !== 'Emprendedor';
-        } else if (user.roles[0].rolNombre === 'Emprendedor') {
-          return item.name === 'Inicio' || item.name === 'Emprendedor';
-        }
-        return false;
-      })
+      if (user.roles[0].rolNombre === 'Administrador' || user.roles[0].rolNombre === 'Operador') {
+        return item.name !== 'Emprendedor';
+      } else if (user.roles[0].rolNombre === 'Emprendedor') {
+        return item.name === 'Inicio' || item.name === 'Emprendedor';
+      }
+      return false;
+    })
     : [];
+
 
   return (
     <Disclosure as="nav" className="bg-blue-500">
