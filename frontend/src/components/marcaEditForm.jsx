@@ -38,11 +38,13 @@ const MarcaEditForm = ({ marcaId, closeModal }) => {
         const formData = new FormData();
         const datos_marca = {
             marcaNombre: data.marcaNombre,
-            emprendedor: { emprendedorId }
+            emprendedor: { 
+                emprendedorId:emprendedorId 
+            }
         };
-
-        formData.append('marca', JSON.stringify(datos_marca));
+ 
         formData.append('id', marca.marcaId); 
+        formData.append('marca', JSON.stringify(datos_marca));
         formData.append('foto', selectedFoto);
 
         dispatch(editMarca(formData))
@@ -86,10 +88,11 @@ const MarcaEditForm = ({ marcaId, closeModal }) => {
 
             <div className="col-span-full my-3">
                 <Image
-                    src={selectedFoto ? fotoUrl : `${process.env.NEXT_PUBLIC_API_URL}/marca/${marca?.marcaId}/foto`}
+                    src={selectedFoto ? fotoUrl : `${process.env.NEXT_PUBLIC_API_URL}/marca/${marca?.marcaId}/foto?timestamp=${new Date().getTime()}`}
                     alt="Foto del marca"
                     className="rounded-md w-40 h-40 object-cover"
-                    layout="intrinsic" 
+                    width={90}
+                    height={90}
                 />
             </div>
 

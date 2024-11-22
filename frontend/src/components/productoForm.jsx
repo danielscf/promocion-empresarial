@@ -107,7 +107,8 @@ const ProductoForm = ({register,handleSubmit,reset,errors,closeModal}) => {
                         src={fotoUrl}
                         alt="Foto del emprendedor"
                         className="rounded-md w-40 h-40 object-cover"
-                        layout="intrinsic" 
+                        width={90}
+                        height={90}
                     />
                 </div>
             )}

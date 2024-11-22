@@ -19,7 +19,7 @@ export default function EmprendedorLayout({ children }) {
                     <Link className='my-3 p-2 text-start rounded-lg hover:bg-blue-600 transition duration-300' href="/promocion-empresarial/emprendedor/marcas">
                         Marcas
                     </Link>
-                    <Link className='my-3 p-2 text-start rounded-lg  hover:bg-blue-600 transition duration-300' href="#">
+                    <Link className='my-3 p-2 text-start rounded-lg  hover:bg-blue-600 transition duration-300' href="/promocion-empresarial/emprendedor/cambiar-contrasena">
                         Cambiar Contraseña
                     </Link>
                 </div>

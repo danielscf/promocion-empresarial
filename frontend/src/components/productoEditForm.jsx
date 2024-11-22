@@ -150,10 +150,11 @@ const ProductoEditForm = ({ productoId, closeModal }) => {
             {(selectedFoto || producto?.imagenes?.[0]?.imagenId) && (
                 <div className="col-span-full my-3">
                     <Image
-                        src={selectedFoto ? fotoUrl : producto?.imagenes?.[0]?.imagenId ? `${process.env.NEXT_PUBLIC_API_URL}/imagen/${producto?.imagenes?.[0]?.imagenId}/foto` : ""}
+                        src={selectedFoto ? fotoUrl : producto?.imagenes?.[0]?.imagenId ? `${process.env.NEXT_PUBLIC_API_URL}/imagen/${producto?.imagenes?.[0]?.imagenId}/foto?timestamp=${new Date().getTime()}` : ""}
                         alt="Foto del producto"
                         className="rounded-md w-40 h-40 object-cover"
-                        layout="intrinsic" 
+                        width={90}
+                        height={90}
                     />
 
                 </div>

@@ -59,7 +59,7 @@ const MarcaTable = () => {
                 row?.marcaId ? (
                     <Image
                         className="my-2"
-                        src={`${apiUrl}/marca/${row.marcaId}/foto`}
+                        src={`${apiUrl}/marca/${row.marcaId}/foto?timestamp=${new Date().getTime()}`}
                         alt="Imagen de Marca"
                         loading="lazy"
                         width={80}

@@ -25,10 +25,11 @@ export const deleteUsuario = createAsyncThunk('usuarios/deleteUsuario', async (i
     return response.data;
 })
 
-export const habilitarUsuario = createAsyncThunk('usuario/habilitarUsuario',async(id) => {
+export const habilitarUsuario = createAsyncThunk('usuarios/habilitarUsuario',async(id) => {
     const response = await apihabilitarUsuario(id)
     return response.data
 })
+
 
 const userSlice = createSlice({
     name: 'usuarios',
