@@ -76,7 +76,8 @@ const Page = ({ params }) => {
                             className="h-44 w-44 mb-4 rounded-full shadow-md"
                             src={`${process.env.NEXT_PUBLIC_API_URL}/emprendedor/${emprendedor.emprendedorId}/foto`}
                             alt="Foto del emprendedor"
-                            layout="intrinsic" 
+                            width={120}
+                            height={150} 
                         />
                         <div className="w-full max-w-sm rounded-lg border bg-white p-4 shadow-md">
                             <p className="mb-2 text-lg"><strong>Nombre: </strong>{emprendedor.usuario.usuarioNombre}</p>

@@ -62,7 +62,8 @@ const MarcaTable = () => {
                         src={`${apiUrl}/marca/${row.marcaId}/foto`}
                         alt="Imagen de Marca"
                         loading="lazy"
-                        layout="intrinsic" 
+                        width={80}
+                        height={80}
                         style={{ width: '80px', height: '80px', objectFit: 'cover' }}
                     />
                 ) : <span>Sin imagen</span>

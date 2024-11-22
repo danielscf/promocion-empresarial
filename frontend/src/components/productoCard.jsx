@@ -8,7 +8,8 @@ const ProductoCard = ({producto}) => {
                 src={`${process.env.NEXT_PUBLIC_API_URL}/imagen/${producto?.imagenes?.[0]?.imagenId}/foto`}
                 alt={'Imagen del producto'}
                 className="rounded mx-auto mb-4 h-40"
-                layout="intrinsic" 
+                width={130}
+                height={150}
             />
             <div className="text-sm">
                 <p><strong>{producto.productoNombre}</strong></p>

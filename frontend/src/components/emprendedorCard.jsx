@@ -8,7 +8,9 @@ const EmprendedorCard = ({emprendedor}) => {
                 src={`${process.env.NEXT_PUBLIC_API_URL}/emprendedor/${emprendedor.emprendedorId}/foto`}
                 alt={'Imagen del emprendedor'}
                 className="rounded mx-auto mb-4 h-40"
-                layout="intrinsic" 
+                width={120}
+                height={150}
+
             />
             <div className="text-sm">
                 <p><strong>{emprendedor.usuario.usuarioNombre} {emprendedor.usuario.usuarioApellidoPaterno} {emprendedor.usuario.usuarioApellidoMaterno}</strong></p>
