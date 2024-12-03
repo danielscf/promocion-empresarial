@@ -7,6 +7,7 @@ import { fetchRubros } from '../store/rubroSlice';
 import { fetchTipoContribuyente } from '../store/tipoContribuyenteSlice';
 import { fetchTipoActividad } from '../store/tipoActividadSlice';
 import { showErrorMessage, showSuccessMessage } from '../app/utils/messages';
+import { emprendedores } from '@/app/utils/emprendedores';
 
 const RegistrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset }) => {
 
@@ -15,6 +16,7 @@ const RegistrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
     const { tipoContribuyentes } = useSelector((state) => state.tipoContribuyentes)
     const { tipoActividad } = useSelector((state) => state.tipoActividad)
     const [selectedFile, setSelectedFile] = useState(null);
+    const [rucEmprendedor, setrucEmprendedor] = useState(null)
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
@@ -27,6 +29,28 @@ const RegistrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
         dispatch(fetchTipoActividad())
 
     }, [dispatch])
+
+    const handleBuscarEmprendedor = (e) => {
+        e.preventDefault();
+        if (!/^\d{11}$/.test(rucEmprendedor)) {
+            alert("El RUC debe tener 11 dígitos.");
+            return;
+        }
+         const emprendedor = emprendedores.find(e => e.emprendedorRuc === rucEmprendedor)
+
+         if(emprendedor){
+
+            setValue("emprendedorDireccion",emprendedor.emprendedorDireccion)
+            setValue("emprendedorRazonSocial",emprendedor.emprendedorRazonSocial)
+            setValue("emprendedorEstadoContribuyente",emprendedor.emprendedorEstadoContribuyente)
+            setValue("emprendedorCondicionContribuyente",emprendedor.emprendedorCondicionContribuyente)
+            setValue("rubroId",emprendedor.rubro.rubroId)
+            setValue("tipoActividadId",emprendedor.tipoActividad.tipoActividadId)
+
+         }else{
+            alert('Emprendedor no encontrado')
+         }
+    }
 
     const onSubmit = async (data) => {
         try {
@@ -121,38 +145,16 @@ const RegistrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
                             {/* Datos de Usuario */}
                             <h3 className="text-xl font-bold mb-4 col-span-6 md:col-span-3">Datos de Usuario</h3>
 
-                            <div className="flex md:flex-row justify-center items-center col-span-6">
+                            <div className="col-span-6 md:col-span-6 lg:col-span-6">
                                 <input type="text" placeholder='Ingresar dni'
-                                    className="w-full p-2 md:w-64 rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                    className="w-full p-2 rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                     {...register('usuarioDni', { required: true })}
                                 />
                                 {errors.usuarioDni && <span className="text-red-500">El dni es requerido</span>}
-                                <button className="p-2 ml-1 bg-black text-white rounded-md">
+                                {/* <button className="p-2 ml-1 bg-black text-white rounded-md">
                                     <FontAwesomeIcon className="mx-3 cursor-pointer" icon={faMagnifyingGlass} />
-                                </button>
+                                </button> */}
                             </div>
-
-                            {/* Nombre de Usuario */}
-                            {/* <div className="col-span-6 md:col-span-3 lg:col-span-3">
-                                <label htmlFor="nombre_usuario" className="block text-sm font-medium leading-6 text-gray-900">
-                                    Nombre de Usuario
-                                </label>
-                                <input type="text" className="block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset 
-                                ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                    {...register('usuarioUsuario', { required: true })} />
-                                {errors.usuarioUsuario && <span className="text-red-500">El nombre de usuario es requerido</span>}
-                            </div> */}
-
-                            {/* Contraseña */}
-                            {/* <div className="col-span-6 md:col-span-3 lg:col-span-3">
-                                <label htmlFor="contrasena" className="block text-sm font-medium leading-6 text-gray-900">
-                                    Contraseña
-                                </label>
-                                <input type="password" className="block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset
-                                 ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                    {...register('usuarioContrasena', { required: true })} />
-                                {errors.usuarioContrasena && <span className="text-red-500">La contraseña es requerida</span>}
-                            </div> */}
 
                             {/* Nombres */}
                             <div className="col-span-6 md:col-span-3 lg:col-span-3">
@@ -236,6 +238,7 @@ const RegistrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
                                  placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                     {...register('emprendedorRuc', { required: true })}
                                     onChange={(e) => {
+                                        setrucEmprendedor(e.target.value)
                                         const obtenerDigitos = e.target.value.substring(0, 2)
                                         console.log(obtenerDigitos)
                                         if (obtenerDigitos === '10') {
@@ -245,7 +248,8 @@ const RegistrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
                                         }
                                     }} />
                                 {errors.emprendedorRuc && <span className="text-red-500">EL ruc es requerido</span>}
-                                <button className="p-2 ml-1 bg-black text-white rounded-md">
+                                <button className="p-2 ml-1 bg-black text-white rounded-md"
+                                 onClick={handleBuscarEmprendedor}>
                                     <FontAwesomeIcon className="mx-3 cursor-pointer" icon={faMagnifyingGlass} />
                                 </button>
                             </div>

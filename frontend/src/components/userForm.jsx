@@ -4,11 +4,13 @@ import { useDispatch } from 'react-redux';
 import { getAllRol } from '../api/rolApi';
 import { useState, useEffect } from 'react';
 import { showSuccessMessage, showErrorMessage } from '../app/utils/messages';
+import { usuarios } from '@/app/utils/usuarios';
 
-const UserForm = ({ closeModal, register, handleSubmit, errors, reset }) => {
+const UserForm = ({ closeModal, register, handleSubmit, errors, reset,setValue }) => {
 
     const [roles, setroles] = useState([])
     const dispatch = useDispatch();
+    const [busqueda, setbusqueda] = useState(null)
 
     const onSubmit = async (data) => {
 
@@ -25,6 +27,33 @@ const UserForm = ({ closeModal, register, handleSubmit, errors, reset }) => {
         });
     };
 
+    const handleBuscar = (e) => {
+        e.preventDefault();
+        console.log(busqueda)
+        if (!/^\d{8}$/.test(busqueda)) {
+            alert("El DNI debe tener 8 dígitos.");
+            return;
+        }
+        const usuario = usuarios.find(e => e.usuarioDni === busqueda)
+
+        if(usuario){
+            setValue("usuarioNombre",usuario.usuarioNombre)
+            setValue("usuarioApellidoPaterno",usuario.usuarioApellidoPaterno)
+            setValue("usuarioApellidoMaterno",usuario.usuarioApellidoPaterno)
+            setValue("usuarioCorreo",usuario.usuarioCorreo)
+            setValue("usuarioTelefono",usuario.usuarioTelefono)
+            setValue("usuarioFechaNacimiento",usuario.usuarioFechaNacimiento)
+        }else{
+            alert("Usuario no encontrado")
+        }
+
+    }
+
+    const handleCloseModal = () => {
+        reset(); 
+        closeModal(); 
+    };
+
     useEffect(() => {
 
         const cargarRoles = async () => {
@@ -38,6 +67,35 @@ const UserForm = ({ closeModal, register, handleSubmit, errors, reset }) => {
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
+             <div className="mb-4 w-full flex items-center">
+             <input
+                    type="text"
+                    className="border border-gray-300 rounded-md p-2 w-1/2 focus:outline-none focus:ring focus:ring-indigo-500 mr-2"
+                    placeholder="Ingresa el DNI"
+                    {...register("usuarioDni", {
+                        required: "El DNI es requerido",
+                    })}
+                    onChange={(e) => {
+                        console.log(e.target.value)
+                        setbusqueda(e.target.value); 
+                    }}
+                />
+                  {errors.usuarioDni && <p className="text-red-600 text-sm mt-1">{errors.usuarioDni.message}</p>}
+                <button
+                    type="button"
+                    className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 mr-2"
+                    onClick={handleBuscar}
+                >
+                    Buscar
+                </button>
+                 <button
+                    type="button"
+                    className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+                    onClick={() => { reset()}}
+                >
+                    Limpiar
+                </button>
+            </div>
             <div className="mb-4">
                 <label htmlFor="nombreUsuario" className="block text-sm font-medium text-gray-700 mb-1">Nombre Usuario</label>
                 <input type="text" className="border border-gray-300 rounded-md w-full p-2 focus:outline-none focus:ring focus:ring-indigo-500"
@@ -73,7 +131,7 @@ const UserForm = ({ closeModal, register, handleSubmit, errors, reset }) => {
                 {errors.usuarioApellidoMaterno && <span className="text-red-500">El apellido materno es requerido</span>}
             </div>
 
-            <div className="mb-4">
+            {/* <div className="mb-4">
                 <label htmlFor="dni" className="block text-sm font-medium text-gray-700 mb-1">DNI</label>
                 <input
                     type="text"
@@ -87,7 +145,7 @@ const UserForm = ({ closeModal, register, handleSubmit, errors, reset }) => {
                     })}
                 />
                 {errors.usuarioDni && <p className="text-red-600 text-sm mt-1">{errors.usuarioDni.message}</p>}
-            </div>
+            </div> */}
 
             <div className="mb-4">
                 <label htmlFor="correo" className="block text-sm font-medium text-gray-700 mb-1">Correo</label>
@@ -134,7 +192,11 @@ const UserForm = ({ closeModal, register, handleSubmit, errors, reset }) => {
             </div>
 
             <div className="flex justify-end mt-4">
-                <button type="button" className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 mr-2" onClick={closeModal}>
+                <button type="button" className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 mr-2" 
+                onClick={() => {
+                    closeModal()
+                    handleCloseModal()
+                }}>
                     Cerrar
                 </button>
                 <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">

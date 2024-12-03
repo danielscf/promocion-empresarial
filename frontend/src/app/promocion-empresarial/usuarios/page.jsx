@@ -11,7 +11,7 @@ import { AuthContext } from '@/context/AuthContext';
 
 function UsuariosPage() {
 
-    const { register, handleSubmit, reset, formState: { errors } } = useForm()
+    const { register, handleSubmit, reset,setValue, formState: { errors } } = useForm()
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const { user } = useContext(AuthContext)
@@ -44,6 +44,7 @@ function UsuariosPage() {
                     handleSubmit={handleSubmit}
                     errors={errors}
                     reset={reset}
+                    setValue={setValue}
                 />
             </Modal>
         </div>

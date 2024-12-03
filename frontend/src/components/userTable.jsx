@@ -107,7 +107,7 @@ const UserTable = () => {
         }
 
         return baseColumns;
-    }, [handleDelete, user, setusuarioId, openModal]);
+    }, [handleDelete, setusuarioId,shouldShowColumn]);
 
     const usuariosFiltrados = usuarios?.filter(usuario => usuario?.usuarioEstado !== 3) || [];
     const validData = usuariosFiltrados.filter(item => item && typeof item.usuarioId !== "undefined");

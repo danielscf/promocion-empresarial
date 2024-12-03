@@ -6,7 +6,7 @@ import Image from 'next/image'
 import { useContext } from 'react';
 import { AuthContext } from '@/context/AuthContext';
 
-const homePage = () => {
+const HomePage = () => {
     const { user } = useContext(AuthContext)
     return (
         <div className="flex flex-col bg-gray-300 justify-center items-center p-4 sm:h-screen md:h-screen xl:h-screen">
@@ -42,4 +42,4 @@ const homePage = () => {
     )
 }
 
-export default homePage
+export default HomePage

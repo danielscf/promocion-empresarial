@@ -40,7 +40,7 @@ const UsuarioEditForm = ({ closeModal, usuarioId }) => {
         cargarRoles()
         cargarDatosUser()
 
-    }, [usuarioId])
+    }, [usuarioId,setValue])
 
     const onSubmit = async (data) => {
 

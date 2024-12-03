@@ -26,7 +26,7 @@ const EventoTable = () => {
 
 
     useEffect(() => {
-        console.log(eventos)
+        
         dispatch(fetchEventos())
 
     }, [dispatch])
@@ -116,7 +116,7 @@ const EventoTable = () => {
             ),
             ignoreRowClick: true,
         },
-    ], [seteventoId, openModal]);
+    ], [seteventoId]);
 
     return (
         <div className="overflow-hidden max-w-full border border-gray-300 rounded-lg shadow-md">
