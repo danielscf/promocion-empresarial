@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import Image from 'next/image';
+import axios from 'axios';
 
 function LoginPage() {
 
@@ -19,39 +20,46 @@ function LoginPage() {
     setError('');
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/login`,
+        {
           usuarioUsuario: data.usuarioUsuario,
-          usuarioContrasena: data.usuarioContrasena
-        }),
-      });
+          usuarioContrasena: data.usuarioContrasena,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
 
-      if (response.ok) {
-
-        const { token, expiration, usuario } = await response.json();
-        // console.log('Token:', token);
+      if (response.status === 200) {
+        const { token, expiration, usuario } = response.data;
         console.log('Expiration Time:', expiration);
         login(token, expiration, usuario);
-
         router.push('/promocion-empresarial/home');
       } else {
-        const errorData = await response.json();
-        console.log('Error en la respuesta:', errorData);
+        console.log('Error en la respuesta:', response.data);
         setError('Credenciales incorrectas. Intenta nuevamente.');
       }
     } catch (err) {
-      console.error('Error de autenticación:', err);
-      setError('Hubo un problema con la autenticación. Revisa tu conexión o intenta más tarde.');
+      if (err.response) {
+        console.error('Error en la respuesta del servidor:', err.response.data);
+        setError(err.response.data.message || 'Credenciales incorrectas. Intenta nuevamente.');
+      } else if (err.request) {
+        console.error('No se recibió respuesta del servidor:', err.request);
+        setError('No se pudo conectar con el servidor. Intenta más tarde.');
+      } else {
+        console.error('Error al configurar la solicitud:', err.message);
+        setError('Ocurrió un problema inesperado. Intenta nuevamente.');
+      }
     }
+
   };
 
   return (
     <div
-      className="login-page min-h-screen flex items-center justify-center"
+      className="login-page min-h-screen flex items-center justify-center p-4"
       style={{
         backgroundImage: `url(${'/images/parque.jpeg'})`, backgroundSize: 'cover', backgroundPosition: 'center',
         width: '100vw', height: '100vh'
@@ -59,7 +67,7 @@ function LoginPage() {
     >
       <div className="login-box p-10 shadow-lg bg-white rounded-lg">
         <div className="text-center mb-6">
-          <Image src="/images/escudo.jpg"alt="Logo" className="mb-4 mx-auto w-16" width={64} height={64} />
+          <Image src="/images/escudo.jpg" priority={true} quality={80} alt="Logo" className="mb-4 mx-auto" width={64} height={64} />
           <h3 className="text-red-600 font-bold text-xl">Login</h3>
         </div>
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -69,7 +77,6 @@ function LoginPage() {
             </label>
             <input
               type="text"
-              id="username"
               className="w-full px-4 py-2 border text-neutral-950 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
               placeholder="Ingrese su usuario"
               {...register('usuarioUsuario', { required: 'El nombre de usuario es requerido' })}
@@ -82,7 +89,6 @@ function LoginPage() {
             </label>
             <input
               type="password"
-              id="password"
               className="w-full px-4 py-2 border border-gray-300 text-normal-950 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
               placeholder="Ingrese su contraseña"
               {...register('usuarioContrasena', { required: 'La contraseña es requerida' })}

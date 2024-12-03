@@ -27,11 +27,11 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Provider store={store}>
-          <AuthProvider>
-            <EmprendedorProvider>
-              {children}
-            </EmprendedorProvider>
-          </AuthProvider>
+            <AuthProvider>
+              <EmprendedorProvider>
+                {children}
+              </EmprendedorProvider>
+            </AuthProvider>
         </Provider>
       </body>
     </html>

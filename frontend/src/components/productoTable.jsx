@@ -42,9 +42,9 @@ const ProductoTable = () => {
         try {
             if (productoId && imagenId) {
                 await deleteImagen(imagenId);
-                console.log(`Imagen con ID ${imagenId} eliminada exitosamente.`);
+                //console.log(`Imagen con ID ${imagenId} eliminada exitosamente.`);
                 await dispatch(deleteProducto(productoId)).unwrap();
-                console.log(`Producto con ID ${productoId} eliminado exitosamente.`);
+                //console.log(`Producto con ID ${productoId} eliminado exitosamente.`);
     
                 setReload(true);
             }
@@ -75,12 +75,12 @@ const ProductoTable = () => {
             cell: row => (
                 row?.imagenes && row.imagenes?.[0]?.imagenId ? (
                     <Image
-                        className="my-2"
+                        className="my-2 w-20 h-20"
                         src={`${apiUrl}/imagen/${row.imagenes[0].imagenId}/foto?timestamp=${new Date().getTime()}`}
                         alt="Imagen de producto"
+                        priority={true}
                         width={80}
                         height={80}
-                        style={{ objectFit: 'cover' }}
                     />
                 ) : <span>Sin imagen</span>
             ),
@@ -89,7 +89,7 @@ const ProductoTable = () => {
         {
             name: 'EDITAR',
             cell: row => (
-                <FontAwesomeIcon className='cursor-pointer h-6 w-6'
+                <FontAwesomeIcon className='cursor-pointer h-6 w-6 ml-3'
                     icon={faPenToSquare}
                     onClick={() => {
                         setproductoId(row.productoId);
@@ -97,19 +97,17 @@ const ProductoTable = () => {
                     }} />
             ),
             ignoreRowClick: true,
-            button: "true",
         },
         {
             name: 'ELIMINAR',
             cell: row => (
                 <FontAwesomeIcon
                     icon={faTrash}
-                    className="text-red-600 cursor-pointer h-6 w-6"
+                    className="text-red-600 cursor-pointer h-6 w-6 ml-3"
                     onClick={() => handleDelete(row.productoId, row.imagenes?.[0]?.imagenId || null)}
                 />
             ),
             ignoreRowClick: true,
-            button: "true",
         },
     ], [apiUrl, handleDelete]);
     

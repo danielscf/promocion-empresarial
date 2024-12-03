@@ -82,8 +82,8 @@ const ProductoEditForm = ({ productoId, closeModal }) => {
             dispatch(editProducto(formDataProducto)).then((response) => {
 
                 if (response.type === 'productos/editProducto/fulfilled') {
-                    console.log(response.payload);
-                    dispatch(editImagen(formDataImagen))
+                    //console.log(response.payload);
+                    selectedFoto && dispatch(editImagen(formDataImagen));
                     showSuccessMessage('Edicion exitosa', 'Se ha editado el producto con éxito');
                     reset()
                     closeModal()

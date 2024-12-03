@@ -2,13 +2,14 @@
 
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { approveSolicitud,declineSolicitud,getSolicitudById } from '@/store/solicitudSlice'
+import { approveSolicitud, declineSolicitud, getSolicitudById } from '@/store/solicitudSlice'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { useRouter } from 'next/navigation';
 import { habilitarUsuario } from '@/store/userSlice';
 import { showSuccessMessage } from '@/app/utils/messages';
 import { deleteUsuario } from '@/store/userSlice';
+import { registroCompleto } from '@/api/registroApi';
 
 const Page = ({ params }) => {
 
@@ -27,6 +28,8 @@ const Page = ({ params }) => {
         dispatch(approveSolicitud(params.solicitudId)).then((response) => {
 
             if (response.type === "solicitudes/approveSolicitud/fulfilled") {
+                console.log(solicitud.usuario.usuarioCorreo)
+                registroCompleto(solicitud.usuario.usuarioCorreo)
                 dispatch(habilitarUsuario(solicitud.usuario.usuarioId))
                 showSuccessMessage('Accion exitosa', 'La solicitud a sido aprobada')
                 router.push('/promocion-empresarial/mis-datos/solicitudes')
@@ -38,11 +41,11 @@ const Page = ({ params }) => {
     }
     const handleClickRechazar = () => {
         dispatch(declineSolicitud(params.solicitudId)).then((response) => {
-            if(response.type === "solicitud/declineSolicitud/fulfilled"){
+            if (response.type === "solicitud/declineSolicitud/fulfilled") {
                 dispatch(deleteUsuario(solicitud.usuario.usuarioId))
                 showSuccessMessage('Accion exitosa', 'La solicitud a sido rechazada')
                 router.push('/promocion-empresarial/mis-datos/solicitudes')
-            }else if (response.type === "solicitud/declineSolicitud/rejected"){
+            } else if (response.type === "solicitud/declineSolicitud/rejected") {
                 showErrorMessage('Error', 'Hubo un problema en rechazar la solicitud');
             }
         })
@@ -86,16 +89,19 @@ const Page = ({ params }) => {
                 <p className="text-gray-600"><span className="font-medium">Rubro:</span>{solicitud.emprendedor.rubro.rubroNombre}</p>
             </div>
 
-            <div className="flex justify-end space-x-4">
+            <div className="flex flex-col sm:flex-col md:flex-row lg:flex-row justify-end">
                 <button
-                    className="flex items-center px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+                    className="flex items-center p-2 mb-2 md:mr-2 md:mb-0 sm:mb-2 lg:mb-0 xl:mb-0 2xl:mb-0 bg-green-600 text-white 
+                    rounded-md hover:bg-green-700 transition-colors text-base"
                     onClick={() => handleClikAprobar()}>
                     <FontAwesomeIcon icon={faCheck} className="mr-2" />
                     Aprobar
                 </button>
+
                 <button
-                    className="flex items-center px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
-                onClick={() => handleClickRechazar()}>
+                    className="flex items-center p-2 md:mb-0 sm:mb-0 lg:mb-0 xl:mb-0 2xl:mb-0 bg-red-600 text-white 
+                    rounded-md hover:bg-red-700 transition-colors text-base"
+                    onClick={() => handleClickRechazar()}>
                     <FontAwesomeIcon icon={faTimes} className="mr-2" />
                     Rechazar
                 </button>

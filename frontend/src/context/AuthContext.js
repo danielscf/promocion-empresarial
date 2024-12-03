@@ -2,6 +2,7 @@ import React, { createContext, useState, useEffect, useCallback } from 'react';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
 export const AuthContext = createContext();
+import { alertPersonalizado } from '@/app/utils/messages';
 
 
 export const AuthProvider = ({ children }) => {
@@ -36,8 +37,8 @@ export const AuthProvider = ({ children }) => {
         if (savedUser) {
           setUser(JSON.parse(savedUser)); 
         }
-      } else {
-        alert('Tu sesión ha expirado, por favor inicia sesión nuevamente.');
+      } else { 
+        alertPersonalizado('Sesión expirada','Tu sesión ha expirado, por favor inicia sesión nuevamente.')
         logout();
       }
     }

@@ -61,10 +61,10 @@ const MarcaTable = () => {
                         className="my-2"
                         src={`${apiUrl}/marca/${row.marcaId}/foto?timestamp=${new Date().getTime()}`}
                         alt="Imagen de Marca"
-                        loading="lazy"
+                        priority={true}
                         width={80}
                         height={80}
-                        style={{ width: '80px', height: '80px', objectFit: 'cover' }}
+                        style={{ width: '80px', height: '80px'}}
                     />
                 ) : <span>Sin imagen</span>
             ),
@@ -73,7 +73,7 @@ const MarcaTable = () => {
         {
             name: 'EDITAR',
             cell: row => (
-                <FontAwesomeIcon className='cursor-pointer h-6 w-6'
+                <FontAwesomeIcon className='cursor-pointer h-6 w-6 ml-3'
                 icon={faPenToSquare} 
                 onClick={() => {
                     setmarcaId(row.marcaId)
@@ -81,19 +81,17 @@ const MarcaTable = () => {
                 }}/>
             ),
             ignoreRowClick: true,
-            button: "true",
         },
         {
             name: 'ELIMINAR',
             cell: row => (
                 <FontAwesomeIcon
                     icon={faTrash}
-                    className="text-red-600 cursor-pointer h-6 w-6"
+                    className="text-red-600 cursor-pointer h-6 w-6 ml-3"
                     onClick={() => handleDelete(row?.marcaId)}
                 />
             ),
             ignoreRowClick: true,
-            button: "true",
         },
         
     ], [apiUrl, handleDelete]);

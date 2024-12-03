@@ -17,6 +17,7 @@ const navigation = [
   { name: 'Usuarios', href: '/promocion-empresarial/usuarios' },
   { name: 'Emprendedor', href: '/promocion-empresarial/emprendedor/datos-emprendedor' },
   { name: 'Emprendedores', href: '/promocion-empresarial/emprendedores' },
+  { name: 'Eventos', href: '/promocion-empresarial/eventos' },
 ];
 
 

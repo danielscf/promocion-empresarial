@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect,useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchSolicitudes } from '@/store/solicitudSlice';
 import Solicitud from '@/components/solicitud';
@@ -33,7 +33,7 @@ const SolicitudesPage = () => {
   };
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
-};
+  };
 
 
   useEffect(() => {
@@ -43,7 +43,7 @@ const SolicitudesPage = () => {
   }, [dispatch])
 
   return (
-    <div className='p-4 w-screen h-screen bg-gray-300 '>
+    <div className={`w-full h-screen px-4`}>
       <h1 className='my-6 text-center text-2xl font-bold'>Solicitudes</h1>
       <Solicitud solicitudes={currentSolicitudes} />
       <Pagination
@@ -54,6 +54,7 @@ const SolicitudesPage = () => {
         onPageChange={handlePageChange}
       />
     </div>
+
   )
 }
 

@@ -72,7 +72,7 @@ const UserDataForm = () => {
                                 type="text"
                                 {...register("usuarioUsuario", { required: "Este campo es obligatorio" })}
                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                            />
+                                readOnly />
                             {errors.usuarioUsuario && <p className="text-red-500 text-sm">{errors.usuarioUsuario.message}</p>}
                         </div>
 
@@ -85,7 +85,7 @@ const UserDataForm = () => {
                                 type="text"
                                 {...register("usuarioNombre", { required: "Este campo es obligatorio" })}
                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                            />
+                                readOnly />
                             {errors.usuarioNombre && <p className="text-red-500 text-sm">{errors.usuarioNombre.message}</p>}
                         </div>
 
@@ -98,7 +98,7 @@ const UserDataForm = () => {
                                 type="text"
                                 {...register("usuarioApellidoPaterno", { required: "Este campo es obligatorio" })}
                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                            />
+                                readOnly />
                             {errors.usuarioApellidoPaterno && <p className="text-red-500 text-sm">{errors.usuarioApellidoPaterno.message}</p>}
                         </div>
 
@@ -111,7 +111,7 @@ const UserDataForm = () => {
                                 type="text"
                                 {...register("usuarioApellidoMaterno", { required: "Este campo es obligatorio" })}
                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                            />
+                                readOnly />
                             {errors.usuarioApellidoMaterno && <p className="text-red-500 text-sm">{errors.usuarioApellidoMaterno.message}</p>}
                         </div>
 
@@ -130,7 +130,7 @@ const UserDataForm = () => {
                                     }
                                 })}
                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                            />
+                                readOnly />
                             {errors.dni && <p className="text-red-500 text-sm">{errors.dni.message}</p>}
                         </div>
 

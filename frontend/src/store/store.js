@@ -8,6 +8,8 @@ import emprendedorReducer from './emprendedorSlice'
 import marcaReducer from './marcaSlice'
 import productoReducer from './productoSlice'
 import imagenReducer from './imagenSlice'
+import eventoReducer from './eventoSlice'
+import participacionReducer from './participacionEvento'
 
 export const store = configureStore({
     reducer: {
@@ -19,7 +21,9 @@ export const store = configureStore({
         emprendedor: emprendedorReducer,
         marcas:marcaReducer,
         productos:productoReducer,
-        imagenes:imagenReducer
+        imagenes:imagenReducer,
+        eventos:eventoReducer,
+        participaciones:participacionReducer
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({

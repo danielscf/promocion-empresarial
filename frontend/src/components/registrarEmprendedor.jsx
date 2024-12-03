@@ -14,7 +14,6 @@ const RegistrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
     const { rubros } = useSelector((state) => state.rubros)
     const { tipoContribuyentes } = useSelector((state) => state.tipoContribuyentes)
     const { tipoActividad } = useSelector((state) => state.tipoActividad)
-    const [dni, setdni] = useState("")
     const [selectedFile, setSelectedFile] = useState(null);
 
     const handleFileChange = (e) => {
@@ -26,12 +25,8 @@ const RegistrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
         dispatch(fetchRubros())
         dispatch(fetchTipoContribuyente())
         dispatch(fetchTipoActividad())
-        console.log(dni)
 
-    }, [dispatch,dni])
-    useEffect(() => {
-        console.log(dni)
-    }, [dni])
+    }, [dispatch])
 
     const onSubmit = async (data) => {
         try {
@@ -41,8 +36,8 @@ const RegistrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
             const nuevaSolicitud = {
                 usuario: {
                     "usuarioDni": data.usuarioDni,
-                    "usuarioUsuario": data.usuarioUsuario,
-                    "usuarioContrasena": data.usuarioContrasena,
+                    "usuarioUsuario": data.usuarioDni + "temporal",
+                    "usuarioContrasena": data.usuarioDni + "temporal",
                     "usuarioNombre": data.usuarioNombre,
                     "usuarioApellidoPaterno": data.usuarioApellidoPaterno,
                     "usuarioApellidoMaterno": data.usuarioApellidoMaterno,
@@ -54,8 +49,8 @@ const RegistrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
                     "emprendedorRuc": data.emprendedorRuc,
                     "emprendedorDireccion": data.emprendedorDireccion,
                     "emprendedorRazonSocial": data.emprendedorRazonSocial,
-                    "emprendedorEstadoContribuyente": 0,
-                    "emprendedorCondicionContribuyente": 0,
+                    "emprendedorEstadoContribuyente": data.emprendedorCondicionContribuyente,
+                    "emprendedorCondicionContribuyente": data.emprendedorCondicionContribuyente,
                     "rubro": {
                         "rubroId": data.rubroId,
                         "rubroNombre": data.rubroNombre
@@ -130,7 +125,7 @@ const RegistrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
                                 <input type="text" placeholder='Ingresar dni'
                                     className="w-full p-2 md:w-64 rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                     {...register('usuarioDni', { required: true })}
-                                    onChange={e => setdni(e.target.value)} />
+                                />
                                 {errors.usuarioDni && <span className="text-red-500">El dni es requerido</span>}
                                 <button className="p-2 ml-1 bg-black text-white rounded-md">
                                     <FontAwesomeIcon className="mx-3 cursor-pointer" icon={faMagnifyingGlass} />
@@ -138,7 +133,7 @@ const RegistrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
                             </div>
 
                             {/* Nombre de Usuario */}
-                            <div className="col-span-6 md:col-span-3 lg:col-span-3">
+                            {/* <div className="col-span-6 md:col-span-3 lg:col-span-3">
                                 <label htmlFor="nombre_usuario" className="block text-sm font-medium leading-6 text-gray-900">
                                     Nombre de Usuario
                                 </label>
@@ -146,10 +141,10 @@ const RegistrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
                                 ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                     {...register('usuarioUsuario', { required: true })} />
                                 {errors.usuarioUsuario && <span className="text-red-500">El nombre de usuario es requerido</span>}
-                            </div>
+                            </div> */}
 
                             {/* Contraseña */}
-                            <div className="col-span-6 md:col-span-3 lg:col-span-3">
+                            {/* <div className="col-span-6 md:col-span-3 lg:col-span-3">
                                 <label htmlFor="contrasena" className="block text-sm font-medium leading-6 text-gray-900">
                                     Contraseña
                                 </label>
@@ -157,7 +152,7 @@ const RegistrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
                                  ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                     {...register('usuarioContrasena', { required: true })} />
                                 {errors.usuarioContrasena && <span className="text-red-500">La contraseña es requerida</span>}
-                            </div>
+                            </div> */}
 
                             {/* Nombres */}
                             <div className="col-span-6 md:col-span-3 lg:col-span-3">
@@ -239,7 +234,16 @@ const RegistrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
                             <div className="flex md:flex-row justify-center items-center col-span-6">
                                 <input type="text" placeholder='Ingresar ruc' className="w-full md:w-64 rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300
                                  placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                    {...register('emprendedorRuc', { required: true })} />
+                                    {...register('emprendedorRuc', { required: true })}
+                                    onChange={(e) => {
+                                        const obtenerDigitos = e.target.value.substring(0, 2)
+                                        console.log(obtenerDigitos)
+                                        if (obtenerDigitos === '10') {
+                                            setValue('tipoContribuyenteId', 1)
+                                        } else if (obtenerDigitos === '20') {
+                                            setValue('tipoContribuyenteId', 2)
+                                        }
+                                    }} />
                                 {errors.emprendedorRuc && <span className="text-red-500">EL ruc es requerido</span>}
                                 <button className="p-2 ml-1 bg-black text-white rounded-md">
                                     <FontAwesomeIcon className="mx-3 cursor-pointer" icon={faMagnifyingGlass} />
@@ -315,7 +319,7 @@ const RegistrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
                             </div>
 
                             {/* Tipo Contribuyente */}
-                            <div className="col-span-6 md:col-span-3 lg:col-span-3">
+                            <div className="col-span-6 md:col-span-6 lg:col-span-6 hidden">
                                 <label htmlFor="tipoContribuyente" className="block text-sm font-medium leading-6 text-gray-900">
                                     Tipo contribuyente
                                 </label>
@@ -363,12 +367,12 @@ const RegistrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
                             </div>
 
                             {/* Foto del Emprendedor */}
-                            <div className="col-span-6 md:col-span-3 lg:col-span-3">
+                            <div className="col-span-6 md:col-span-6 lg:col-span-6">
                                 <label htmlFor="foto" className="block text-sm font-medium leading-6 text-gray-900">
                                     Foto del emprendedor
                                 </label>
-                                <input type="file" accept="image/*" className="block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300  
-                                    placeholder:text-gray-400 focus:ring-2 focus:ring-inset  focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                <input type="file" accept="image/*" className="w-full text-gray-500 font-medium text-sm bg-gray-100 file:cursor-pointer cursor-pointer file:border-0 file:py-2 
+                                  file:px-4 file:mr-4 file:bg-gray-800 file:hover:bg-gray-700 file:text-white rounded"
                                     onChange={handleFileChange}
                                 />
                                 {errors.emprendedorFoto && <span className="text-red-500">La foto es requerida</span>}
