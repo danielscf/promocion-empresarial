@@ -6,6 +6,7 @@ import { useEmprendedor } from '../context/EmprendedorContext'
 import { showErrorMessage, showSuccessMessage } from '../app/utils/messages'
 import { useDispatch } from 'react-redux'
 import Image from 'next/image'
+import { alertPersonalizado } from '../app/utils/messages'
 
 const MarcaEditForm = ({ marcaId, closeModal }) => {
 
@@ -32,6 +33,19 @@ const MarcaEditForm = ({ marcaId, closeModal }) => {
     const onSubmit = async (data) => {
         if (!marca?.marcaId) {
             console.error("No se encontró 'marcaId' en la marca.");
+            return;
+        }
+
+        const initialValues = {
+            marcaNombre: marca?.marcaNombre
+        }
+        const formDataIsEqual = JSON.stringify(data) === JSON.stringify(initialValues);
+        // console.log(initialValues)
+        // console.log(data)
+        const photoIsUnchanged = !selectedFoto;
+
+        if (formDataIsEqual && photoIsUnchanged) {
+            alertPersonalizado('Sin cambios', 'No se han realizado cambios en el formulario.');
             return;
         }
 
@@ -67,8 +81,29 @@ const MarcaEditForm = ({ marcaId, closeModal }) => {
 
     const handleFotoChange = (e) => {
         const file = e.target.files[0];
-        setSelectedFoto(file);
-        setFotoUrl(URL.createObjectURL(file));
+    
+        if (file) {
+           
+            const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
+            if (!allowedTypes.includes(file.type)) {
+                showErrorMessage('Archivo no válido', 'Por favor selecciona una imagen en formato JPEG, PNG o GIF.');
+                e.target.value = ''; 
+                setSelectedFoto(null);
+                setFotoUrl(null);
+                return;
+            }
+    
+            if (file.size > 5 * 1024 * 1024) { 
+                showErrorMessage('Archivo demasiado grande', 'El archivo debe ser menor a 5 MB.');
+                e.target.value = ''; 
+                setSelectedFoto(null);
+                setFotoUrl(null);
+                return;
+            }
+    
+            setSelectedFoto(file);
+            setFotoUrl(URL.createObjectURL(file));
+        }
     };
 
     if (!marca) return <p>Cargando datos de la marca...</p>;

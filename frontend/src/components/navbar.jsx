@@ -34,10 +34,12 @@ const Navbar = () => {
 
   const filteredNavigation = user?.roles?.[0]?.rolNombre
     ? navigation.filter(item => {
-      if (user.roles[0].rolNombre === 'Administrador' || user.roles[0].rolNombre === 'Operador') {
+      if (user.roles[0].rolNombre === 'Administrador') {
         return item.name !== 'Emprendedor';
       } else if (user.roles[0].rolNombre === 'Emprendedor') {
         return item.name === 'Inicio' || item.name === 'Emprendedor';
+      }else if(user.roles[0].rolNombre === 'Operador'){
+        return item.name !== 'Usuarios';
       }
       return false;
     })

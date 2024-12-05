@@ -12,8 +12,9 @@ export const getAllProductosByEmprendedor = (emprendedorId) => productoApi.get(`
 
 export const getProductoById = (productoId) => productoApi.get(`/${productoId}`)
 
-export const deleteProducto = (productoId) => productoApi.delete(`/${productoId}`)
+export const deleteProducto = (productoId) => productoApi.patch(`/${productoId}/eliminar`)
 
+export const cambiarEstadoProducto = (productoId,estado) => productoApi.patch(`${productoId}/cambiar-estado/${estado}`)
 
 export const editarProducto = async (formData) => {
     try {
@@ -37,7 +38,7 @@ export const editarProducto = async (formData) => {
                 params: { productoId, emprendedorId },
             }
         );
-        console.log('Respuesta API:', response.data);  
+       // console.log('Respuesta API:', response.data);  
         return response.data;
     } catch (error) {
         console.error('Error al editar el producto:', error);

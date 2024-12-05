@@ -37,7 +37,7 @@ function UsuariosPage() {
 
             <UserTable />
 
-            <Modal isOpen={isModalOpen} handleClose={closeModal} title="Registrar Usuario">
+            <Modal isOpen={isModalOpen} handleClose={() => { closeModal(); reset(); }} title="Registrar Usuario">
                 <UserForm
                     closeModal={closeModal}
                     register={register}

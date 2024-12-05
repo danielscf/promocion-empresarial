@@ -16,6 +16,8 @@ const participacionApi = axios.create({
 
 export const getAllParticipantes = (eventoId) => participacionApi.get(`/evento/${eventoId}`)
 
+export const actualizarAsistencia = (participanteEventoId,estado) => participacionApi.patch(`/${participanteEventoId}/actualizar-asistencia/${estado}`)
+
 export const createParticipacion = (datos) => participacionApi.post('',datos)
 
 export const descargarDiplomas = async (eventoId) => {

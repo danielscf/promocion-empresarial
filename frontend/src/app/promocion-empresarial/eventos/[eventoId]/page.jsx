@@ -11,13 +11,13 @@ import { descargarDiplomas } from '@/api/participacionApi';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteParticipacion, fetchParticipacionByEvento } from '@/store/participacionEvento';
 import { showConfirmation } from '@/app/utils/confirmationDialog';
+import { actualizarAsistencia } from '@/api/participacionApi';
 
 const ParticipantesPage = ({ params }) => {
 
     const router = useRouter();
     const [cargando, setCargando] = useState(false);
     const dispatch = useDispatch()
-   
 
     const participantes = useSelector((state) => state.participaciones.participaciones)
 
@@ -60,6 +60,20 @@ const ParticipantesPage = ({ params }) => {
         }
     }, [dispatch]);
 
+    const actualizarAsistenciaParticipante = async (participacionEventoId, estado) => {
+        setCargando(true);
+        try {
+
+            await actualizarAsistencia(participacionEventoId, estado);
+
+            dispatch(fetchParticipacionByEvento(params.eventoId));
+        } catch (error) {
+            console.error('Error al actualizar la asistencia:', error);
+        } finally {
+            setCargando(false);
+        }
+    };
+
     const columns = useMemo(() => [
         {
             name: 'ID',
@@ -68,7 +82,8 @@ const ParticipantesPage = ({ params }) => {
         },
         {
             name: 'NOMBRE EMPRENDEDOR',
-            selector: (row) => `${row?.emprendedor?.usuario?.usuarioNombre} ${row?.emprendedor?.usuario?.usuarioApellidoPaterno} ${row?.emprendedor?.usuario?.usuarioApellidoMaterno}`,
+            selector: (row) =>
+                `${row?.emprendedor?.usuario?.usuarioNombre} ${row?.emprendedor?.usuario?.usuarioApellidoPaterno} ${row?.emprendedor?.usuario?.usuarioApellidoMaterno}`,
             sortable: true,
         },
         {
@@ -82,6 +97,17 @@ const ParticipantesPage = ({ params }) => {
             sortable: true,
         },
         {
+            name: 'ASISTENCIA',
+            cell: (row) => (
+                <input
+                    className='ml-6'
+                    type="checkbox"
+                    checked={row?.asistencia === 1}
+                    onChange={() => actualizarAsistenciaParticipante(row?.participacionEventoId, row?.asistencia === 1 ? 0 : 1)}
+                />
+            ),
+        },
+        {
             name: 'ELIMINAR',
             cell: (row) => (
                 <FontAwesomeIcon
@@ -91,11 +117,13 @@ const ParticipantesPage = ({ params }) => {
                 />
             ),
         },
-    ], [eliminarParticipante]);
+    ], [eliminarParticipante, actualizarAsistenciaParticipante]);
 
     if (!participantes) {
         return <p>...Cargando</p>;
     }
+
+    const participacionesFiltradas = participantes.filter(participante => participante.estado !== 3 )
 
     return (
         <div className="p-4 bg-gray-300">
@@ -125,7 +153,7 @@ const ParticipantesPage = ({ params }) => {
             <div className="bg-white p-4 mt-6 shadow-md rounded">
                 <DataTable
                     columns={columns}
-                    data={participantes}
+                    data={participacionesFiltradas}
                     pagination
                     highlightOnHover
                     responsive

@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchRubros } from '../store/rubroSlice';
 import { fetchTipoContribuyente } from '../store/tipoContribuyenteSlice';
 import { fetchTipoActividad } from '../store/tipoActividadSlice';
-import { showErrorMessage, showSuccessMessage } from '../app/utils/messages';
+import { alertPersonalizado, showErrorMessage, showSuccessMessage } from '../app/utils/messages';
 import { emprendedores } from '@/app/utils/emprendedores';
 
 const RegistrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset }) => {
@@ -20,7 +20,26 @@ const RegistrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
-        setSelectedFile(file);
+
+        if (file) {
+
+            const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
+            if (!allowedTypes.includes(file.type)) {
+                showErrorMessage('Archivo no válido', 'Por favor selecciona una imagen en formato JPEG, PNG o GIF.');
+                e.target.value = '';
+                setSelectedFile(null);
+                return;
+            }
+
+            if (file.size > 5 * 1024 * 1024) {
+                showErrorMessage('Archivo demasiado grande', 'El archivo debe ser menor a 5 MB.');
+                e.target.value = '';
+                setSelectedFile(null);
+                return;
+            }
+
+            setSelectedFile(file);
+        }
     };
     useEffect(() => {
 
@@ -33,102 +52,126 @@ const RegistrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
     const handleBuscarEmprendedor = (e) => {
         e.preventDefault();
         if (!/^\d{11}$/.test(rucEmprendedor)) {
-            alert("El RUC debe tener 11 dígitos.");
+            alertPersonalizado("Ruc Invalido","El RUC debe tener 11 dígitos.");
             return;
         }
-         const emprendedor = emprendedores.find(e => e.emprendedorRuc === rucEmprendedor)
+        const emprendedor = emprendedores.find(e => e.emprendedorRuc === rucEmprendedor)
 
-         if(emprendedor){
+        if (emprendedor) {
 
-            setValue("emprendedorDireccion",emprendedor.emprendedorDireccion)
-            setValue("emprendedorRazonSocial",emprendedor.emprendedorRazonSocial)
-            setValue("emprendedorEstadoContribuyente",emprendedor.emprendedorEstadoContribuyente)
-            setValue("emprendedorCondicionContribuyente",emprendedor.emprendedorCondicionContribuyente)
-            setValue("rubroId",emprendedor.rubro.rubroId)
-            setValue("tipoActividadId",emprendedor.tipoActividad.tipoActividadId)
+            setValue("emprendedorDireccion", emprendedor.emprendedorDireccion)
+            setValue("emprendedorRazonSocial", emprendedor.emprendedorRazonSocial)
+            setValue("emprendedorEstadoContribuyente", emprendedor.emprendedorEstadoContribuyente)
+            setValue("emprendedorCondicionContribuyente", emprendedor.emprendedorCondicionContribuyente)
+            setValue("rubroId", emprendedor.rubro.rubroId)
+            setValue("tipoActividadId", emprendedor.tipoActividad.tipoActividadId)
 
-         }else{
+        } else {
             alert('Emprendedor no encontrado')
-         }
+        }
     }
+
+    const restringirCantidadDigitos = (e, tipoAtributo) => {
+        const digitos = e.target.value.replace(/\D/g, "");
+        const limite =
+            tipoAtributo === 'dni' ? 8 :
+                tipoAtributo === 'ruc' ? 11 :
+                    tipoAtributo === 'telefono' ? 9 : 0;
+
+        const mensaje =
+            tipoAtributo === 'dni' ? 'El dni debe tener 8 dígitos' :
+                tipoAtributo === 'telefono' ? 'El teléfono debe tener 9 dígitos' :
+                    tipoAtributo === 'ruc' ? 'El ruc debe tener 11 dígitos' : '';
+
+        if (digitos.length > limite) {
+            e.target.value = digitos.slice(0, limite);
+            alertPersonalizado('', mensaje);
+        }
+
+        if (digitos.length === 11 && tipoAtributo === 'ruc') {
+            const prefijo = digitos.substring(0, 2);
+            if (prefijo !== '10' && prefijo !== '20') {
+                e.target.value = '';
+                alertPersonalizado('', 'RUC inválido. Debe comenzar con 10 o 20');
+            }
+        }
+    };
 
     const onSubmit = async (data) => {
         try {
-
             const formData = new FormData();
 
             const nuevaSolicitud = {
                 usuario: {
-                    "usuarioDni": data.usuarioDni,
-                    "usuarioUsuario": data.usuarioDni + "temporal",
-                    "usuarioContrasena": data.usuarioDni + "temporal",
-                    "usuarioNombre": data.usuarioNombre,
-                    "usuarioApellidoPaterno": data.usuarioApellidoPaterno,
-                    "usuarioApellidoMaterno": data.usuarioApellidoMaterno,
-                    "usuarioCorreo": data.usuarioCorreo,
-                    "usuarioTelefono": data.usuarioTelefono,
-                    "usuarioFechaNacimiento": data.usuarioFechaNacimiento
+                    usuarioDni: data.usuarioDni,
+                    usuarioUsuario: data.usuarioDni + "temporal",
+                    usuarioContrasena: data.usuarioDni + "temporal",
+                    usuarioNombre: data.usuarioNombre,
+                    usuarioApellidoPaterno: data.usuarioApellidoPaterno,
+                    usuarioApellidoMaterno: data.usuarioApellidoMaterno,
+                    usuarioCorreo: data.usuarioCorreo,
+                    usuarioTelefono: data.usuarioTelefono,
+                    usuarioFechaNacimiento: data.usuarioFechaNacimiento,
                 },
                 emprendedor: {
-                    "emprendedorRuc": data.emprendedorRuc,
-                    "emprendedorDireccion": data.emprendedorDireccion,
-                    "emprendedorRazonSocial": data.emprendedorRazonSocial,
-                    "emprendedorEstadoContribuyente": data.emprendedorCondicionContribuyente,
-                    "emprendedorCondicionContribuyente": data.emprendedorCondicionContribuyente,
-                    "rubro": {
-                        "rubroId": data.rubroId,
-                        "rubroNombre": data.rubroNombre
+                    emprendedorRuc: data.emprendedorRuc,
+                    emprendedorDireccion: data.emprendedorDireccion,
+                    emprendedorRazonSocial: data.emprendedorRazonSocial,
+                    emprendedorEstadoContribuyente: data.emprendedorCondicionContribuyente,
+                    emprendedorCondicionContribuyente: data.emprendedorCondicionContribuyente,
+                    rubro: {
+                        rubroId: data.rubroId,
+                        rubroNombre: data.rubroNombre,
                     },
-                    "tipoContribuyente": {
-                        "tipoContribuyenteId": data.tipoContribuyenteId,
-                        "tipoContribuyenteNombre": data.tipoContribuyenteNombre
+                    tipoContribuyente: {
+                        tipoContribuyenteId: data.tipoContribuyenteId,
+                        tipoContribuyenteNombre: data.tipoContribuyenteNombre,
                     },
-                    "tipoActividad": {
-                        "tipoActividadId": data.tipoActividadId,
-                        "tipoActividadNombre": data.tipoActividadNombre
-                    }
-                }
+                    tipoActividad: {
+                        tipoActividadId: data.tipoActividadId,
+                        tipoActividadNombre: data.tipoActividadNombre,
+                    },
+                },
             };
 
-            formData.append('nuevaSolicitud', JSON.stringify(nuevaSolicitud));
+            formData.append("nuevaSolicitud", JSON.stringify(nuevaSolicitud));
 
             if (selectedFile) {
-                formData.append('foto', selectedFile);
+                formData.append("foto", selectedFile);
             } else {
-                throw new Error('No se seleccionó una foto.');
+                throw new Error("No se seleccionó una foto.");
             }
 
-            formData.append('emprendedorRuc', data.emprendedorRuc);
+            formData.append("emprendedorRuc", data.emprendedorRuc);
 
-            dispatch(addNewSolicitud({ nuevoSolicitud: nuevaSolicitud, selectedFile: selectedFile, emprendedorRuc: data.emprendedorRuc })).then((response) => {
-                if (response.type === 'solicitudes/addNewSolicitud/fulfilled') {
-                    showSuccessMessage('Registro exitoso', 'La registro se ha realizado con exito')
-                    reset()
-                } else if (response.type === 'solicitudes/addNewSolicitud/rejected') {
-                    showErrorMessage('Error en el registro', 'Hubo un problema en realizar el registro')
+            dispatch(
+                addNewSolicitud({
+                    nuevoSolicitud: nuevaSolicitud,
+                    selectedFile: selectedFile,
+                    emprendedorRuc: data.emprendedorRuc,
+                })
+            ).then((response) => {
+                if (response.type === "solicitudes/addNewSolicitud/fulfilled") {
+                    showSuccessMessage("Registro exitoso", "El registro se ha realizado con éxito");
+                    reset();
+                } else if (response.type === "solicitudes/addNewSolicitud/rejected") {
+                    const backendMessage = response?.payload?.message || "Hubo un problema al realizar el registro.";
+                    showErrorMessage("Error en el registro", backendMessage);
                 }
             });
-
         } catch (error) {
-            console.error('Error al registrar solicitud:', error);
+            console.error("Error al registrar solicitud:", error);
 
             if (error.response) {
-                showErrorMessage(
-                    'Error del servidor',
-                    `Hubo un error al procesar tu solicitud. Detalles: ${error.response.data.message || error.response.statusText}`
-                );
+                const backendMessage = error.response.data?.message || error.response.statusText || "Error desconocido en el servidor.";
+                showErrorMessage("Error del servidor", backendMessage);
             } else if (error.request) {
-
                 showErrorMessage(
-                    'Error de red',
+                    "Error de red",
                     `No se pudo conectar con el servidor. Por favor, revisa tu conexión a Internet y vuelve a intentarlo. Detalles: ${error.message}`
                 );
             } else {
-
-                showErrorMessage(
-                    'Error desconocido',
-                    `Hubo un error desconocido: ${error.message}. Intenta de nuevo más tarde.`
-                );
+                showErrorMessage("Error desconocido", `Hubo un error desconocido: ${error.message}. Intenta de nuevo más tarde.`);
             }
         }
     };
@@ -149,11 +192,11 @@ const RegistrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
                                 <input type="text" placeholder='Ingresar dni'
                                     className="w-full p-2 rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                     {...register('usuarioDni', { required: true })}
-                                />
+                                    onInput={(e) => {
+                                        e.target.value = e.target.value.replace(/\D/g, "");
+                                    }}
+                                    onChange={(e) => restringirCantidadDigitos(e, 'dni')} />
                                 {errors.usuarioDni && <span className="text-red-500">El dni es requerido</span>}
-                                {/* <button className="p-2 ml-1 bg-black text-white rounded-md">
-                                    <FontAwesomeIcon className="mx-3 cursor-pointer" icon={faMagnifyingGlass} />
-                                </button> */}
                             </div>
 
                             {/* Nombres */}
@@ -202,7 +245,13 @@ const RegistrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
                                             value: /^[0-9]{9}$/,
                                             message: "El teléfono debe tener 9 dígitos"
                                         }
-                                    })} />
+                                    })}
+                                    onInput={(e) => {
+                                        e.target.value = e.target.value.replace(/\D/g, "");
+                                    }}
+                                    onChange={(e) => restringirCantidadDigitos(e, 'telefono')}
+                                />
+
                                 {errors.usuarioTelefono && (
                                     <p className="text-red-600 text-sm mt-1">{errors.usuarioTelefono.message}</p>
                                 )}
@@ -234,25 +283,39 @@ const RegistrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
                             <h3 className="text-xl font-bold mb-4 col-span-6">Datos de Emprendedor</h3>
 
                             <div className="flex md:flex-row justify-center items-center col-span-6">
-                                <input type="text" placeholder='Ingresar ruc' className="w-full md:w-64 rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300
-                                 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                    {...register('emprendedorRuc', { required: true })}
-                                    onChange={(e) => {
-                                        setrucEmprendedor(e.target.value)
-                                        const obtenerDigitos = e.target.value.substring(0, 2)
-                                        console.log(obtenerDigitos)
-                                        if (obtenerDigitos === '10') {
-                                            setValue('tipoContribuyenteId', 1)
-                                        } else if (obtenerDigitos === '20') {
-                                            setValue('tipoContribuyenteId', 2)
+                                <input
+                                    type="text"
+                                    placeholder="Ingresar ruc"
+                                    className="w-full md:w-64 rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300
+                    placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                    {...register('emprendedorRuc', {
+                                        required: 'El RUC es requerido',
+                                        validate: {
+                                            startsWith: value =>
+                                                value.startsWith('10') || value.startsWith('20') || 'El RUC debe comenzar con 10 o 20',
+                                            length: value =>
+                                                value.length === 11 || 'El RUC debe tener exactamente 11 dígitos'
                                         }
-                                    }} />
-                                {errors.emprendedorRuc && <span className="text-red-500">EL ruc es requerido</span>}
-                                <button className="p-2 ml-1 bg-black text-white rounded-md"
-                                 onClick={handleBuscarEmprendedor}>
+                                    })}
+                                    onInput={(e) => {
+                                        e.target.value = e.target.value.replace(/\D/g, "");
+                                    }}
+                                    onChange={(e) => {
+                                        setrucEmprendedor(e.target.value);
+                                        const obtenerDigitos = e.target.value.substring(0, 2);
+
+                                        obtenerDigitos === '10' ? setValue('tipoContribuyenteId', 1) :
+                                            obtenerDigitos === '20' ? setValue('tipoContribuyenteId', 2) : 0
+
+                                        restringirCantidadDigitos(e, 'ruc');
+                                    }}
+                                />
+                                {errors.emprendedorRuc && <span className="text-red-500">{errors.emprendedorRuc.message}</span>}
+                                <button className="p-2 ml-1 bg-black text-white rounded-md" onClick={handleBuscarEmprendedor}>
                                     <FontAwesomeIcon className="mx-3 cursor-pointer" icon={faMagnifyingGlass} />
                                 </button>
                             </div>
+
 
                             {/* Dirección */}
                             <div className="col-span-6 md:col-span-3 lg:col-span-3">
@@ -375,7 +438,7 @@ const RegistrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
                                 <label htmlFor="foto" className="block text-sm font-medium leading-6 text-gray-900">
                                     Foto del emprendedor
                                 </label>
-                                <input type="file" accept="image/*" className="w-full text-gray-500 font-medium text-sm bg-gray-100 file:cursor-pointer cursor-pointer file:border-0 file:py-2 
+                                <input type="file" accept="image/*" required className="w-full text-gray-500 font-medium text-sm bg-gray-100 file:cursor-pointer cursor-pointer file:border-0 file:py-2 
                                   file:px-4 file:mr-4 file:bg-gray-800 file:hover:bg-gray-700 file:text-white rounded"
                                     onChange={handleFileChange}
                                 />

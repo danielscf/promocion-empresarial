@@ -9,6 +9,7 @@ import { editProducto } from '../store/productoSlice';
 import { editImagen } from '../store/imagenSlice';
 import { fetchProductoByEmprendedor } from '../store/productoSlice';
 import Image from 'next/image';
+import { alertPersonalizado } from '../app/utils/messages';
 
 
 const ProductoEditForm = ({ productoId, closeModal }) => {
@@ -22,39 +23,73 @@ const ProductoEditForm = ({ productoId, closeModal }) => {
     const { register, handleSubmit, setValue, reset, formState: { errors } } = useForm();
 
     useEffect(() => {
-        let isMounted = true;
+
         const cargarTipoProductos = async () => {
             const response = await getAllTipoProducto();
-            if (isMounted) settipoProducto(response.data);
+            settipoProducto(response.data);
         }
         cargarTipoProductos();
 
         const cargarProducto = async () => {
             const response = await getProductoById(productoId);
-            if (isMounted) {
-                setproducto(response.data);
-                setValue('productoNombre', response.data.productoNombre);
-                setValue('productoDescripcion', response.data.productoDescripcion);
-                setValue('tipoProductoId', response.data.tipoProducto?.tipoProductoId);
-                setValue('tipoProductoNombre', response.data.tipoProducto?.tipoProductoNombre);
-            }
+
+            setproducto(response.data);
+            setValue('productoNombre', response.data.productoNombre);
+            setValue('productoDescripcion', response.data.productoDescripcion);
+            setValue('tipoProductoId', response.data.tipoProducto?.tipoProductoId);
+            setValue('tipoProductoNombre', response.data.tipoProducto?.tipoProductoNombre);
+
         };
         cargarProducto();
-        return () => {
-            isMounted = false;
-        }
+
     }, [productoId, setValue]);
 
 
     const handleFotoChange = (e) => {
         const file = e.target.files[0];
-        setSelectedFoto(file);
-        setFotoUrl(URL.createObjectURL(file));
+    
+        if (file) {
+           
+            const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
+            if (!allowedTypes.includes(file.type)) {
+                showErrorMessage('Archivo no válido', 'Por favor selecciona una imagen en formato JPEG, PNG o GIF.');
+                e.target.value = ''; 
+                setSelectedFoto(null);
+                setFotoUrl(null);
+                return;
+            }
+    
+            if (file.size > 5 * 1024 * 1024) { 
+                showErrorMessage('Archivo demasiado grande', 'El archivo debe ser menor a 5 MB.');
+                e.target.value = ''; 
+                setSelectedFoto(null);
+                setFotoUrl(null);
+                return;
+            }
+    
+            setSelectedFoto(file);
+            setFotoUrl(URL.createObjectURL(file));
+        }
     };
 
     const onSubmit = async (data) => {
 
         try {
+
+            const initialValues = {
+                productoNombre: producto?.productoNombre,
+                productoDescripcion: producto?.productoDescripcion,
+                tipoProductoId: producto?.tipoProducto?.tipoProductoId,
+                tipoProductoNombre: producto?.tipoProducto?.tipoProductoNombre,
+            }
+            const formDataIsEqual = JSON.stringify(data) === JSON.stringify(initialValues);
+          
+            const photoIsUnchanged = !selectedFoto;
+
+            if (formDataIsEqual && photoIsUnchanged) {
+                alertPersonalizado('Sin cambios', 'No se han realizado cambios en el formulario.');
+                return;
+            }
 
             const formDataProducto = new FormData();
 
@@ -65,13 +100,13 @@ const ProductoEditForm = ({ productoId, closeModal }) => {
             formDataProducto.append('tipoProductoId', data.tipoProductoId)
             formDataProducto.append('tipoProductoNombre', data.tipoProductoNombre)
 
-            console.log("Datos en FormDataProducto:");
-            console.log("productoId:", productoId);
-            console.log("emprendedorId:", emprendedorId);
-            console.log("productoNombre:", data.productoNombre);
-            console.log("tipoProductoId:", data.tipoProductoId);
-            console.log("productoDescripcion:", data.productoDescripcion);
-            console.log("tipoProductoNombre:", data.tipoProductoNombre);
+            // console.log("Datos en FormDataProducto:");
+            // console.log("productoId:", productoId);
+            // console.log("emprendedorId:", emprendedorId);
+            // console.log("productoNombre:", data.productoNombre);
+            // console.log("tipoProductoId:", data.tipoProductoId);
+            // console.log("productoDescripcion:", data.productoDescripcion);
+            // console.log("tipoProductoNombre:", data.tipoProductoNombre);
 
             const formDataImagen = new FormData()
 
@@ -126,22 +161,30 @@ const ProductoEditForm = ({ productoId, closeModal }) => {
                 <label htmlFor="tipoProducto" className="block text-sm font-medium text-gray-700 mb-1">
                     Tipo de producto
                 </label>
-                <select
-                    className="border border-gray-300 rounded-md w-full p-2 focus:outline-none focus:ring focus:ring-indigo-500"
-                    {...register('tipoProductoId', { required: true })}
-                    onChange={(e) => {
-                        const selectedOption = tipoProducto.find(tipo => tipo.tipoProductoId === parseInt(e.target.value));
-                        setValue('tipoProductoId', e.target.value);
-                        setValue('tipoProductoNombre', selectedOption?.tipoProductoNombre || '');
-                    }}
-                >
-                    <option value="">Selecciona un tipo de producto</option>
-                    {tipoProducto.map(tipo => (
-                        <option key={tipo.tipoProductoId} value={tipo.tipoProductoId}>
-                            {tipo.tipoProductoNombre}
-                        </option>
-                    ))}
-                </select>
+
+                {tipoProducto && tipoProducto.length > 0 ? (
+                    <select
+                        className="border border-gray-300 rounded-md w-full p-2 focus:outline-none focus:ring focus:ring-indigo-500"
+                        {...register('tipoProductoId', { required: true })}
+                        onChange={(e) => {
+                            const selectedOption = tipoProducto.find(
+                                (tipo) => tipo.tipoProductoId === parseInt(e.target.value)
+                            );
+                            setValue('tipoProductoId', e.target.value);
+                            setValue('tipoProductoNombre', selectedOption?.tipoProductoNombre || '');
+                        }}
+                    >
+                        <option value="">Selecciona un tipo de producto</option>
+                        {tipoProducto.map((tipo) => (
+                            <option key={tipo.tipoProductoId} value={tipo.tipoProductoId}>
+                                {tipo.tipoProductoNombre}
+                            </option>
+                        ))}
+                    </select>
+                ) : (
+                    <p className="text-gray-500">No hay tipos de producto disponibles.</p>
+                )}
+
                 {errors.tipoProductoId && (
                     <span className="text-red-500">El tipo de producto es requerido</span>
                 )}

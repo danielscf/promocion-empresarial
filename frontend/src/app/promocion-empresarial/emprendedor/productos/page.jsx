@@ -31,7 +31,7 @@ const Productos = () => {
 
             <ProductoTable />
             
-            <Modal isOpen={isModalOpen} handleClose={closeModal} title="Registrar Producto">
+            <Modal isOpen={isModalOpen} handleClose={() =>{ reset(); closeModal()}} title="Registrar Producto">
 
                 <ProductoForm 
                  register={register}

@@ -16,6 +16,7 @@ const usuarioApi = axios.create({
 // );
 
 export const getAllUsuarios = () => usuarioApi.get('')
+export const getUsuarioById = (usuarioId) => usuarioApi.get(`/${usuarioId}`)
 export const createUsuario = (usuario) => usuarioApi.post('/registro',usuario)
 export const cambiarContrasena = (usuarioUsuario, datosUsuario) =>  usuarioApi.patch(`/${usuarioUsuario}/cambiarContrasena`, datosUsuario)
 export const editUsuario = (usuario) => usuarioApi.put('',usuario)

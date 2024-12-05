@@ -65,7 +65,7 @@ const userSlice = createSlice({
             .addCase(editUsuario.fulfilled, (state,action) => {
                 state.status = 'succeeded'
                 state.usuarios = state.usuarios.map((user) =>
-                    user.usuarioId === action.payload.usuarioId ? action.payload.usuario : user
+                    user.usuarioId === action.payload.usuarioId ? action.payload : user
                 );
             })
             .addCase(addNewUsuario.rejected, (state, action) => {

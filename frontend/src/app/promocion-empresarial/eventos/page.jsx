@@ -34,7 +34,7 @@ const EventosPage = () => {
 
             <EventoTable />
 
-             <Modal isOpen={isModalOpen} handleClose={closeModal} title="Registrar Evento">
+             <Modal isOpen={isModalOpen} handleClose={() => { closeModal(); reset(); }} title="Registrar Evento">
                 <EventoForm
                     closeModal={closeModal}
                     register={register}

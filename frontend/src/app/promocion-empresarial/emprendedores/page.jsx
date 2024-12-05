@@ -13,7 +13,7 @@ const EmprendedoresPage = () => {
     const [emprendedores, setEmprendedores] = useState([]);
     const [filteredEmprendedor, setFilteredEmprendedor] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
-    const [valueOption, setValueOption] = useState('');
+    const [valueOption, setValueOption] = useState(null);
     const itemsPerPage = 5;
 
     const handleSelectChange = (event) => {
@@ -21,27 +21,37 @@ const EmprendedoresPage = () => {
         setFilteredEmprendedor(null);
     };
 
-    const handleInputChange = (event) => {
-        setValueOption(event.target.value);
-    };
-
-
-    const handleClickSearch = async () => {
-        try {
-            if (selectedOption === 'dni' && valueOption) {
-                const response = await findEmprendedorByDni(valueOption);
-                setFilteredEmprendedor(response.data);
-            } else if (selectedOption === 'ruc' && valueOption) {
-                const response = await findEmprendedorByRuc(valueOption);
-                setFilteredEmprendedor(response.data);
-            } else {
-                alertPersonalizado('Criterio no seleccionado', 'Por favor selecciona un criterio y proporciona un valor válido.')
-            }
-        } catch (error) {
-            console.error('Error al buscar emprendedor:', error);
-            alertPersonalizado('', 'No se encontró el emprendedor.')
+    const handleInputChange = (e) => {
+        const value = e.target.value.replace(/\D/g, ""); 
+        selectedOption === '' ? e.target.value = '' : e.target.value
+        setValueOption(value)
+        if (selectedOption === 'dni' && value.length > 8) {
+            alertPersonalizado('', 'El DNI debe tener máximo 8 dígitos.');
+            e.target.value =  value.slice(0, 8)
+        } else if (selectedOption === 'ruc' && value.length > 11) {
+            alertPersonalizado('', 'El RUC debe tener máximo 11 dígitos.');
+            e.target.value =  value.slice(0, 11)
+        } else {
+            setValueOption(value);
         }
     };
+    
+    const handleClickSearch = async () => {
+        if (!selectedOption || !valueOption) {
+            alertPersonalizado('Criterio no seleccionado', 'Por favor selecciona un criterio y proporciona un valor válido.');
+            return;
+        }
+    
+        try {
+            const searchFn = selectedOption === 'dni' ? findEmprendedorByDni : findEmprendedorByRuc;
+            const response = await searchFn(valueOption);
+            setFilteredEmprendedor(response.data);
+        } catch (error) {
+            console.error('Error al buscar emprendedor:', error);
+            alertPersonalizado('', 'No se encontró el emprendedor.');
+        }
+    };
+    
 
     useEffect(() => {
         const cargarEmprendedores = async () => {
@@ -51,10 +61,11 @@ const EmprendedoresPage = () => {
         cargarEmprendedores();
     }, []);
 
+    const filtroEmprendedores = emprendedores.filter(emprendedor => emprendedor.usuario.usuarioEstado === 2)
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentEmprendedores = emprendedores.slice(indexOfFirstItem, indexOfLastItem);
-    const totalPages = Math.ceil(emprendedores.length / itemsPerPage);
+    const currentEmprendedores = filtroEmprendedores.slice(indexOfFirstItem, indexOfLastItem);
+    const totalPages = Math.ceil(filtroEmprendedores.length / itemsPerPage);
 
     const handleNextPage = () => {
         if (currentPage < totalPages) {
@@ -90,6 +101,9 @@ const EmprendedoresPage = () => {
                         type="text"
                         placeholder={selectedOption === 'dni' ? 'Ingrese DNI' : selectedOption === 'ruc' ? 'Ingrese RUC' : 'Seleccione un criterio'}
                         className="p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mr-2"
+                        onInput={(e) => {
+                            e.target.value = e.target.value.replace(/\D/g, "");
+                        }}
                         onChange={handleInputChange}
                     />
                     <button className="p-2 bg-blue-800 text-white rounded-md" onClick={handleClickSearch}>

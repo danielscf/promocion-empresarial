@@ -176,7 +176,11 @@ const EventoForm = ({ closeModal, register, handleSubmit, errors, reset }) => {
                 <button
                     type="button"
                     className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 mr-2"
-                    onClick={closeModal}
+                    onClick={() => {
+
+                        closeModal()
+                        reset()
+                    }}
                 >
                     Cerrar
                 </button>

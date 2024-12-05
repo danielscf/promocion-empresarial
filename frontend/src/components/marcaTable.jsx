@@ -22,23 +22,17 @@ const MarcaTable = () => {
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
 
-    // Estado para recargar los datos
-    const [reload, setReload] = useState(false);
-
-    const validMarcas = useMemo(() => marcas.filter(marca => marca && marca.marcaId), [marcas]);
-
     useEffect(() => {
         if (emprendedorId) {
             dispatch(fetchMarcasByEmprendedor(emprendedorId));
-            setReload(false);
         }
-    }, [emprendedorId, dispatch, reload]);
+    }, [emprendedorId, dispatch]);
 
     const handleDelete = useCallback(async (marcaId) => {
         const confirmed = await showConfirmation();
         if (confirmed) {
-            await dispatch(deleteMarca(marcaId));
-            setReload(true); // Activar la recarga
+            dispatch(deleteMarca(marcaId));
+           emprendedorId && dispatch(fetchMarcasByEmprendedor(emprendedorId));
         }
     }, [dispatch]);
 
@@ -94,18 +88,20 @@ const MarcaTable = () => {
             ignoreRowClick: true,
         },
         
-    ], [apiUrl, handleDelete]);
+    ], [handleDelete]);
 
     if (status === 'failed') {
         return <div>Error: {error}</div>;
     }
 
+    const marcasFiltradas = marcas?.filter(marca => marca?.marcaEstado === 0 )
+
     return (
-        <div className="w-full border h-screen border-gray-300 rounded-lg shadow-md">
+        <div className="overflow-hidden max-w-full border border-gray-300 rounded-lg shadow-md">
             <DataTable
                 title="Lista de Marcas"
                 columns={columns}
-                data={validMarcas}
+                data={marcasFiltradas}
                 pagination
                 className="w-full"
             />

@@ -76,7 +76,7 @@ const productoSlice = createSlice({
                 state.status = 'failed';
             })
             .addCase(deleteProducto.fulfilled, (state, action) => {
-                console.log("Producto eliminado con ID:", action.payload);
+                //console.log("Producto eliminado con ID:", action.payload);
                 state.productos = state.productos.filter(
                     (producto) => producto.productoId !== action.payload
                 );

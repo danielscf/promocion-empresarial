@@ -50,11 +50,12 @@ const Page = ({ params }) => {
         cargarProductos();
     }, [params.emprendedorId]);
 
+    const productosFiltrados = productos.filter(producto => producto.productoEstado !== 3)
 
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentProductos = productos.slice(indexOfFirstItem, indexOfLastItem);
-    const totalPages = Math.ceil(productos.length / itemsPerPage);
+    const currentProductos = productosFiltrados.slice(indexOfFirstItem, indexOfLastItem);
+    const totalPages = Math.ceil(productosFiltrados.length / itemsPerPage);
 
 
     return (
@@ -87,7 +88,9 @@ const Page = ({ params }) => {
                             <p className="text-lg"><strong>Rubro: </strong>{emprendedor.rubro.rubroNombre}</p>
                         </div>
                     </div>
-                    <ProductoList productos={currentProductos} />
+                    <h2 className='text-xl my-6 text-center'>Lista de Productos</h2>
+
+                    <ProductoList productos={currentProductos} showCheckbox={true} />
                     
                     {productos.length > 0 ? (
                         <Pagination

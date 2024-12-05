@@ -1,17 +1,19 @@
 import { findEmprendedorByDni, findEmprendedorByRuc } from "@/api/emprendedorApi";
 import { createParticipacion } from "@/api/participacionApi";
-import { showErrorMessage, showSuccessMessage } from "@/app/utils/messages";
+import { alertPersonalizado, showErrorMessage, showSuccessMessage } from "@/app/utils/messages";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
 const ParticipanteForm = ({ closeModal, eventoId }) => {
+
     const { register, handleSubmit, reset, setValue, formState: { errors } } = useForm();
     const [emprendedores, setEmprendedores] = useState([]);
     const [busqueda, setBusqueda] = useState("");
     const [emprendedorId, setemprendedorId] = useState(null)
     const [criterioBusqueda, setCriterioBusqueda] = useState("ruc");
+    const [disable, setdisable] = useState(false)
 
     const onSubmit = (data) => {
         const nuevoEmprendedor = {
@@ -21,6 +23,7 @@ const ParticipanteForm = ({ closeModal, eventoId }) => {
         setEmprendedores([...emprendedores, nuevoEmprendedor]);
         reset();
         setBusqueda('')
+        setdisable(false)
     };
 
     const eliminarEmprendedor = (id) => {
@@ -45,40 +48,50 @@ const ParticipanteForm = ({ closeModal, eventoId }) => {
             showErrorMessage('Error en el registro', errorMessage);
         }
 
-
     }
+
+    const restringirCantidadDigitos = (e, criterioBusqueda) => {
+        const digitos = e.target.value.replace(/\D/g, "");
+        const limite = criterioBusqueda === 'ruc' ? 11 : 8;
+        const mensaje = criterioBusqueda === 'ruc' ? 'El RUC debe tener 11 dígitos' : 'El DNI debe tener 8 dígitos';
+    
+        if (digitos.length > limite) {
+            e.target.value = digitos.slice(0, limite);
+            alertPersonalizado('',mensaje)
+        }
+    };
+    
 
     const handleBuscar = async () => {
         if (!busqueda) {
-            alert("Por favor, ingresa un valor para buscar.");
+            alertPersonalizado("","Por favor, ingresa un valor para buscar.");
             return;
         }
-        let datos = '';
+    
+        const validaciones = {
+            dni: { regex: /^\d{8}$/, mensaje: "El DNI debe tener 8 dígitos.", apiCall: findEmprendedorByDni },
+            ruc: { regex: /^\d{11}$/, mensaje: "El RUC debe tener 11 dígitos.", apiCall: findEmprendedorByRuc }
+        };
+    
+        const { regex, mensaje, apiCall } = validaciones[criterioBusqueda] || {};
+    
+        if (!regex || !regex.test(busqueda)) {
+            alertPersonalizado('',mensaje);
+            return;
+        }
+    
         try {
-            if (criterioBusqueda === 'dni') {
-                if (!/^\d{8}$/.test(busqueda)) {
-                    alert("El DNI debe tener 8 dígitos.");
-                    return;
-                }
-                const response = await findEmprendedorByDni(busqueda);
-                datos = response.data;
-                setemprendedorId(datos.emprendedorId)
-                setValue('emprendedorRazonSocial', datos.emprendedorRazonSocial);
-            } else if (criterioBusqueda === 'ruc') {
-                if (!/^\d{11}$/.test(busqueda)) {
-                    alert("El RUC debe tener 11 dígitos.");
-                    return;
-                }
-                const response = await findEmprendedorByRuc(busqueda);
-                datos = response.data;
-                setemprendedorId(datos.emprendedorId)
-                setValue('emprendedorRazonSocial', datos.emprendedorRazonSocial);
-            }
+            const response = await apiCall(busqueda);
+            const datos = response.data;
+            setemprendedorId(datos.emprendedorId);
+            setdisable(true);
+            setValue('emprendedorRazonSocial', datos.emprendedorRazonSocial);
         } catch (error) {
             console.error("Error al buscar el emprendedor:", error);
-            alert("No se encontró ningún emprendedor con los datos proporcionados.");
+            alertPersonalizado("","No se encontró ningún emprendedor con los datos proporcionados.");
         }
     };
+    
 
     return (
         <>
@@ -94,10 +107,17 @@ const ParticipanteForm = ({ closeModal, eventoId }) => {
                 </select>
                 <input
                     type="text"
-                    className="border border-gray-300 rounded-md p-2 w-1/2 focus:outline-none focus:ring focus:ring-indigo-500 mr-2"
+                    className={`${disable ? 'bg-gray-100 text-gray-500 cursor-not-allowed': ''} border border-gray-300 rounded-md p-2 w-1/2 focus:outline-none focus:ring focus:ring-indigo-500 mr-2`}
                     placeholder={`Ingresa el ${criterioBusqueda}`}
+                    readOnly={disable}
                     value={busqueda}
-                    onChange={(e) => setBusqueda(e.target.value)}
+                    onInput={(e) => {
+                        e.target.value = e.target.value.replace(/\D/g, "");
+                    }}
+                    onChange={(e) => {
+                        restringirCantidadDigitos(e, criterioBusqueda)
+                        setBusqueda(e.target.value)
+                    }}
                 />
                 <button
                     type="button"
@@ -116,9 +136,9 @@ const ParticipanteForm = ({ closeModal, eventoId }) => {
                     </label>
                     <input
                         type="text"
-                        className="border border-gray-300 rounded-md w-full p-2 focus:outline-none focus:ring focus:ring-indigo-500"
+                        className={`${disable ? 'bg-gray-100 text-gray-500 cursor-not-allowed' : ''} border border-gray-300 rounded-md w-full p-2 focus:outline-none focus:ring focus:ring-indigo-500`}
                         {...register('emprendedorRazonSocial', { required: true, maxLength: 150 })}
-                    />
+                        readOnly={disable}/>
                     {errors.emprendedorRazonSocial && <span className="text-red-500">Este campo es requerido</span>}
                 </div>
                 <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">

@@ -3,11 +3,11 @@ import { useDispatch } from 'react-redux';
 import { useEmprendedor } from '../context/EmprendedorContext';
 import { showSuccessMessage, showErrorMessage } from '../app/utils/messages';
 import { getAllTipoProducto } from '../api/tipoProductoApi';
-import { addNewProducto,fetchProductoByEmprendedor } from '../store/productoSlice';
+import { addNewProducto, fetchProductoByEmprendedor } from '../store/productoSlice';
 import { addNewImagen } from '../store/imagenSlice';
 import Image from 'next/image';
 
-const ProductoForm = ({register,handleSubmit,reset,errors,closeModal}) => {
+const ProductoForm = ({ register, handleSubmit, reset, errors, closeModal }) => {
 
     const dispatch = useDispatch()
     const [selectedFoto, setSelectedFoto] = useState(null);
@@ -27,8 +27,29 @@ const ProductoForm = ({register,handleSubmit,reset,errors,closeModal}) => {
 
     const handleFotoChange = (e) => {
         const file = e.target.files[0];
-        setSelectedFoto(file);
-        setFotoUrl(URL.createObjectURL(file));
+    
+        if (file) {
+           
+            const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
+            if (!allowedTypes.includes(file.type)) {
+                showErrorMessage('Archivo no válido', 'Por favor selecciona una imagen en formato JPEG, PNG o GIF.');
+                e.target.value = ''; 
+                setSelectedFoto(null);
+                setFotoUrl(null);
+                return;
+            }
+    
+            if (file.size > 5 * 1024 * 1024) { 
+                showErrorMessage('Archivo demasiado grande', 'El archivo debe ser menor a 5 MB.');
+                e.target.value = ''; 
+                setSelectedFoto(null);
+                setFotoUrl(null);
+                return;
+            }
+    
+            setSelectedFoto(file);
+            setFotoUrl(URL.createObjectURL(file));
+        }
     };
 
     const onSubmit = async (data) => {
@@ -42,13 +63,13 @@ const ProductoForm = ({register,handleSubmit,reset,errors,closeModal}) => {
                 "emprendedorId": emprendedorId
             }
             const formData = new FormData();
-        
-            formData.append('imagen',selectedFoto)
-        
+
+            formData.append('imagen', selectedFoto)
+
             dispatch(addNewProducto(producto)).then((response) => {
 
                 if (response.type === 'productos/addNewProducto/fulfilled') {
-                    console.log(response.payload); 
+                    //console.log(response.payload); 
                     formData.append('productoId', response.payload.productoId);
                     dispatch(addNewImagen(formData))
                     showSuccessMessage('Registro exitoso', 'El registro se ha realizado con éxito');
@@ -69,7 +90,7 @@ const ProductoForm = ({register,handleSubmit,reset,errors,closeModal}) => {
     }
 
     return (
-        <form  onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)}>
             <div className="mb-4">
                 <label htmlFor="nombre" className="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
                 <input
@@ -114,8 +135,9 @@ const ProductoForm = ({register,handleSubmit,reset,errors,closeModal}) => {
             )}
 
             <div className='col-span-full'>
+                <label htmlFor="marcaNombre" className="block text-sm font-medium text-gray-700 mb-1">Selecciona una imagen</label>
                 <div className="space-y-8 font-[sans-serif] max-w-md mx-auto">
-                    <input type="file" className="w-full text-gray-500 font-medium text-sm bg-gray-100 file:cursor-pointer cursor-pointer file:border-0 file:py-2 
+                    <input type="file" required className="w-full text-gray-500 font-medium text-sm bg-gray-100 file:cursor-pointer cursor-pointer file:border-0 file:py-2 
                     file:px-4 file:mr-4 file:bg-gray-800 file:hover:bg-gray-700 file:text-white rounded"
                         accept="image/*"
                         onChange={handleFotoChange}
@@ -124,7 +146,7 @@ const ProductoForm = ({register,handleSubmit,reset,errors,closeModal}) => {
             </div>
 
             <div className="flex justify-end mt-4">
-                <button type="button" className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 mr-2" onClick={closeModal}>
+                <button type="button" className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 mr-2" onClick={() => { reset(); closeModal() }}>
                     Cerrar
                 </button>
                 <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">

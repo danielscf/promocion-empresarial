@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useEffect, useState, useCallback, useRef } from 'react'
-import { showSuccessMessage, showErrorMessage } from '../app/utils/messages'
+import { showSuccessMessage, showErrorMessage, alertPersonalizado } from '../app/utils/messages'
 import { editEmprendedor, fetchEmprendedor } from '../store/emprendedorSlice'
 import { useEmprendedor } from '../context/EmprendedorContext'
 import Image from 'next/image'
@@ -34,17 +34,37 @@ const EmprendedorForm = ({ user_emprendedor, handleSubmit, register, errors, dis
     };
 
     const handleFotoChange = (e) => {
-        setSelectedFoto(e.target.files[0]);
+        const file = e.target.files[0];
+    
+        if (file) {
+           
+            const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
+            if (!allowedTypes.includes(file.type)) {
+                showErrorMessage('Archivo no válido', 'Por favor selecciona una imagen en formato JPEG, PNG o GIF.');
+                e.target.value = ''; 
+                setSelectedFoto(null);
+                return;
+            }
+    
+            if (file.size > 5 * 1024 * 1024) { 
+                showErrorMessage('Archivo demasiado grande', 'El archivo debe ser menor a 5 MB.');
+                e.target.value = ''; 
+                setSelectedFoto(null);
+                return;
+            }
+    
+            setSelectedFoto(file);
+        }
     };
 
     const setFormValues = useCallback((emprendedorData) => {
-        setValue('usuarioUsuario',emprendedorData.usuario?.usuarioUsuario)
-        setValue('usuarioNombre',emprendedorData.usuario?.usuarioNombre)
-        setValue('usuarioApellidoPaterno',emprendedorData.usuario?.usuarioApellidoPaterno)
-        setValue('usuarioApellidoMaterno',emprendedorData.usuario?.usuarioApellidoMaterno)
-        setValue('usuarioDni',emprendedorData.usuario?.usuarioDni)
-        setValue('usuarioCorreo',emprendedorData.usuario?.usuarioCorreo)
-        setValue('usuarioTelefono',emprendedorData.usuario?.usuarioTelefono)
+        setValue('usuarioUsuario', emprendedorData.usuario?.usuarioUsuario)
+        setValue('usuarioNombre', emprendedorData.usuario?.usuarioNombre)
+        setValue('usuarioApellidoPaterno', emprendedorData.usuario?.usuarioApellidoPaterno)
+        setValue('usuarioApellidoMaterno', emprendedorData.usuario?.usuarioApellidoMaterno)
+        setValue('usuarioDni', emprendedorData.usuario?.usuarioDni)
+        setValue('usuarioCorreo', emprendedorData.usuario?.usuarioCorreo)
+        setValue('usuarioTelefono', emprendedorData.usuario?.usuarioTelefono)
         setValue('emprendedorRuc', emprendedorData.emprendedorRuc);
         setValue('emprendedorDireccion', emprendedorData.emprendedorDireccion);
         setValue('emprendedorRazonSocial', emprendedorData.emprendedorRazonSocial);
@@ -63,38 +83,46 @@ const EmprendedorForm = ({ user_emprendedor, handleSubmit, register, errors, dis
 
     const onSubmit = async (data) => {
         try {
+
+            const initialData = {
+                usuarioUsuario: emprendedor?.usuario.usuarioUsuario,
+                usuarioNombre: emprendedor?.usuario.usuarioNombre,
+                usuarioApellidoPaterno: emprendedor?.usuario.usuarioApellidoPaterno,
+                usuarioApellidoMaterno: emprendedor?.usuario.usuarioApellidoMaterno,
+                usuarioDni: emprendedor?.usuario.usuarioDni,
+                usuarioTelefono: emprendedor?.usuario.usuarioTelefono,
+                usuarioCorreo: emprendedor?.usuario.usuarioCorreo,
+                emprendedorRuc: emprendedor?.emprendedorRuc,
+                emprendedorDireccion: emprendedor?.emprendedorDireccion,
+                emprendedorRazonSocial: emprendedor?.emprendedorRazonSocial,
+                rubroNombre: emprendedor?.rubro?.rubroNombre,
+            };
+            // console.log(initialData)
+            // console.log(data)
+
+            const formDataIsEqual = JSON.stringify(data) === JSON.stringify(initialData);
+
+            const photoIsUnchanged = !selectedFoto;
+
+            if (formDataIsEqual && photoIsUnchanged) {
+                alertPersonalizado('Sin cambios', 'No se han realizado cambios en el formulario.');
+                return;
+            }
+
             const formData = new FormData();
             const datos_emprendedor = {
                 ...data,
-                "usuario": {
-                    "usuarioUsuario": emprendedor.usuario.usuarioUsuario,
-                    "usuarioNombre": emprendedor.usuario.usuarioNombre,
-                    "usuarioDni": emprendedor.usuario.usuarioDni,
-                    "usuarioCorreo": data.usuarioCorreo,
-                    "usuarioTelefono": data.usuarioTelefono,
-                    "usuarioId": emprendedor.usuario.usuarioId,
-                    "usuarioEstado": emprendedor.usuario.usuarioEstado,
-                    "usuarioApellidoPaterno": emprendedor.usuario.usuarioApellidoPaterno,
-                    "usuarioApellidoMaterno": emprendedor.usuario.usuarioApellidoMaterno,
-                    "usuarioContrasena": emprendedor.usuario.usuarioContrasena,
-                    "usuarioFechaNacimiento": emprendedor.usuario.usuarioFechaNacimiento,
-                    "usuarioFechaCreacion": emprendedor.usuario.usuarioFechaCreacion
+                usuario: {
+                    ...emprendedor.usuario,
+                    usuarioCorreo: data.usuarioCorreo,
+                    usuarioTelefono: data.usuarioTelefono,
                 },
-                "emprendedorId": emprendedor.emprendedorId,
-                "tipoActividad": {
-                    "tipoActividadId": emprendedor.tipoActividad.tipoActividadId,
-                    "tipoActividadNombre": emprendedor.tipoActividad.tipoActividadNombre
-                },
-                "rubro": {
-                    "rubroId": emprendedor.rubro.rubroId,
-                    "rubroNombre": emprendedor.rubro.rubroNombre
-                },
-                "emprendedorCondicionContribuyente": emprendedor.emprendedorCondicionContribuyente,
-                "tipoContribuyente": {
-                    "tipoContribuyenteNombre": emprendedor.tipoContribuyente.tipoContribuyenteNombre,
-                    "tipoContribuyenteId": emprendedor.tipoContribuyente.tipoContribuyenteId
-                },
-                "emprendedorEstadoContribuyente": emprendedor.emprendedorEstadoContribuyente,
+                emprendedorId: emprendedor.emprendedorId,
+                tipoActividad: emprendedor.tipoActividad,
+                rubro: emprendedor.rubro,
+                tipoContribuyente: emprendedor.tipoContribuyente,
+                emprendedorEstadoContribuyente: emprendedor.emprendedorEstadoContribuyente,
+                emprendedorCondicionContribuyente: emprendedor.emprendedorCondicionContribuyente
             };
 
             formData.append('foto', selectedFoto);
@@ -113,7 +141,6 @@ const EmprendedorForm = ({ user_emprendedor, handleSubmit, register, errors, dis
                     showErrorMessage('Error en la edición', errorMessage);
                 }
             });
-
         } catch (error) {
             console.error("Error inesperado:", error);
             showErrorMessage('Error inesperado', error.message || 'Ocurrió un error inesperado. Inténtalo nuevamente.');
@@ -139,7 +166,7 @@ const EmprendedorForm = ({ user_emprendedor, handleSubmit, register, errors, dis
                                         <input
                                             type="text"
                                             {...register("usuarioUsuario", { required: "Este campo es obligatorio" })}
-                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                            className="block w-full rounded-md border-0 py-1.5 bg-gray-100 text-gray-500 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6 cursor-not-allowed"
                                             readOnly />
                                         {errors.usuarioUsuario && <p className="text-red-500 text-sm">{errors.usuarioUsuario.message}</p>}
                                     </div>
@@ -152,7 +179,7 @@ const EmprendedorForm = ({ user_emprendedor, handleSubmit, register, errors, dis
                                         <input
                                             type="text"
                                             {...register("usuarioNombre", { required: "Este campo es obligatorio" })}
-                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                            className="block w-full rounded-md border-0 py-1.5 bg-gray-100 text-gray-500 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6 cursor-not-allowed"
                                             readOnly />
                                         {errors.usuarioNombre && <p className="text-red-500 text-sm">{errors.usuarioNombre.message}</p>}
                                     </div>
@@ -165,7 +192,7 @@ const EmprendedorForm = ({ user_emprendedor, handleSubmit, register, errors, dis
                                         <input
                                             type="text"
                                             {...register("usuarioApellidoPaterno", { required: "Este campo es obligatorio" })}
-                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                            className="block w-full rounded-md border-0 py-1.5 bg-gray-100 text-gray-500 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6 cursor-not-allowed"
                                             readOnly />
                                         {errors.usuarioApellidoPaterno && <p className="text-red-500 text-sm">{errors.usuarioApellidoPaterno.message}</p>}
                                     </div>
@@ -178,7 +205,7 @@ const EmprendedorForm = ({ user_emprendedor, handleSubmit, register, errors, dis
                                         <input
                                             type="text"
                                             {...register("usuarioApellidoMaterno", { required: "Este campo es obligatorio" })}
-                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                            className="block w-full rounded-md border-0 py-1.5 bg-gray-100 text-gray-500 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6 cursor-not-allowed"
                                             readOnly />
                                         {errors.usuarioApellidoMaterno && <p className="text-red-500 text-sm">{errors.usuarioApellidoMaterno.message}</p>}
                                     </div>
@@ -197,7 +224,7 @@ const EmprendedorForm = ({ user_emprendedor, handleSubmit, register, errors, dis
                                                     message: "El DNI debe tener 8 dígitos"
                                                 }
                                             })}
-                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                            className="block w-full rounded-md border-0 py-1.5 bg-gray-100 text-gray-500 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6 cursor-not-allowed"
                                             readOnly />
                                         {errors.dni && <p className="text-red-500 text-sm">{errors.dni.message}</p>}
                                     </div>
@@ -276,8 +303,8 @@ const EmprendedorForm = ({ user_emprendedor, handleSubmit, register, errors, dis
                                             <div className="mt-2">
                                                 <input
                                                     type="text"
-                                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                                     {...register("emprendedorRuc", { required: "Este campo es obligatorio" })}
+                                                    className="block w-full rounded-md border-0 py-1.5 bg-gray-100 text-gray-500 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6 cursor-not-allowed"
                                                     readOnly />
                                                 {errors.emprendedorRuc && <p className="text-red-500 text-sm">{errors.emprendedorRuc.message}</p>}
                                             </div>
@@ -291,8 +318,8 @@ const EmprendedorForm = ({ user_emprendedor, handleSubmit, register, errors, dis
                                             <div className="mt-2">
                                                 <input
                                                     type="text"
-                                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                                     {...register("emprendedorDireccion", { required: "Este campo es obligatorio" })}
+                                                    className="block w-full rounded-md border-0 py-1.5 bg-gray-100 text-gray-500 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6 cursor-not-allowed"
                                                     readOnly />
                                                 {errors.emprendedorDireccion && <p className="text-red-500 text-sm">{errors.emprendedorDireccion.message}</p>}
                                             </div>
@@ -306,8 +333,8 @@ const EmprendedorForm = ({ user_emprendedor, handleSubmit, register, errors, dis
                                             <div className="mt-2">
                                                 <input
                                                     type="text"
-                                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                                     {...register("emprendedorRazonSocial", { required: "Este campo es obligatorio" })}
+                                                    className="block w-full rounded-md border-0 py-1.5 bg-gray-100 text-gray-500 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6 cursor-not-allowed"
                                                     readOnly />
                                                 {errors.emprendedorRazonSocial && <p className="text-red-500 text-sm">{errors.emprendedorRazonSocial.message}</p>}
                                             </div>
@@ -321,8 +348,8 @@ const EmprendedorForm = ({ user_emprendedor, handleSubmit, register, errors, dis
                                             <div className="mt-2">
                                                 <input
                                                     type="text"
-                                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                                     {...register("rubroNombre", { required: "Este campo es obligatorio" })}
+                                                    className="block w-full rounded-md border-0 py-1.5 bg-gray-100 text-gray-500 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6 cursor-not-allowed"
                                                     readOnly />
                                                 {errors.rubroNombre && <p className="text-red-500 text-sm">{errors.rubroNombre.message}</p>}
                                             </div>

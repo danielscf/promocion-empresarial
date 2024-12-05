@@ -35,17 +35,14 @@ const ProductoTable = () => {
     }, [dispatch, emprendedorId, reload]);
 
 
-    const handleDelete = useCallback(async (productoId, imagenId) => {
+    const handleDelete = useCallback(async (productoId) => {
         const confirmed = await showConfirmation();
         if (!confirmed) return;
     
         try {
-            if (productoId && imagenId) {
-                await deleteImagen(imagenId);
-                //console.log(`Imagen con ID ${imagenId} eliminada exitosamente.`);
+            if (productoId ) {
                 await dispatch(deleteProducto(productoId)).unwrap();
                 //console.log(`Producto con ID ${productoId} eliminado exitosamente.`);
-    
                 setReload(true);
             }
         } catch (error) {
@@ -104,20 +101,21 @@ const ProductoTable = () => {
                 <FontAwesomeIcon
                     icon={faTrash}
                     className="text-red-600 cursor-pointer h-6 w-6 ml-3"
-                    onClick={() => handleDelete(row.productoId, row.imagenes?.[0]?.imagenId || null)}
+                    onClick={() => handleDelete(row?.productoId)}
                 />
             ),
             ignoreRowClick: true,
         },
     ], [apiUrl, handleDelete]);
     
+    const filtrarProductos = productos?.filter(producto => producto.productoEstado !== 3)
 
     return (
         <div className="overflow-hidden max-w-full border border-gray-300 rounded-lg shadow-md">
             <DataTable
                 title="Lista de productos"
                 columns={columns}
-                data={productos}
+                data={filtrarProductos}
                 pagination
                 className="min-w-full"
             />

@@ -33,81 +33,71 @@ const UserTable = () => {
         }
     }, [dispatch]);
 
-    const shouldShowColumn = user?.roles?.[0]?.rolNombre === "Administrador";
-
-    const columns = useMemo(() => {
-        const baseColumns = [
-            {
-                name: 'ID',
-                selector: row => row.usuarioId,
-                sortable: true,
-            },
-            {
-                name: 'NOMBRE USUARIO',
-                selector: row => row.usuarioUsuario,
-                sortable: true,
-            },
-            {
-                name: 'NOMBRE',
-                selector: row => row.usuarioNombre,
-                sortable: true,
-            },
-            {
-                name: 'APELLIDOS',
-                selector: row => `${row.usuarioApellidoPaterno} ${row.usuarioApellidoMaterno}`,
-                sortable: true,
-            },
-            {
-                name: 'DNI',
-                selector: row => row.usuarioDni,
-                sortable: true,
-            },
-            {
-                name: 'CORREO',
-                selector: row => row.usuarioCorreo,
-                sortable: true,
-            },
-            {
-                name: 'TELEFONO',
-                selector: row => row.usuarioTelefono,
-                sortable: true,
-            },
-            {
-                name: 'ROL',
-                selector: row => row.roles?.[0]?.rolNombre,
-                sortable: true,
-            }
-        ];
-
-        if (shouldShowColumn) {
-            baseColumns.push(
-                {
-                    name: 'EDITAR',
-                    cell: row => (
-                        <FontAwesomeIcon className="cursor-pointer h-6 w-6 ml-3"
-                            icon={faPenToSquare}
-                            onClick={() =>{ openModal()
-                                setusuarioId(row.usuarioId)
-                            }}/>
-                    ),
-                    ignoreRowClick: true,
-                },
-                {
-                    name: 'ELIMINAR',
-                    cell: row => (
-                        <FontAwesomeIcon
-                            icon={faTrash}
-                            className="text-red-600 cursor-pointer h-6 ml-3 w-6"
-                            onClick={() => handleDelete(row.usuarioId)}
-                        />
-                    ),
-                    ignoreRowClick: true,
-                }
-            );
-        }
-
-        return baseColumns;
-    }, [handleDelete, setusuarioId,shouldShowColumn]);
+    const columns = useMemo(() => [
+        {
+            name: 'ID',
+            selector: row => row.usuarioId,
+            sortable: true,
+        },
+        {
+            name: 'NOMBRE USUARIO',
+            selector: row => row.usuarioUsuario,
+            sortable: true,
+        },
+        {
+            name: 'NOMBRE',
+            selector: row => row.usuarioNombre,
+            sortable: true,
+        },
+        {
+            name: 'APELLIDOS',
+            selector: row => `${row.usuarioApellidoPaterno} ${row.usuarioApellidoMaterno}`,
+            sortable: true,
+        },
+        {
+            name: 'DNI',
+            selector: row => row.usuarioDni,
+            sortable: true,
+        },
+        {
+            name: 'CORREO',
+            selector: row => row.usuarioCorreo,
+            sortable: true,
+        },
+        {
+            name: 'TELEFONO',
+            selector: row => row.usuarioTelefono,
+            sortable: true,
+        },
+        {
+            name: 'ROL',
+            selector: row => row.roles?.[0]?.rolNombre,
+            sortable: true,
+        },
+        {
+            name: 'EDITAR',
+            cell: row => (
+                <FontAwesomeIcon className="cursor-pointer h-6 w-6 ml-3"
+                    icon={faPenToSquare}
+                    onClick={() => {
+                        openModal()
+                        setusuarioId(row.usuarioId)
+                    }} />
+            ),
+            ignoreRowClick: true,
+        },
+        {
+            name: 'ELIMINAR',
+            cell: row => (
+                <FontAwesomeIcon
+                    icon={faTrash}
+                    className="text-red-600 cursor-pointer h-6 ml-3 w-6"
+                    onClick={() => handleDelete(row.usuarioId)}
+                />
+            ),
+            ignoreRowClick: true,
+        }, 
+    ],[handleDelete, setusuarioId]);
 
     const usuariosFiltrados = usuarios?.filter(usuario => usuario?.usuarioEstado !== 3) || [];
     const validData = usuariosFiltrados.filter(item => item && typeof item.usuarioId !== "undefined");

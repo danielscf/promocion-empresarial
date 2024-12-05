@@ -28,7 +28,7 @@ const MarcasPage = () => {
 
             <MarcaTable />
 
-            <Modal isOpen={isModalOpen} handleClose={closeModal} title="Registrar Marca">
+            <Modal isOpen={isModalOpen} handleClose={() =>{ reset(); closeModal()}} title="Registrar Marca">
                 <MarcaForm
                     closeModal={closeModal}
                     register={register}
