@@ -82,7 +82,7 @@ const MarcaForm = ({ closeModal, register, handleSubmit, errors, reset }) => {
 
 
             <div className="mb-4">
-                <label htmlFor="marcaNombre" className="block text-sm font-medium text-gray-700 mb-1">Nombre de la marca</label>
+                <label htmlFor="marcaNombre" className="block text-sm font-medium text-black mb-1">Nombre de la marca</label>
                 <input type="text" className="border border-gray-300 rounded-md w-full p-2 focus:outline-none focus:ring focus:ring-indigo-500"
                     {...register('marcaNombre', { required: true })} />
                 {errors.marcaNombre && <span className="text-red-500">El nombre de la marca es requerido</span>}
@@ -101,7 +101,7 @@ const MarcaForm = ({ closeModal, register, handleSubmit, errors, reset }) => {
             )}
 
             <div className='col-span-full'>
-            <label htmlFor="marcaNombre" className="block text-sm font-medium text-gray-700 mb-1">Selecciona una imagen</label>
+            <label htmlFor="marcaNombre" className="block text-sm font-medium text-black mb-1">Selecciona una imagen</label>
                 <div className="space-y-8 font-[sans-serif] max-w-md mx-auto">
                     <input type="file" required className="w-full text-gray-500 font-medium text-sm bg-gray-100 file:cursor-pointer cursor-pointer file:border-0 file:py-2 
                     file:px-4 file:mr-4 file:bg-gray-800 file:hover:bg-gray-700 file:text-white rounded"

@@ -112,10 +112,10 @@ const MarcaEditForm = ({ marcaId, closeModal }) => {
         <form onSubmit={handleSubmit(onSubmit)}>
 
             <div className="mb-4">
-                <label htmlFor="marcaNombre" className="block text-sm font-medium text-gray-700 mb-1">Nombre de la marca</label>
+                <label htmlFor="marcaNombre" className="block text-sm font-medium text-black mb-1">Nombre de la marca</label>
                 <input
                     type="text"
-                    className="border border-gray-300 rounded-md w-full p-2 focus:outline-none focus:ring focus:ring-indigo-500"
+                    className="border border-gray-300 rounded-md w-full text-black p-2 focus:outline-none focus:ring focus:ring-indigo-500"
                     {...register('marcaNombre', { required: true })}
                 />
                 {errors.marcaNombre && <span className="text-red-500">El nombre de la marca es requerido</span>}

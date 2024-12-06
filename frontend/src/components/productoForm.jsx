@@ -92,28 +92,28 @@ const ProductoForm = ({ register, handleSubmit, reset, errors, closeModal }) => 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
             <div className="mb-4">
-                <label htmlFor="nombre" className="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
+                <label htmlFor="nombre" className="block text-sm font-medium text-black mb-1">Nombre</label>
                 <input
                     type="text"
                     id="nombre"
-                    className="border border-gray-300 rounded-md w-full p-2 focus:outline-none focus:ring focus:ring-indigo-500"
+                    className="border border-gray-300 rounded-md w-full text-black p-2 focus:outline-none focus:ring focus:ring-indigo-500"
                     {...register('productoNombre', { required: true })}
                 />
                 {errors.productoNombre && <span className="text-red-500">El nombre del producto es requerido</span>}
             </div>
 
             <div className="mb-4">
-                <label htmlFor="descripcion" className="block text-sm font-medium text-gray-700 mb-1">Descripcion</label>
+                <label htmlFor="descripcion" className="block text-sm font-medium text-black mb-1">Descripcion</label>
                 <input
-                    type="text" className="border border-gray-300 rounded-md w-full p-2 focus:outline-none focus:ring focus:ring-indigo-500"
+                    type="text" className="border border-gray-300 rounded-md w-full text-black p-2 focus:outline-none focus:ring focus:ring-indigo-500"
                     {...register('productoDescripcion', { required: true })}
                 />
                 {errors.productoDescripcion && <span className="text-red-500">La descripcion es requerido</span>}
             </div>
 
             <div className="mb-4">
-                <label htmlFor="tipoProducto" className="block text-sm font-medium text-gray-700 mb-1">Tipo de producto</label>
-                <select className="border border-gray-300 rounded-md w-full p-2 focus:outline-none focus:ring focus:ring-indigo-500" {...register('tipoProductoId', { required: true })}>
+                <label htmlFor="tipoProducto" className="block text-sm font-medium text-black mb-1">Tipo de producto</label>
+                <select className="border border-gray-300 rounded-md w-full text-black p-2 focus:outline-none focus:ring focus:ring-indigo-500" {...register('tipoProductoId', { required: true })}>
                     <option value="">Selecciona un tipo de producto</option>
                     {tipoProducto.map(tipoProduct => (
                         <option key={tipoProduct.tipoProductoId} value={tipoProduct.tipoProductoId}>{tipoProduct.tipoProductoNombre}</option>
@@ -135,7 +135,7 @@ const ProductoForm = ({ register, handleSubmit, reset, errors, closeModal }) => 
             )}
 
             <div className='col-span-full'>
-                <label htmlFor="marcaNombre" className="block text-sm font-medium text-gray-700 mb-1">Selecciona una imagen</label>
+                <label htmlFor="marcaNombre" className="block text-sm font-medium text-black mb-1">Selecciona una imagen</label>
                 <div className="space-y-8 font-[sans-serif] max-w-md mx-auto">
                     <input type="file" required className="w-full text-gray-500 font-medium text-sm bg-gray-100 file:cursor-pointer cursor-pointer file:border-0 file:py-2 
                     file:px-4 file:mr-4 file:bg-gray-800 file:hover:bg-gray-700 file:text-white rounded"

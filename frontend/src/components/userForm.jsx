@@ -33,7 +33,7 @@ const UserForm = ({ closeModal, register, handleSubmit, errors, reset, setValue 
         e.preventDefault();
         console.log(busqueda)
         if (!/^\d{8}$/.test(busqueda)) {
-            alertPersonalizado('','El DNI debe tener 8 dígitos.')
+            alertPersonalizado('', 'El DNI debe tener 8 dígitos.')
             return;
         }
         const usuario = usuarios.find(e => e.usuarioDni === busqueda)
@@ -47,7 +47,7 @@ const UserForm = ({ closeModal, register, handleSubmit, errors, reset, setValue 
             setValue("usuarioTelefono", usuario.usuarioTelefono)
             setValue("usuarioFechaNacimiento", usuario.usuarioFechaNacimiento)
         } else {
-            alertPersonalizado('','Usuario no encontrado')
+            alertPersonalizado('', 'Usuario no encontrado')
         }
 
     }
@@ -56,13 +56,13 @@ const UserForm = ({ closeModal, register, handleSubmit, errors, reset, setValue 
         const digitos = e.target.value.replace(/\D/g, "");
         const limite = tipoAtributo === 'dni' ? 8 : 9;
         const mensaje = tipoAtributo === 'dni' ? 'El dni debe tener 8 dígitos' : 'El teléfono debe tener 9 dígitos';
-    
+
         if (digitos.length > limite) {
             e.target.value = digitos.slice(0, limite);
-            alertPersonalizado('',mensaje);
+            alertPersonalizado('', mensaje);
         }
     };
-    
+
 
     useEffect(() => {
 
@@ -90,7 +90,7 @@ const UserForm = ({ closeModal, register, handleSubmit, errors, reset, setValue 
                         e.target.value = e.target.value.replace(/\D/g, "");
                     }}
                     onChange={(e) => {
-                        restringirCantidadDigitos(e,'dni');
+                        restringirCantidadDigitos(e, 'dni');
                         setbusqueda(e.target.value);
                     }}
                 />
@@ -163,7 +163,9 @@ const UserForm = ({ closeModal, register, handleSubmit, errors, reset, setValue 
 
             <div className="mb-4">
                 <label htmlFor="telefono" className="block text-sm font-medium text-gray-700 mb-1">Teléfono</label>
-                <input type="text" id="telefono" className="border border-gray-300 rounded-md w-full p-2 focus:outline-none focus:ring focus:ring-indigo-500"
+                <input
+                    type="tel"
+                    className="border border-gray-300 rounded-md w-full p-2 focus:outline-none focus:ring focus:ring-indigo-500"
                     {...register('usuarioTelefono', {
                         required: "El teléfono es requerido",
                         pattern: {
@@ -191,8 +193,8 @@ const UserForm = ({ closeModal, register, handleSubmit, errors, reset, setValue 
 
             <div className="mb-4">
                 <label htmlFor="fecha_nacimiento" className="block text-sm font-medium text-gray-700 mb-1">Fecha Nacimiento</label>
-                <input type="date" id="fecha_nacimiento" className="border border-gray-300 rounded-md w-full p-2 focus:outline-none focus:ring focus:ring-indigo-500"
-                    {...register('usuarioFechaNacimiento', { required: true })} />
+                <input type="date" className={`${disable ? 'bg-gray-100 text-gray-500 cursor-not-allowed' : ''} border border-gray-300 rounded-md w-full p-2 focus:outline-none focus:ring focus:ring-indigo-500`}
+                    {...register('usuarioFechaNacimiento', { required: true })} readOnly={disable} />
                 {errors.usuarioFechaNacimiento && <span className="text-red-500">La fecha de nacimiento es requerida</span>}
             </div>
 

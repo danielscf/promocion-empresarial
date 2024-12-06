@@ -24,7 +24,7 @@ const ProductoCard = ({ producto, showCheckbox }) => {
         width={130}
         height={150}
       />
-      <div className="text-sm text-center">
+      <div className="text-sm text-center text-black">
         <p className="font-bold">{producto.productoNombre}</p>
         <p>{producto.productoDescripcion}</p>
       </div>
@@ -37,8 +37,8 @@ const ProductoCard = ({ producto, showCheckbox }) => {
             checked={isChecked}
             onChange={handleCheckboxChange}
           />
-          <label htmlFor={`checkbox-${producto.productoId}`} className="text-sm">
-            ¿Es esta imagen correcta?
+          <label htmlFor={`checkbox-${producto.productoId}`} className="text-sm text-black">
+            ¿Marque la casilla si la imagen es adecuada?
           </label>
         </div>
       )}

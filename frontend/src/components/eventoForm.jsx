@@ -52,12 +52,12 @@ const EventoForm = ({ closeModal, register, handleSubmit, errors, reset }) => {
         <form onSubmit={handleSubmit(onSubmit)}>
             {/* Nombre del Evento */}
             <div className="mb-4">
-                <label htmlFor="eventoNombre" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="eventoNombre" className="block text-sm font-medium text-black mb-1">
                     Nombre del Evento
                 </label>
                 <input
                     type="text"
-                    className="border border-gray-300 rounded-md w-full p-2 focus:outline-none focus:ring focus:ring-indigo-500"
+                    className="border border-gray-300 rounded-md w-full text-black p-2 focus:outline-none focus:ring focus:ring-indigo-500"
                     {...register('eventoNombre', { required: true, maxLength: 150 })}
                 />
                 {errors.eventoNombre && <span className="text-red-500">El nombre del evento es requerido</span>}
@@ -65,11 +65,11 @@ const EventoForm = ({ closeModal, register, handleSubmit, errors, reset }) => {
 
             {/* Descripción */}
             <div className="mb-4">
-                <label htmlFor="eventoDescripcion" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="eventoDescripcion" className="block text-sm font-medium text-black mb-1">
                     Descripción
                 </label>
                 <textarea
-                    className="border border-gray-300 rounded-md w-full p-2 focus:outline-none focus:ring focus:ring-indigo-500"
+                    className="border border-gray-300 rounded-md w-full text-black p-2 focus:outline-none focus:ring focus:ring-indigo-500"
                     {...register('eventoDescripcion', {require:true, maxLength: 255 })}
                 ></textarea>
                 {errors.eventoDescripcion && <span className="text-red-500">El descripcion del evento es requerido</span>}
@@ -77,12 +77,12 @@ const EventoForm = ({ closeModal, register, handleSubmit, errors, reset }) => {
 
             {/* Fecha de Inicio */}
             <div className="mb-4">
-                <label htmlFor="eventoFechaInicio" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="eventoFechaInicio" className="block text-sm font-medium text-black mb-1">
                     Fecha de Inicio
                 </label>
                 <input
                     type="date"
-                    className="border border-gray-300 rounded-md w-full p-2 focus:outline-none focus:ring focus:ring-indigo-500"
+                    className="border border-gray-300 rounded-md w-full text-black p-2 focus:outline-none focus:ring focus:ring-indigo-500"
                     {...register('eventoFechaInicio', { required: true })}
                 />
                 {errors.eventoFechaInicio && <span className="text-red-500">La fecha de inicio es requerida</span>}
@@ -90,12 +90,12 @@ const EventoForm = ({ closeModal, register, handleSubmit, errors, reset }) => {
 
             {/* Fecha de Fin */}
             <div className="mb-4">
-                <label htmlFor="eventoFechaFin" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="eventoFechaFin" className="block text-sm font-medium text-black mb-1">
                     Fecha de Fin
                 </label>
                 <input
                     type="date"
-                    className="border border-gray-300 rounded-md w-full p-2 focus:outline-none focus:ring focus:ring-indigo-500"
+                    className="border border-gray-300 rounded-md w-full text-black p-2 focus:outline-none focus:ring focus:ring-indigo-500"
                     {...register('eventoFechaFin', { required: true })}
                 />
                 {errors.eventoFechaFin && <span className="text-red-500">La fecha de fin es requerida</span>}
@@ -103,12 +103,12 @@ const EventoForm = ({ closeModal, register, handleSubmit, errors, reset }) => {
 
             {/* Hora de Inicio */}
             <div className="mb-4">
-                <label htmlFor="eventoHoraInicio" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="eventoHoraInicio" className="block text-sm font-medium text-black mb-1">
                     Hora de Inicio
                 </label>
                 <input
                     type="time"
-                    className="border border-gray-300 rounded-md w-full p-2 focus:outline-none focus:ring focus:ring-indigo-500"
+                    className="border border-gray-300 rounded-md w-full text-black p-2 focus:outline-none focus:ring focus:ring-indigo-500"
                     {...register('eventoHoraInicio', { required: true })}
                 />
                 {errors.eventoHoraInicio && <span className="text-red-500">La hora de inicio es requerida</span>}
@@ -116,12 +116,12 @@ const EventoForm = ({ closeModal, register, handleSubmit, errors, reset }) => {
 
             {/* Hora de Fin */}
             <div className="mb-4">
-                <label htmlFor="eventoHoraFin" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="eventoHoraFin" className="block text-sm font-medium text-black mb-1">
                     Hora de Fin
                 </label>
                 <input
                     type="time"
-                    className="border border-gray-300 rounded-md w-full p-2 focus:outline-none focus:ring focus:ring-indigo-500"
+                    className="border border-gray-300 rounded-md w-full text-black p-2 focus:outline-none focus:ring focus:ring-indigo-500"
                     {...register('eventoHoraFin', { required: true })}
                 />
                 {errors.eventoHoraFin && <span className="text-red-500">La hora de fin es requerida</span>}
@@ -129,12 +129,12 @@ const EventoForm = ({ closeModal, register, handleSubmit, errors, reset }) => {
 
             {/* Lugar */}
             <div className="mb-4">
-                <label htmlFor="eventoLugar" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="eventoLugar" className="block text-sm font-medium text-black mb-1">
                     Lugar
                 </label>
                 <input
                     type="text"
-                    className="border border-gray-300 rounded-md w-full p-2 focus:outline-none focus:ring focus:ring-indigo-500"
+                    className="border border-gray-300 rounded-md w-full text-black p-2 focus:outline-none focus:ring focus:ring-indigo-500"
                     {...register('eventoLugar', { required: true, maxLength: 255 })}
                 />
                 {errors.eventoLugar && <span className="text-red-500">El lugar es requerido</span>}
@@ -142,7 +142,7 @@ const EventoForm = ({ closeModal, register, handleSubmit, errors, reset }) => {
 
             {/* Tipo de Evento */}
             <div className="mb-4">
-                <label htmlFor="tipoEvento" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="tipoEvento" className="block text-sm font-medium text-black mb-1">
                     Tipo de Evento
                 </label>
                 <select
@@ -151,21 +151,21 @@ const EventoForm = ({ closeModal, register, handleSubmit, errors, reset }) => {
                     {...register('tipoEvento', { required: true })}
                 >
                     <option value="">Selecciona un tipo de evento</option>
-                    <option value="feria">Feria</option>
-                    <option value="taller">Taller</option>
-                    <option value="capacitacion">Capacitación</option>
+                    <option value="Feria">Feria</option>
+                    <option value="Taller">Taller</option>
+                    <option value="Capacitacion">Capacitación</option>
                 </select>
                 {errors.tipoEvento && <span className="text-red-500">El tipo de evento es requerido</span>}
             </div>
 
             {/* Plantilla de Diploma */}
             <div className="mb-4">
-                <label htmlFor="eventoPlantillaDiploma" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="eventoPlantillaDiploma" className="block text-sm font-medium text-black mb-1">
                     Plantilla de Diploma
                 </label>
                 <input
                     type="file"
-                    className="border border-gray-300 rounded-md w-full p-2 focus:outline-none focus:ring focus:ring-indigo-500"
+                    className="border border-gray-300 rounded-md w-full text-black p-2 focus:outline-none focus:ring focus:ring-indigo-500"
                     accept="application/pdf"
                     onChange={handleFileChange}
                 />

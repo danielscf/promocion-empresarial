@@ -139,32 +139,32 @@ const ProductoEditForm = ({ productoId, closeModal }) => {
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
             <div className="mb-4">
-                <label htmlFor="nombre" className="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
+                <label htmlFor="nombre" className="block text-sm font-medium text-black mb-1">Nombre</label>
                 <input
                     type="text"
-                    className="border border-gray-300 rounded-md w-full p-2 focus:outline-none focus:ring focus:ring-indigo-500"
+                    className="border border-gray-300 rounded-md w-full text-black p-2 focus:outline-none focus:ring focus:ring-indigo-500"
                     {...register('productoNombre', { required: true })}
                 />
                 {errors.productoNombre && <span className="text-red-500">El nombre del producto es requerido</span>}
             </div>
 
             <div className="mb-4">
-                <label htmlFor="descripcion" className="block text-sm font-medium text-gray-700 mb-1">Descripcion</label>
+                <label htmlFor="descripcion" className="block text-sm font-medium text-black mb-1">Descripcion</label>
                 <input
-                    type="text" className="border border-gray-300 rounded-md w-full p-2 focus:outline-none focus:ring focus:ring-indigo-500"
+                    type="text" className="border border-gray-300 rounded-md w-full text-black p-2 focus:outline-none focus:ring focus:ring-indigo-500"
                     {...register('productoDescripcion', { required: true })}
                 />
                 {errors.productoDescripcion && <span className="text-red-500">La descripcion es requerido</span>}
             </div>
 
             <div className="mb-4">
-                <label htmlFor="tipoProducto" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="tipoProducto" className="block text-sm font-medium text-black mb-1">
                     Tipo de producto
                 </label>
 
                 {tipoProducto && tipoProducto.length > 0 ? (
                     <select
-                        className="border border-gray-300 rounded-md w-full p-2 focus:outline-none focus:ring focus:ring-indigo-500"
+                        className="border border-gray-300 rounded-md w-full text-black p-2 focus:outline-none focus:ring focus:ring-indigo-500"
                         {...register('tipoProductoId', { required: true })}
                         onChange={(e) => {
                             const selectedOption = tipoProducto.find(

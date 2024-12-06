@@ -16,7 +16,7 @@ const EmprendedorForm = ({ user_emprendedor, handleSubmit, register, errors, dis
         rubro: {},
         tipoContribuyente: {},
     });
-    const value = `http://localhost:3000/informacion-emprendedor/${emprendedor?.usuario?.usuarioUsuario}`;
+    const value = `http://129.151.39.237/informacion-emprendedor/${emprendedor?.usuario?.usuarioUsuario}`;
     const qrRef = useRef();
     const [selectedFoto, setSelectedFoto] = useState(null);
     const { setEmprendedorId } = useEmprendedor();
@@ -160,7 +160,7 @@ const EmprendedorForm = ({ user_emprendedor, handleSubmit, register, errors, dis
 
                                     {/* Nombre de Usuario */}
                                     <div className="sm:col-span-3">
-                                        <label className="block text-sm font-medium leading-6 text-gray-900">
+                                        <label className="block text-sm font-medium leading-6 text-black">
                                             Nombre de Usuario
                                         </label>
                                         <input
@@ -173,7 +173,7 @@ const EmprendedorForm = ({ user_emprendedor, handleSubmit, register, errors, dis
 
                                     {/* Nombres */}
                                     <div className="sm:col-span-3">
-                                        <label className="block text-sm font-medium leading-6 text-gray-900">
+                                        <label className="block text-sm font-medium leading-6 text-black">
                                             Nombres
                                         </label>
                                         <input
@@ -186,7 +186,7 @@ const EmprendedorForm = ({ user_emprendedor, handleSubmit, register, errors, dis
 
                                     {/* Apellido Paterno */}
                                     <div className="sm:col-span-3">
-                                        <label className="block text-sm font-medium leading-6 text-gray-900">
+                                        <label className="block text-sm font-medium leading-6 text-black">
                                             Apellido Paterno
                                         </label>
                                         <input
@@ -199,7 +199,7 @@ const EmprendedorForm = ({ user_emprendedor, handleSubmit, register, errors, dis
 
                                     {/* Apellido Materno */}
                                     <div className="sm:col-span-3">
-                                        <label className="block text-sm font-medium leading-6 text-gray-900">
+                                        <label className="block text-sm font-medium leading-6 text-black">
                                             Apellido Materno
                                         </label>
                                         <input
@@ -212,7 +212,7 @@ const EmprendedorForm = ({ user_emprendedor, handleSubmit, register, errors, dis
 
                                     {/* DNI */}
                                     <div className="sm:col-span-3">
-                                        <label className="block text-sm font-medium leading-6 text-gray-900">
+                                        <label className="block text-sm font-medium leading-6 text-black">
                                             DNI
                                         </label>
                                         <input
@@ -231,7 +231,7 @@ const EmprendedorForm = ({ user_emprendedor, handleSubmit, register, errors, dis
 
                                     {/* Teléfono */}
                                     <div className="sm:col-span-3">
-                                        <label className="block text-sm font-medium leading-6 text-gray-900">
+                                        <label className="block text-sm font-medium leading-6 text-black">
                                             Teléfono
                                         </label>
                                         <input
@@ -243,14 +243,14 @@ const EmprendedorForm = ({ user_emprendedor, handleSubmit, register, errors, dis
                                                     message: "El teléfono debe tener 9 dígitos"
                                                 }
                                             })}
-                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                            className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                         />
                                         {errors.usuarioTelefono && <span className="text-red-500">{errors.usuarioTelefono.message}</span>}
                                     </div>
 
                                     {/* Correo */}
                                     <div className="sm:col-span-6">
-                                        <label className="block text-sm font-medium leading-6 text-gray-900">
+                                        <label className="block text-sm font-medium leading-6 text-black">
                                             Correo
                                         </label>
                                         <input
@@ -262,7 +262,7 @@ const EmprendedorForm = ({ user_emprendedor, handleSubmit, register, errors, dis
                                                     message: "Formato de correo inválido"
                                                 }
                                             })}
-                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                            className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                         />
                                         {errors.correo && <p className="text-red-500 text-sm">{errors.correo.message}</p>}
                                     </div>
@@ -299,7 +299,7 @@ const EmprendedorForm = ({ user_emprendedor, handleSubmit, register, errors, dis
                                     {/* Mostrar RUC */}
                                     {emprendedor?.emprendedorRuc && (
                                         <div className="sm:col-span-3">
-                                            <label htmlFor="ruc" className="block text-sm font-medium leading-6 text-gray-900">Ruc</label>
+                                            <label htmlFor="ruc" className="block text-sm font-medium leading-6 text-black">Ruc</label>
                                             <div className="mt-2">
                                                 <input
                                                     type="text"
@@ -314,7 +314,7 @@ const EmprendedorForm = ({ user_emprendedor, handleSubmit, register, errors, dis
                                     {/* Mostrar Dirección */}
                                     {emprendedor?.emprendedorDireccion && (
                                         <div className="sm:col-span-3">
-                                            <label htmlFor="direccion" className="block text-sm font-medium leading-6 text-gray-900">Dirección</label>
+                                            <label htmlFor="direccion" className="block text-sm font-medium leading-6 text-black">Dirección</label>
                                             <div className="mt-2">
                                                 <input
                                                     type="text"
@@ -329,7 +329,7 @@ const EmprendedorForm = ({ user_emprendedor, handleSubmit, register, errors, dis
                                     {/* Mostrar Razón Social */}
                                     {emprendedor?.emprendedorRazonSocial && (
                                         <div className="sm:col-span-6">
-                                            <label htmlFor="razon-social" className="block text-sm font-medium leading-6 text-gray-900">Razón Social</label>
+                                            <label htmlFor="razon-social" className="block text-sm font-medium leading-6 text-black">Razón Social</label>
                                             <div className="mt-2">
                                                 <input
                                                     type="text"
@@ -344,7 +344,7 @@ const EmprendedorForm = ({ user_emprendedor, handleSubmit, register, errors, dis
                                     {/* Mostrar Rubro */}
                                     {emprendedor?.rubro?.rubroNombre && (
                                         <div className="col-span-full">
-                                            <label htmlFor="rubro" className="block text-sm font-medium leading-6 text-gray-900">Rubro</label>
+                                            <label htmlFor="rubro" className="block text-sm font-medium leading-6 text-black">Rubro</label>
                                             <div className="mt-2">
                                                 <input
                                                     type="text"

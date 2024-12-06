@@ -52,7 +52,7 @@ const RegistrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
     const handleBuscarEmprendedor = (e) => {
         e.preventDefault();
         if (!/^\d{11}$/.test(rucEmprendedor)) {
-            alertPersonalizado("Ruc Invalido","El RUC debe tener 11 dígitos.");
+            alertPersonalizado("Ruc Invalido", "El RUC debe tener 11 dígitos.");
             return;
         }
         const emprendedor = emprendedores.find(e => e.emprendedorRuc === rucEmprendedor)
@@ -186,11 +186,11 @@ const RegistrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
                         <div className="mt-10 grid grid-cols-1 md:grid-cols-6 lg:grid-cols-6 gap-x-6 gap-y-8">
 
                             {/* Datos de Usuario */}
-                            <h3 className="text-xl font-bold mb-4 col-span-6 md:col-span-3">Datos de Usuario</h3>
+                            <h3 className="text-xl font-bold mb-4 text-black col-span-6 md:col-span-3">Datos de Usuario</h3>
 
                             <div className="col-span-6 md:col-span-6 lg:col-span-6">
                                 <input type="text" placeholder='Ingresar dni'
-                                    className="w-full p-2 rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                    className="w-full p-2 rounded-md border-0 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                     {...register('usuarioDni', { required: true })}
                                     onInput={(e) => {
                                         e.target.value = e.target.value.replace(/\D/g, "");
@@ -201,10 +201,10 @@ const RegistrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
 
                             {/* Nombres */}
                             <div className="col-span-6 md:col-span-3 lg:col-span-3">
-                                <label htmlFor="nombres" className="block text-sm font-medium leading-6 text-gray-900">
+                                <label htmlFor="nombres" className="block text-sm font-medium leading-6 text-black">
                                     Nombres
                                 </label>
-                                <input type="text" className="block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm 
+                                <input type="text" className="block w-full rounded-md border-0 p-2 text-black shadow-sm 
                                 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                     {...register('usuarioNombre', { required: true })} />
                                 {errors.usuarioNombre && <span className="text-red-500">El nombre es requerido</span>}
@@ -212,10 +212,10 @@ const RegistrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
 
                             {/* Apellido Paterno */}
                             <div className="col-span-6 md:col-span-3 lg:col-span-3">
-                                <label htmlFor="apellido-paterno" className="block text-sm font-medium leading-6 text-gray-900">
+                                <label htmlFor="apellido-paterno" className="block text-sm font-medium leading-6 text-black">
                                     Apellido Paterno
                                 </label>
-                                <input type="text" className="block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 
+                                <input type="text" className="block w-full rounded-md border-0 p-2 text-black shadow-sm ring-1 
                                 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                     {...register('usuarioApellidoPaterno', { required: true })} />
                                 {errors.usuarioApellidoPaterno && <span className="text-red-500">El apellido paterno es requerido</span>}
@@ -223,10 +223,10 @@ const RegistrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
 
                             {/* Apellido Materno */}
                             <div className="col-span-6 md:col-span-3 lg:col-span-3">
-                                <label htmlFor="apellido-materno" className="block text-sm font-medium leading-6 text-gray-900">
+                                <label htmlFor="apellido-materno" className="block text-sm font-medium leading-6 text-black">
                                     Apellido Materno
                                 </label>
-                                <input type="text" className="block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm 
+                                <input type="text" className="block w-full rounded-md border-0 p-2 text-black shadow-sm 
                                 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                     {...register('usuarioApellidoMaterno', { required: true })} />
                                 {errors.usuarioApellidoMaterno && <span className="text-red-500">El apellido materno es requerido</span>}
@@ -234,10 +234,10 @@ const RegistrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
 
                             {/* Teléfono */}
                             <div className="col-span-6 md:col-span-3 lg:col-span-3">
-                                <label htmlFor="telefono" className="block text-sm font-medium leading-6 text-gray-900">
+                                <label htmlFor="telefono" className="block text-sm font-medium leading-6 text-black">
                                     Teléfono
                                 </label>
-                                <input type="tel" className="block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm 
+                                <input type="tel" className="block w-full rounded-md border-0 p-2 text-black shadow-sm 
                                 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                     {...register('usuarioTelefono', {
                                         required: "El teléfono es requerido",
@@ -259,10 +259,10 @@ const RegistrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
 
                             {/* Correo */}
                             <div className="col-span-6 md:col-span-3 lg:col-span-3">
-                                <label htmlFor="correo" className="block text-sm font-medium leading-6 text-gray-900">
+                                <label htmlFor="correo" className="block text-sm font-medium leading-6 text-black">
                                     Correo
                                 </label>
-                                <input type="email" className="block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm 
+                                <input type="email" className="block w-full rounded-md border-0 p-2 text-black shadow-sm 
                                 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                     {...register('usuarioCorreo', { required: true })} />
                                 {errors.usuarioCorreo && <span className="text-red-500">El correo es requerido</span>}
@@ -270,10 +270,10 @@ const RegistrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
 
                             {/* Fecha de nacimiento */}
                             <div className="col-span-6 md:col-span-3 lg:col-span-3">
-                                <label htmlFor="fecha_nacimiento" className="block text-sm font-medium leading-6 text-gray-900">
+                                <label htmlFor="fecha_nacimiento" className="block text-sm font-medium leading-6 text-black">
                                     Fecha de nacimiento
                                 </label>
-                                <input type="date" className="block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset 
+                                <input type="date" className="block w-full rounded-md border-0 p-2 text-black shadow-sm ring-1 ring-inset 
                                 ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                     {...register('usuarioFechaNacimiento', { required: true })} />
                                 {errors.usuarioFechaNacimiento && <span className="text-red-500">La fecha de nacimiento es requerida</span>}
@@ -286,7 +286,7 @@ const RegistrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
                                 <input
                                     type="text"
                                     placeholder="Ingresar ruc"
-                                    className="w-full md:w-64 rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300
+                                    className="w-full md:w-64 rounded-md border-0 p-2 text-black shadow-sm ring-1 ring-inset ring-gray-300
                     placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                     {...register('emprendedorRuc', {
                                         required: 'El RUC es requerido',
@@ -301,7 +301,14 @@ const RegistrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
                                         e.target.value = e.target.value.replace(/\D/g, "");
                                     }}
                                     onChange={(e) => {
-                                        setrucEmprendedor(e.target.value);
+                                        let digitos = e.target.value.replace(/\D/g, "");
+                                        console.log(digitos)
+                                        if (digitos.length > 11) {
+                                            digitos = digitos.slice(0, 11);
+                                        }
+                                    
+                                        e.target.value = digitos;
+                                        setrucEmprendedor(digitos);
                                         const obtenerDigitos = e.target.value.substring(0, 2);
 
                                         obtenerDigitos === '10' ? setValue('tipoContribuyenteId', 1) :
@@ -319,10 +326,10 @@ const RegistrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
 
                             {/* Dirección */}
                             <div className="col-span-6 md:col-span-3 lg:col-span-3">
-                                <label htmlFor="direccion" className="block text-sm font-medium leading-6 text-gray-900">
+                                <label htmlFor="direccion" className="block text-sm font-medium leading-6 text-black">
                                     Dirección
                                 </label>
-                                <input type="text" className="block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset 
+                                <input type="text" className="block w-full rounded-md border-0 p-2 text-black shadow-sm ring-1 ring-inset 
                                 ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                     {...register('emprendedorDireccion', { required: true })} />
                                 {errors.emprendedorDireccion && <span className="text-red-500">La direccion es requerida</span>}
@@ -330,10 +337,10 @@ const RegistrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
 
                             {/* Razon Social */}
                             <div className="col-span-6 md:col-span-3 lg:col-span-3">
-                                <label htmlFor="razon_social" className="block text-sm font-medium leading-6 text-gray-900">
+                                <label htmlFor="razon_social" className="block text-sm font-medium leading-6 text-black">
                                     Razón Social
                                 </label>
-                                <input type="text" className="block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 
+                                <input type="text" className="block w-full rounded-md border-0 p-2 text-black shadow-sm ring-1 
                                 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                     {...register('emprendedorRazonSocial', { required: true })} />
                                 {errors.emprendedorRazonSocial && <span className="text-red-500">La razon social es requerida</span>}
@@ -341,10 +348,10 @@ const RegistrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
 
                             {/* Estado Contribuyente */}
                             <div className="col-span-6 md:col-span-3 lg:col-span-3">
-                                <label htmlFor="estadoContribuyente" className="block text-sm font-medium leading-6 text-gray-900">
+                                <label htmlFor="estadoContribuyente" className="block text-sm font-medium leading-6 text-black">
                                     Estado Contribuyente
                                 </label>
-                                <input type="text" className="block w-full rounded-md border-0 p-2 text-gray-900 
+                                <input type="text" className="block w-full rounded-md border-0 p-2 text-black 
                                 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                     {...register('emprendedorEstadoContribuyente', { required: true })} />
                                 {errors.emprendedorEstadoContribuyente && <span className="text-red-500">El estado contribuyente es requerido</span>}
@@ -352,10 +359,10 @@ const RegistrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
 
                             {/* Condición Contribuyente */}
                             <div className="col-span-6 md:col-span-3 lg:col-span-3">
-                                <label htmlFor="condicionContribuyente" className="block text-sm font-medium leading-6 text-gray-900">
+                                <label htmlFor="condicionContribuyente" className="block text-sm font-medium leading-6 text-black">
                                     Condición Contribuyente
                                 </label>
-                                <input type="text" className="block w-full rounded-md border-0 p-2 text-gray-900 
+                                <input type="text" className="block w-full rounded-md border-0 p-2 text-black 
                                 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                     {...register('emprendedorCondicionContribuyente', { required: true })} />
                                 {errors.emprendedorCondicionContribuyente && <span className="text-red-500">La condicion contribuyente es requerida</span>}
@@ -363,11 +370,11 @@ const RegistrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
 
                             {/* Rubro */}
                             <div className="col-span-6 md:col-span-3 lg:col-span-3">
-                                <label htmlFor="rubro" className="block text-sm font-medium leading-6 text-gray-900">
+                                <label htmlFor="rubro" className="block text-sm font-medium leading-6 text-black">
                                     Rubro
                                 </label>
                                 <select
-                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                    className="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                                     {...register('rubroId', { required: true })}
                                     onChange={(e) => {
                                         const selectedOption = rubros.find(rubro => rubro.rubroId === parseInt(e.target.value));
@@ -387,11 +394,11 @@ const RegistrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
 
                             {/* Tipo Contribuyente */}
                             <div className="col-span-6 md:col-span-6 lg:col-span-6 hidden">
-                                <label htmlFor="tipoContribuyente" className="block text-sm font-medium leading-6 text-gray-900">
+                                <label htmlFor="tipoContribuyente" className="block text-sm font-medium leading-6 text-black ">
                                     Tipo contribuyente
                                 </label>
                                 <select
-                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                    className="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                                     {...register('tipoContribuyenteId', { required: true })}
                                     onChange={(e) => {
                                         const selectedOption = tipoContribuyentes.find(tipo => tipo.tipoContribuyenteId === parseInt(e.target.value));
@@ -411,11 +418,11 @@ const RegistrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
 
                             {/* Tipo Actividad */}
                             <div className="col-span-6 md:col-span-3 lg:col-span-3">
-                                <label htmlFor="tipoActividad" className="block text-sm font-medium leading-6 text-gray-900">
+                                <label htmlFor="tipoActividad" className="block text-sm font-medium leading-6 text-black">
                                     Tipo actividad
                                 </label>
                                 <select
-                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                    className="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                                     {...register('tipoActividadId', { required: true })}
                                     onChange={(e) => {
                                         const selectedOption = tipoActividad.find(tipo => tipo.tipoActividadId === parseInt(e.target.value));
@@ -435,7 +442,7 @@ const RegistrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
 
                             {/* Foto del Emprendedor */}
                             <div className="col-span-6 md:col-span-6 lg:col-span-6">
-                                <label htmlFor="foto" className="block text-sm font-medium leading-6 text-gray-900">
+                                <label htmlFor="foto" className="block text-sm font-medium leading-6 text-black">
                                     Foto del emprendedor
                                 </label>
                                 <input type="file" accept="image/*" required className="w-full text-gray-500 font-medium text-sm bg-gray-100 file:cursor-pointer cursor-pointer file:border-0 file:py-2 

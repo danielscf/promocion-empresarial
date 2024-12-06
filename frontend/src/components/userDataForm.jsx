@@ -105,7 +105,7 @@ const UserDataForm = () => {
 
                         {/* Nombre de Usuario */}
                         <div className="sm:col-span-3">
-                            <label className="block text-sm font-medium leading-6 text-gray-900">
+                            <label className="block text-sm font-medium leading-6 text-black">
                                 Nombre de Usuario
                             </label>
                             <input
@@ -120,7 +120,7 @@ const UserDataForm = () => {
 
                         {/* Nombres */}
                         <div className="sm:col-span-3">
-                            <label className="block text-sm font-medium leading-6 text-gray-900">
+                            <label className="block text-sm font-medium leading-6 text-black">
                                 Nombres
                             </label>
                             <input
@@ -134,7 +134,7 @@ const UserDataForm = () => {
 
                         {/* Apellido Paterno */}
                         <div className="sm:col-span-3">
-                            <label className="block text-sm font-medium leading-6 text-gray-900">
+                            <label className="block text-sm font-medium leading-6 text-black">
                                 Apellido Paterno
                             </label>
                             <input
@@ -148,7 +148,7 @@ const UserDataForm = () => {
 
                         {/* Apellido Materno */}
                         <div className="sm:col-span-3">
-                            <label className="block text-sm font-medium leading-6 text-gray-900">
+                            <label className="block text-sm font-medium leading-6 text-black">
                                 Apellido Materno
                             </label>
                             <input
@@ -162,7 +162,7 @@ const UserDataForm = () => {
 
                         {/* DNI */}
                         <div className="sm:col-span-3">
-                            <label className="block text-sm font-medium leading-6 text-gray-900">
+                            <label className="block text-sm font-medium leading-6 text-black">
                                 DNI
                             </label>
                             <input
@@ -182,7 +182,7 @@ const UserDataForm = () => {
 
                         {/* Teléfono */}
                         <div className="sm:col-span-3">
-                            <label className="block text-sm font-medium leading-6 text-gray-900">
+                            <label className="block text-sm font-medium leading-6 text-black">
                                 Teléfono
                             </label>
                             <input
@@ -197,14 +197,14 @@ const UserDataForm = () => {
                                 onChange={(e) => {
                                     restringirCantidadDigitos(e);
                                 }}
-                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                             />
                             {errors.usuarioTelefono && <span className="text-red-500">{errors.usuarioTelefono.message}</span>}
                         </div>
 
                         {/* Correo */}
                         <div className="sm:col-span-6">
-                            <label className="block text-sm font-medium leading-6 text-gray-900">
+                            <label className="block text-sm font-medium leading-6 text-black">
                                 Correo
                             </label>
                             <input
@@ -216,7 +216,7 @@ const UserDataForm = () => {
                                         message: "Formato de correo inválido"
                                     }
                                 })}
-                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                             />
                             {errors.correo && <p className="text-red-500 text-sm">{errors.correo.message}</p>}
                         </div>

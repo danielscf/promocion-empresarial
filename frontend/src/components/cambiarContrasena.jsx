@@ -53,14 +53,14 @@ const CambiarContrasena = () => {
             <div className="mb-5">
                 <label
                     htmlFor="contrasenaActual"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    className="block mb-2 text-sm font-medium text-black dark:text-white"
                 >
                     Contraseña Actual
                 </label>
                 <input
                     type="password"
                     {...register('contrasenaActual', { required: 'La contraseña actual es obligatoria.' })}
-                    className={`bg-gray-50 border text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${errors.contrasenaActual ? 'border-red-500' : 'border-gray-300'
+                    className={`bg-gray-50 border text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${errors.contrasenaActual ? 'border-red-500' : 'border-gray-300'
                         }`}
                 />
                 {errors.contrasenaActual && (
@@ -70,14 +70,14 @@ const CambiarContrasena = () => {
             <div className="mb-5">
                 <label
                     htmlFor="nuevaContrasena"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    className="block mb-2 text-sm font-medium text-black dark:text-white"
                 >
                     Nueva Contraseña
                 </label>
                 <input
                     type="password"
                     {...register('nuevaContrasena', { required: 'La nueva contraseña es obligatoria.' })}
-                    className={`bg-gray-50 border text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${errors.nuevaContrasena ? 'border-red-500' : 'border-gray-300'
+                    className={`bg-gray-50 border text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${errors.nuevaContrasena ? 'border-red-500' : 'border-gray-300'
                         }`}
                 />
                 {errors.nuevaContrasena && (
@@ -87,7 +87,7 @@ const CambiarContrasena = () => {
             <div className="mb-5">
                 <label
                     htmlFor="repetirContrasena"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    className="block mb-2 text-sm font-medium text-black dark:text-white"
                 >
                     Repetir Nueva Contraseña
                 </label>
@@ -98,7 +98,7 @@ const CambiarContrasena = () => {
                         validate: (value, data) =>
                             value === data?.nuevaContrasena || 'Las contraseñas no coinciden.',
                     })}
-                    className={`bg-gray-50 border text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${errors.repetirContrasena ? 'border-red-500' : 'border-gray-300'
+                    className={`bg-gray-50 border text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${errors.repetirContrasena ? 'border-red-500' : 'border-gray-300'
                         }`}
                 />
                 {errors.repetirContrasena && (

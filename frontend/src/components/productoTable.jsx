@@ -9,7 +9,6 @@ import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import Modal from './modal';
 import ProductoEditForm from './productoEditForm';
 import { deleteProducto } from '../store/productoSlice';
-import { deleteImagen } from '../api/imagenApi';
 import { showConfirmation } from '../app/utils/confirmationDialog';
 import Image from 'next/image';
 

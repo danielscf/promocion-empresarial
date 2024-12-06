@@ -16,6 +16,17 @@ const ParticipanteForm = ({ closeModal, eventoId }) => {
     const [disable, setdisable] = useState(false)
 
     const onSubmit = (data) => {
+
+        const existeEmprendedor = emprendedores.some(emprendedor => emprendedor.razonSocial === data.emprendedorRazonSocial)
+        console.log(existeEmprendedor)
+        if(existeEmprendedor){
+            reset()
+            setBusqueda('')
+            setdisable(false)
+            disable
+            alertPersonalizado('Datos repetidos', 'Este emprendedor ya se agrego')
+            return
+        }
         const nuevoEmprendedor = {
             id: emprendedorId,
             razonSocial: data.emprendedorRazonSocial,
@@ -54,32 +65,32 @@ const ParticipanteForm = ({ closeModal, eventoId }) => {
         const digitos = e.target.value.replace(/\D/g, "");
         const limite = criterioBusqueda === 'ruc' ? 11 : 8;
         const mensaje = criterioBusqueda === 'ruc' ? 'El RUC debe tener 11 dígitos' : 'El DNI debe tener 8 dígitos';
-    
+
         if (digitos.length > limite) {
             e.target.value = digitos.slice(0, limite);
-            alertPersonalizado('',mensaje)
+            alertPersonalizado('', mensaje)
         }
     };
-    
+
 
     const handleBuscar = async () => {
         if (!busqueda) {
-            alertPersonalizado("","Por favor, ingresa un valor para buscar.");
+            alertPersonalizado("", "Por favor, ingresa un valor para buscar.");
             return;
         }
-    
+
         const validaciones = {
             dni: { regex: /^\d{8}$/, mensaje: "El DNI debe tener 8 dígitos.", apiCall: findEmprendedorByDni },
             ruc: { regex: /^\d{11}$/, mensaje: "El RUC debe tener 11 dígitos.", apiCall: findEmprendedorByRuc }
         };
-    
+
         const { regex, mensaje, apiCall } = validaciones[criterioBusqueda] || {};
-    
+
         if (!regex || !regex.test(busqueda)) {
-            alertPersonalizado('',mensaje);
+            alertPersonalizado('', mensaje);
             return;
         }
-    
+
         try {
             const response = await apiCall(busqueda);
             const datos = response.data;
@@ -88,17 +99,17 @@ const ParticipanteForm = ({ closeModal, eventoId }) => {
             setValue('emprendedorRazonSocial', datos.emprendedorRazonSocial);
         } catch (error) {
             console.error("Error al buscar el emprendedor:", error);
-            alertPersonalizado("","No se encontró ningún emprendedor con los datos proporcionados.");
+            alertPersonalizado("", "No se encontró ningún emprendedor con los datos proporcionados.");
         }
     };
-    
+
 
     return (
         <>
             {/* Buscar por RUC o DNI */}
             <div className="mb-4 flex items-center">
                 <select
-                    className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-indigo-500 mr-2"
+                    className="border border-gray-300 rounded-md p-2 text-black focus:outline-none focus:ring focus:ring-indigo-500 mr-2"
                     value={criterioBusqueda}
                     onChange={(e) => setCriterioBusqueda(e.target.value)}
                 >
@@ -107,7 +118,7 @@ const ParticipanteForm = ({ closeModal, eventoId }) => {
                 </select>
                 <input
                     type="text"
-                    className={`${disable ? 'bg-gray-100 text-gray-500 cursor-not-allowed': ''} border border-gray-300 rounded-md p-2 w-1/2 focus:outline-none focus:ring focus:ring-indigo-500 mr-2`}
+                    className={`${disable ? 'bg-gray-100 text-black cursor-not-allowed' : ''} border border-gray-300 rounded-md p-2 w-1/2 focus:outline-none focus:ring focus:ring-indigo-500 mr-2`}
                     placeholder={`Ingresa el ${criterioBusqueda}`}
                     readOnly={disable}
                     value={busqueda}
@@ -131,14 +142,14 @@ const ParticipanteForm = ({ closeModal, eventoId }) => {
             {/* Formulario */}
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="mb-4">
-                    <label htmlFor="razonSocial" className="block text-sm font-medium text-gray-700 mb-1">
+                    <label htmlFor="razonSocial" className="block text-sm font-medium text-black mb-1">
                         Razón Social
                     </label>
                     <input
                         type="text"
-                        className={`${disable ? 'bg-gray-100 text-gray-500 cursor-not-allowed' : ''} border border-gray-300 rounded-md w-full p-2 focus:outline-none focus:ring focus:ring-indigo-500`}
+                        className={`${disable ? 'bg-gray-100 text-gray-500 cursor-not-allowed' : ''} border border-gray-300 rounded-md w-full text-black p-2 focus:outline-none focus:ring focus:ring-indigo-500`}
                         {...register('emprendedorRazonSocial', { required: true, maxLength: 150 })}
-                        readOnly={disable}/>
+                        readOnly={disable} />
                     {errors.emprendedorRazonSocial && <span className="text-red-500">Este campo es requerido</span>}
                 </div>
                 <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
@@ -159,9 +170,9 @@ const ParticipanteForm = ({ closeModal, eventoId }) => {
                 <tbody>
                     {emprendedores.map((emprendedor) => (
                         <tr key={emprendedor.id}>
-                            <td className="border px-4 py-2">{emprendedor.id}</td>
-                            <td className="border px-4 py-2">{emprendedor.razonSocial}</td>
-                            <td className="border px-4 py-2 text-center">
+                            <td className="border text-black px-4 py-2">{emprendedor.id}</td>
+                            <td className="border text-black px-4 py-2">{emprendedor.razonSocial}</td>
+                            <td className="border  px-4 py-2 text-center">
                                 <FontAwesomeIcon
                                     icon={faTrash}
                                     className="text-red-600 cursor-pointer h-6 w-6 ml-3"

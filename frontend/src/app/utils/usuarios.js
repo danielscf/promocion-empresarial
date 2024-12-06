@@ -9,7 +9,7 @@ export const usuarios = [
     {
         usuarioDni: "87654321",
         usuarioNombre: "María",
-        usuarioApellidoPaterno: "Ramírez",
+        usuarioApellidoPaterno: "Ramirez",
         usuarioApellidoMaterno: "Lopez",
         usuarioFechaNacimiento: "1985-10-20"
     },
@@ -23,14 +23,14 @@ export const usuarios = [
     {
         usuarioDni: "44332211",
         usuarioNombre: "Ana",
-        usuarioApellidoPaterno: "Sánchez",
+        usuarioApellidoPaterno: "Sanchez",
         usuarioApellidoMaterno: "Torres",
         usuarioFechaNacimiento: "1998-11-30"
     },
     {
         usuarioDni: "55443322",
         usuarioNombre: "Luis",
-        usuarioApellidoPaterno: "Hernández",
+        usuarioApellidoPaterno: "Hernandez",
         usuarioApellidoMaterno: "Vega",
         usuarioFechaNacimiento: "2000-02-25"
     },

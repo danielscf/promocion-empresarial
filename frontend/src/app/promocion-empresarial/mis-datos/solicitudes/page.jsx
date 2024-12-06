@@ -13,7 +13,7 @@ const SolicitudesPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 3;
 
-  const solicitudesFiltradas = solicitudes.filter(solicitud => solicitud.solicitudEstado !== 3)
+  const solicitudesFiltradas = solicitudes.filter(solicitud => solicitud.solicitudEstado !== 3 && solicitud.solicitudEstado !== 2)
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;

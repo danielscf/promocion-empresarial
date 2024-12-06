@@ -16,7 +16,7 @@ const Modal = ({ isOpen, title, children,handleClose }) => {
                         >
                             <FontAwesomeIcon icon={faTimes} className="h-5 w-5" />
                         </button>
-                        <h2 className="text-xl font-bold mb-4">{title}</h2>
+                        <h2 className="text-xl font-bold text-black mb-4">{title}</h2>
                         {children}
                     </div>
                 </div>

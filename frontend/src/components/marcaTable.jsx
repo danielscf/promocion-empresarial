@@ -34,7 +34,7 @@ const MarcaTable = () => {
             dispatch(deleteMarca(marcaId));
            emprendedorId && dispatch(fetchMarcasByEmprendedor(emprendedorId));
         }
-    }, [dispatch]);
+    }, [dispatch,emprendedorId]);
 
     const columns = useMemo(() => [
         {
@@ -88,7 +88,7 @@ const MarcaTable = () => {
             ignoreRowClick: true,
         },
         
-    ], [handleDelete]);
+    ], [handleDelete,apiUrl]);
 
     if (status === 'failed') {
         return <div>Error: {error}</div>;

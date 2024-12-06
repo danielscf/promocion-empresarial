@@ -14,7 +14,7 @@ const EmprendedorCard = ({ emprendedor }) => {
                 height={100}
             />
 
-            <div className="text-sm">
+            <div className="text-sm text-black">
                 <p><strong>{emprendedor.usuario.usuarioNombre} {emprendedor.usuario.usuarioApellidoPaterno} {emprendedor.usuario.usuarioApellidoMaterno}</strong></p>
                 <p><strong>RUC:</strong>{emprendedor.emprendedorRuc}</p>
             </div>
