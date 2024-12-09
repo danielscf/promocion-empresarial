@@ -5,14 +5,14 @@ const participacionApi = axios.create({
     baseURL:process.env.NEXT_PUBLIC_API_URL+'/participacion'
 
 }) 
-// rolApi.interceptors.request.use(
-//     (config) => {
+participacionApi.interceptors.request.use(
+    (config) => {
         
-//         config.withCredentials = true;
-//         return config;
-//     },
-//     (error) => Promise.reject(error)
-// );
+        config.withCredentials = true;
+        return config;
+    },
+    (error) => Promise.reject(error)
+);
 
 export const getAllParticipantes = (eventoId) => participacionApi.get(`/evento/${eventoId}`)
 

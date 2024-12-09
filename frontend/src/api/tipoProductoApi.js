@@ -6,4 +6,13 @@ const tipoProductoApi = axios.create({
 
 }) 
 
+tipoProductoApi.interceptors.request.use(
+    (config) => {
+        
+        config.withCredentials = true;
+        return config;
+    },
+    (error) => Promise.reject(error)
+);
+
 export const getAllTipoProducto = () => tipoProductoApi.get('')

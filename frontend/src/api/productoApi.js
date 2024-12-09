@@ -6,6 +6,15 @@ const productoApi = axios.create({
 
 })
 
+productoApi.interceptors.request.use(
+    (config) => {
+        
+        config.withCredentials = true;
+        return config;
+    },
+    (error) => Promise.reject(error)
+);
+
 export const registrarProducto = (producto) => productoApi.post('',producto)
 
 export const getAllProductosByEmprendedor = (emprendedorId) => productoApi.get(`/emprendedor/${emprendedorId}`)

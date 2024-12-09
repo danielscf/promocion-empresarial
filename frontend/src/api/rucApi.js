@@ -6,6 +6,15 @@ const rucApi = axios.create({
 
 })
 
+rucApi.interceptors.request.use(
+    (config) => {
+     
+        config.withCredentials = true;
+        return config;
+    },
+    (error) => Promise.reject(error)
+);
+
 export const fetchRucInfo = async (ruc) => {
     try {
         const response = await rucApi.get(`/${ruc}`);

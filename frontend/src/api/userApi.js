@@ -6,14 +6,14 @@ const usuarioApi = axios.create({
 
 }) 
 
-// usuarioApi.interceptors.request.use(
-//     (config) => {
+usuarioApi.interceptors.request.use(
+    (config) => {
         
-//         config.withCredentials = true;
-//         return config;
-//     },
-//     (error) => Promise.reject(error)
-// );
+        config.withCredentials = true;
+        return config;
+    },
+    (error) => Promise.reject(error)
+);
 
 export const getAllUsuarios = () => usuarioApi.get('')
 export const getUsuarioById = (usuarioId) => usuarioApi.get(`/${usuarioId}`)

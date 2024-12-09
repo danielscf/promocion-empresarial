@@ -6,6 +6,15 @@ const registroApi = axios.create({
 
 }) 
 
+registroApi.interceptors.request.use(
+    (config) => {
+        
+        config.withCredentials = true;
+        return config;
+    },
+    (error) => Promise.reject(error)
+);
+
 export const linkTerminarRegistro = (correo) => 
     registroApi.post('/enviar-link', JSON.stringify(correo), {
         headers: {

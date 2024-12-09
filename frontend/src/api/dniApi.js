@@ -6,6 +6,15 @@ const dniApi = axios.create({
 
 })
 
+dniApi.interceptors.request.use(
+    (config) => {
+
+        config.withCredentials = true;
+        return config;
+    },
+    (error) => Promise.reject(error)
+);
+
 export const fetchDniInfo = async (dni) => {
     try {
         const response = await dniApi.get(`/${dni}`);

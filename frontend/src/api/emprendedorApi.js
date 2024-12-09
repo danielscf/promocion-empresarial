@@ -6,14 +6,14 @@ const emprendedorApi = axios.create({
 
 })
 
-// emprendedorApi.interceptors.request.use(
-//     (config) => {
+emprendedorApi.interceptors.request.use(
+    (config) => {
 
-//         config.withCredentials = true;
-//         return config;
-//     },
-//     (error) => Promise.reject(error)
-// );
+        config.withCredentials = true;
+        return config;
+    },
+    (error) => Promise.reject(error)
+);
 
 
 export const getEmprendorByUsername = (username) => emprendedorApi.get(`/usuario/${username}`)

@@ -5,14 +5,14 @@ const marcaApi = axios.create({
     baseURL:process.env.NEXT_PUBLIC_API_URL+'/marca'
 
 }) 
-// rolApi.interceptors.request.use(
-//     (config) => {
+marcaApi.interceptors.request.use(
+    (config) => {
         
-//         config.withCredentials = true;
-//         return config;
-//     },
-//     (error) => Promise.reject(error)
-// );
+        config.withCredentials = true;
+        return config;
+    },
+    (error) => Promise.reject(error)
+);
 
 export const getAllMarcasByEmprendedor = (emprendedorId) => marcaApi.get(`/emprendedor/${emprendedorId}`)
 

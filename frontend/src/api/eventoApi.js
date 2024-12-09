@@ -5,14 +5,14 @@ const eventoApi = axios.create({
     baseURL:process.env.NEXT_PUBLIC_API_URL+'/evento'
 
 }) 
-// rolApi.interceptors.request.use(
-//     (config) => {
+eventoApi.interceptors.request.use(
+    (config) => {
         
-//         config.withCredentials = true;
-//         return config;
-//     },
-//     (error) => Promise.reject(error)
-// );
+        config.withCredentials = true;
+        return config;
+    },
+    (error) => Promise.reject(error)
+);
 
 
 export const getAllEvento = () => eventoApi.get('')

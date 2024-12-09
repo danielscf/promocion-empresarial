@@ -6,6 +6,15 @@ const solicitudApi = axios.create({
 
 }) 
 
+solicitudApi.interceptors.request.use(
+    (config) => {
+     
+        config.withCredentials = true;
+        return config;
+    },
+    (error) => Promise.reject(error)
+);
+
 export const createSolicitud = async (solicitud, selectedFile, emprendedorRuc) => {
     const formData = new FormData();
     
@@ -30,8 +39,6 @@ export const createSolicitud = async (solicitud, selectedFile, emprendedorRuc) =
         throw error;  
     }
 };
-
-
 
 
 export const getAllSolicitud = () => solicitudApi.get('')
