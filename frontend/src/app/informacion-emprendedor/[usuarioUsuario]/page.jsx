@@ -56,10 +56,10 @@ const Page = ({params}) => {
     const totalPages = Math.ceil(productosFiltrados.length / itemsPerPage);
 
   return (
-    <div className="mx-auto p-6 w-screen bg-gray-300">
+    <div className="mx-auto p-6 w-screen bg-gray-100">
             {emprendedor ? (
                 <>
-                    <h2 className="mb-6 text-center text-2xl font-bold">Datos del Emprendedor</h2>
+                    <h2 className="mb-6 text-center text-2xl text-black font-bold">Datos del Emprendedor</h2>
                     <div className="flex flex-col items-center justify-center space-y-6 mb-3 md:space-y-0 md:space-x-6">
                         <Image
                             className="h-44 w-44 mb-4 rounded-full shadow-md"
@@ -68,8 +68,8 @@ const Page = ({params}) => {
                             width={120}
                             height={150} 
                         />
-                        <div className="w-full max-w-sm rounded-lg border bg-white p-4 shadow-md">
-                            <p className="mb-2 text-lg"><strong>Nombre: </strong>{emprendedor.usuario.usuarioNombre} {emprendedor.usuario.usuarioApellidoPaterno}</p>
+                        <div className="w-full max-w-sm rounded-lg border text-black border-gray-300 bg-white p-4 shadow-lg">
+                            <p className="mb-2 text-lg "><strong>Nombre: </strong>{emprendedor.usuario.usuarioNombre} {emprendedor.usuario.usuarioApellidoPaterno}</p>
                             <p className="mb-2 text-lg"><strong>Razón Social: </strong>{emprendedor.emprendedorRazonSocial}</p>
                             <p className="text-lg"><strong>Rubro: </strong>{emprendedor.rubro.rubroNombre}</p>
                         </div>

@@ -6,9 +6,17 @@ const registroApi = axios.create({
 
 }) 
 
-export const registroCompleto = (correo) => 
+export const linkTerminarRegistro = (correo) => 
     registroApi.post('/enviar-link', JSON.stringify(correo), {
         headers: {
             'Content-Type': 'application/json'
         }
     });
+
+export const linkRestablecerContrasena = (correo) => {
+    registroApi.post('enviar-link-cambio-contrasena',JSON.stringify(correo),{
+        headers:{
+               'Content-Type': 'application/json'
+        }
+    })
+}

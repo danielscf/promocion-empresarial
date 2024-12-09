@@ -26,7 +26,7 @@ const EventoTable = () => {
 
 
     useEffect(() => {
-        
+
         dispatch(fetchEventos())
 
     }, [dispatch])
@@ -80,28 +80,47 @@ const EventoTable = () => {
         },
         {
             name: 'AGREGAR',
-            cell: row => (
-                <FontAwesomeIcon className='cursor-pointer h-6 w-6 ml-3'
-                    icon={faPlus}
-                    onClick={() => {
-                        seteventoId(row.eventoId);
-                        openModal('registrarParticipantes')
-                    }}
-                />
-            ),
+            cell: row => {
+
+                const fechaActual = new Date();
+                const fechaFin = new Date(row.eventoFechaFin);
+
+                const disable = fechaActual > fechaFin;
+
+                return (
+                    <FontAwesomeIcon
+                        className={`h-6 w-6 ml-3 
+                            ${disable
+                                ? 'text-gray-400 cursor-not-allowed'
+                                : 'text-blue-500 hover:text-blue-700'
+                            }`}
+                        icon={faPlus}
+                        onClick={() => {
+                            if (!disable) {
+                                seteventoId(row.eventoId);
+                                openModal('registrarParticipantes');
+                            }
+                        }}
+                        style={{ pointerEvents: disable ? 'none' : 'auto' }}
+                    />
+                );
+            },
             ignoreRowClick: true,
         },
         {
             name: 'EDITAR',
-            cell: row => (
-                <FontAwesomeIcon className='cursor-pointer h-6 w-6 ml-3'
-                    icon={faPenToSquare}
-                    onClick={() => {
-                        seteventoId(row.eventoId);
-                        openModal("editarEvento");
-                    }}
-                />
-            ),
+            cell: row => {
+                return (
+                    <FontAwesomeIcon
+                        className='cursor-pointer h-6 w-6 ml-8'
+                        icon={faPenToSquare}
+                        onClick={() => {
+                            seteventoId(row.eventoId);
+                            openModal("editarEvento");
+                        }}
+                    />
+                );
+            },
             ignoreRowClick: true,
         },
         {
@@ -119,7 +138,7 @@ const EventoTable = () => {
     ], [seteventoId]);
 
     return (
-        <div className="overflow-hidden max-w-full border border-gray-300 rounded-lg shadow-md">
+        <div className="overflow-hidden max-w-full shadow-lg border border-gray-300 rounded-lg">
             <DataTable
                 title="Lista de Eventos"
                 columns={columns}

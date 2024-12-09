@@ -38,7 +38,7 @@ const ProductoCard = ({ producto, showCheckbox }) => {
             onChange={handleCheckboxChange}
           />
           <label htmlFor={`checkbox-${producto.productoId}`} className="text-sm text-black">
-            ¿Marque la casilla si la imagen es adecuada?
+            Marque la casilla si la imagen es adecuada
           </label>
         </div>
       )}

@@ -212,7 +212,9 @@ const ProductoEditForm = ({ productoId, closeModal }) => {
                     />
                 </div>
             </div>
-
+            <p className="text-sm text-gray-700 mt-2">
+                * Solo se aceptan imágenes en formato JPEG, PNG o GIF.
+            </p>
             <div className="flex justify-end mt-4">
                 <button type="button" className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 mr-2" onClick={closeModal}>
                     Cerrar

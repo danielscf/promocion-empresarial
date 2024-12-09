@@ -1,12 +1,13 @@
-'use client';
+'use client'
 
-import React, { useEffect, useState } from 'react';
-import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
+import React, { useState, useEffect } from 'react'
 import axios from 'axios';
 import { alertPersonalizado, showSuccessMessage } from '../utils/messages';
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
 
-const CompletarRegistro = () => {
+const CambiarContrasenaPage = () => {
+
     const router = useRouter();
     const [token, setToken] = useState(null);
     const { register, handleSubmit, watch, formState: { errors } } = useForm();
@@ -22,29 +23,26 @@ const CompletarRegistro = () => {
     }
 
     const onSubmit = async (data) => {
-        const datos = {
-            "usuarioUsuario": data.usuarioUsuario,
-            "usuarioContrasena": data.usuarioContrasena
-        };
+
+        const nuevaContrasena = data.usuarioContrasena
 
         try {
             const response = await axios.post(
-                `${process.env.NEXT_PUBLIC_API_URL}/registro/completar?token=${token}`,
-                datos,
+                `${process.env.NEXT_PUBLIC_API_URL}/registro/cambiar-contrasena?token=${token}`,
+                nuevaContrasena,
                 {
                     headers: {
                         "Content-Type": "application/json",
                     },
                 }
             );
-
             if (response.status === 200) {
-                showSuccessMessage('Registro completado', 'Registro completado exitosamente')
+                showSuccessMessage('Contraseña cambiada', 'Contraseña cambiada exitosamente')
                 router.push('/');
             }
         } catch (error) {
             if (error.response) {
-                alert(error.response.data.message || "Error al completar el registro.");
+                alertPersonalizado(error.response.data.message || "Error al completar el cambiar la contraseña.");
             } else if (error.request) {
                 console.error("No response received:", error.request);
                 alertPersonalizado("No se recibió respuesta del servidor.");
@@ -57,29 +55,23 @@ const CompletarRegistro = () => {
 
     return (
         <div className="h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200">
-            <form onSubmit={handleSubmit(onSubmit)} className="bg-white shadow-lg rounded-xl p-8 max-w-sm w-full">
-                <div className="mb-5 w-full">
-                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                        Nombre de Usuario
-                    </label>
-                    <input
-                        type="text"
-                        {...register("usuarioUsuario", { required: "El nombre de usuario es obligatorio." })}
-                        className="bg-gray-50 border text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                    />
-                    {errors.usuarioUsuario && (
-                        <p className="text-red-500 text-sm mt-1">{errors.usuarioUsuario.message}</p>
-                    )}
-                </div>
+            <form
+                onSubmit={handleSubmit(onSubmit)}
+                className="bg-white shadow-lg rounded-xl p-8 max-w-sm w-full"
+            >
+                <h2 className="text-2xl font-bold text-gray-900 text-center mb-6">
+                    Restablecer Contraseña
+                </h2>
 
                 <div className="mb-5 w-full">
-                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                    <label className="block mb-2 text-sm font-medium text-gray-700">
                         Nueva Contraseña
                     </label>
                     <input
                         type="password"
                         {...register("usuarioContrasena", { required: "La nueva contraseña es obligatoria." })}
-                        className="bg-gray-50 border text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3"
+                        placeholder="Ingresa tu nueva contraseña"
                     />
                     {errors.usuarioContrasena && (
                         <p className="text-red-500 text-sm mt-1">{errors.usuarioContrasena.message}</p>
@@ -87,7 +79,7 @@ const CompletarRegistro = () => {
                 </div>
 
                 <div className="mb-5 w-full">
-                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                    <label className="block mb-2 text-sm font-medium text-gray-700">
                         Repetir Nueva Contraseña
                     </label>
                     <input
@@ -97,7 +89,8 @@ const CompletarRegistro = () => {
                             validate: (value) =>
                                 value === watch("usuarioContrasena") || "Las contraseñas no coinciden.",
                         })}
-                        className="bg-gray-50 border text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3"
+                        placeholder="Repite tu nueva contraseña"
                     />
                     {errors.repetirContrasena && (
                         <p className="text-red-500 text-sm mt-1">{errors.repetirContrasena.message}</p>
@@ -106,13 +99,14 @@ const CompletarRegistro = () => {
 
                 <button
                     type="submit"
-                    className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-full px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                    className="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-3 text-center transition-transform transform hover:scale-105"
                 >
                     Guardar
                 </button>
             </form>
         </div>
-    );
-};
 
-export default CompletarRegistro;
+    )
+}
+
+export default CambiarContrasenaPage

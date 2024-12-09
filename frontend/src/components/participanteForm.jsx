@@ -1,5 +1,5 @@
 import { findEmprendedorByDni, findEmprendedorByRuc } from "@/api/emprendedorApi";
-import { createParticipacion } from "@/api/participacionApi";
+import { createParticipacion, getAllParticipantes } from "@/api/participacionApi";
 import { alertPersonalizado, showErrorMessage, showSuccessMessage } from "@/app/utils/messages";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -14,12 +14,15 @@ const ParticipanteForm = ({ closeModal, eventoId }) => {
     const [emprendedorId, setemprendedorId] = useState(null)
     const [criterioBusqueda, setCriterioBusqueda] = useState("ruc");
     const [disable, setdisable] = useState(false)
+    const [isRegistering, setIsRegistering] = useState(false);
+    const [dniError, setDniError] = useState("");
+    const [rucError, setRucError] = useState("");
 
     const onSubmit = (data) => {
 
         const existeEmprendedor = emprendedores.some(emprendedor => emprendedor.razonSocial === data.emprendedorRazonSocial)
-        console.log(existeEmprendedor)
-        if(existeEmprendedor){
+        //console.log(existeEmprendedor)
+        if (existeEmprendedor) {
             reset()
             setBusqueda('')
             setdisable(false)
@@ -42,24 +45,50 @@ const ParticipanteForm = ({ closeModal, eventoId }) => {
     };
 
     const handleRegistrar = async () => {
+        if (isRegistering) return;
+        setIsRegistering(true);
+
+        const response = await getAllParticipantes(eventoId)
+        const participantesActuales = response.data;
+        console.log("Participantes:", JSON.stringify(participantesActuales));
+        const idsParticipantesActuales = participantesActuales.map(participante => participante.emprendedor.emprendedorRazonSocial);
+        console.log("Arrays razon social:", JSON.stringify(idsParticipantesActuales));
+
+        let registraronParticipantes = false;
+
         try {
             for (const emprendedor of emprendedores) {
+                if (idsParticipantesActuales.some(razonSocial => razonSocial === emprendedor.razonSocial)) {
+                    alertPersonalizado('Participante registrado', `El emprendedor con razon social ${emprendedor.razonSocial} ya está registrado. Se omitirá.`);
+                    await new Promise(resolve => setTimeout(resolve, 3000));
+                    console.warn(`El emprendedor con ID ${emprendedor.id} ya está registrado. Se omitirá.`);
+                    continue;
+                }
+
                 const participacion = {
                     "eventoId": eventoId,
                     "emprendedorId": emprendedor.id
-                }
-                await createParticipacion(participacion)
+                };
+                await createParticipacion(participacion);
+                registraronParticipantes = true;
             }
-            setEmprendedores([])
-            showSuccessMessage('Registro exitoso', 'El registro de los participantes se ha realizado con éxito');
-            closeModal()
+
+            if (registraronParticipantes) {
+                showSuccessMessage('Registro exitoso', 'El registro de los participantes se ha realizado con éxito');
+            } else {
+                alertPersonalizado('Sin registros', 'No se registraron participantes nuevos');
+            }
+            setEmprendedores([]);
+            closeModal();
         } catch (error) {
             console.error('Error al registrar a los participantes:', error);
             const errorMessage = error.message || 'Hubo un problema al realizar el registro. Verifica los datos e intenta nuevamente.';
             showErrorMessage('Error en el registro', errorMessage);
+        } finally {
+            setIsRegistering(false);
         }
-
     }
+
 
     const restringirCantidadDigitos = (e, criterioBusqueda) => {
         const digitos = e.target.value.replace(/\D/g, "");
@@ -68,10 +97,17 @@ const ParticipanteForm = ({ closeModal, eventoId }) => {
 
         if (digitos.length > limite) {
             e.target.value = digitos.slice(0, limite);
-            alertPersonalizado('', mensaje)
         }
+        if (digitos.length > limite) {
+            if (criterioBusqueda === "dni") setDniError(mensaje);
+            if (criterioBusqueda === "ruc") setRucError(mensaje);
+            setTimeout(() => {
+                if (criterioBusqueda === "dni") setDniError("");
+                if (criterioBusqueda === "ruc") setRucError("");
+            }, 2000);
+        }
+       
     };
-
 
     const handleBuscar = async () => {
         if (!busqueda) {
@@ -103,7 +139,6 @@ const ParticipanteForm = ({ closeModal, eventoId }) => {
         }
     };
 
-
     return (
         <>
             {/* Buscar por RUC o DNI */}
@@ -118,7 +153,7 @@ const ParticipanteForm = ({ closeModal, eventoId }) => {
                 </select>
                 <input
                     type="text"
-                    className={`${disable ? 'bg-gray-100 text-black cursor-not-allowed' : ''} border border-gray-300 rounded-md p-2 w-1/2 focus:outline-none focus:ring focus:ring-indigo-500 mr-2`}
+                    className={`${disable ? 'bg-gray-100 text-gray-500 cursor-not-allowed' : ''} border rounded-md p-2 w-1/2 focus:outline-none focus:ring focus:ring-indigo-500 mr-2 placeholder-gray-500`}
                     placeholder={`Ingresa el ${criterioBusqueda}`}
                     readOnly={disable}
                     value={busqueda}
@@ -137,6 +172,10 @@ const ParticipanteForm = ({ closeModal, eventoId }) => {
                 >
                     Buscar
                 </button>
+            </div>
+            <div className="text-center">
+                {rucError && <span className="text-red-500 text-sm mt-1">{rucError}</span>}
+                {dniError && <span className="text-red-500 text-sm mt-1">{dniError}</span>}
             </div>
 
             {/* Formulario */}
@@ -191,9 +230,13 @@ const ParticipanteForm = ({ closeModal, eventoId }) => {
                 >
                     Cerrar
                 </button>
-                <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-                    onClick={handleRegistrar}>
-                    Registrar
+                <button
+                    type="button"
+                    className={`px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 ${isRegistering ? 'cursor-not-allowed opacity-50' : ''}`}
+                    onClick={handleRegistrar}
+                    disabled={isRegistering}
+                >
+                    {isRegistering ? 'Registrando...' : 'Registrar'}
                 </button>
             </div>
         </>

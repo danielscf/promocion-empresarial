@@ -18,6 +18,8 @@ const navigation = [
   { name: 'Emprendedor', href: '/promocion-empresarial/emprendedor/datos-emprendedor' },
   { name: 'Emprendedores', href: '/promocion-empresarial/emprendedores' },
   { name: 'Eventos', href: '/promocion-empresarial/eventos' },
+  { name: 'Solicitudes', href: '/promocion-empresarial/solicitudes' },
+  { name: 'Dashboard', href: '/promocion-empresarial/dashboard' },
 ];
 
 

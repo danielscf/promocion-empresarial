@@ -110,7 +110,7 @@ const ProductoTable = () => {
     const filtrarProductos = productos?.filter(producto => producto.productoEstado !== 3)
 
     return (
-        <div className="overflow-hidden max-w-full border border-gray-300 rounded-lg shadow-md">
+        <div className="overflow-hidden max-w-full border border-gray-300 rounded-lg shadow-lg">
             <DataTable
                 title="Lista de productos"
                 columns={columns}

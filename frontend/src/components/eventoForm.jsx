@@ -1,7 +1,7 @@
 import { fetchEventos } from '@/store/eventoSlice';
-import React,{useState} from 'react'
+import React, { useState } from 'react'
 import { useDispatch } from 'react-redux';
-import { showSuccessMessage,showErrorMessage } from '@/app/utils/messages';
+import { showSuccessMessage, showErrorMessage, alertPersonalizado } from '@/app/utils/messages';
 import { addNewEvento } from '@/store/eventoSlice';
 
 const EventoForm = ({ closeModal, register, handleSubmit, errors, reset }) => {
@@ -9,17 +9,58 @@ const EventoForm = ({ closeModal, register, handleSubmit, errors, reset }) => {
     const [selectedFile, setSelectedFile] = useState(null);
     const [fileError, setFileError] = useState('');
     const dispatch = useDispatch()
+    const [startDate, setStartDate] = useState("");
+    const [endDate, setEndDate] = useState("");
+    const [horaInicio, setHoraInicio] = useState("");
+    const [horaFin, setHoraFin] = useState("");
 
+    const handleStartDateChange = (e) => {
+        const selectedStartDate = e.target.value;
+        setStartDate(selectedStartDate);
+    };
+
+    const handleEndDateChange = (e) => {
+        setEndDate(e.target.value);
+    };
+
+    const handleHoraInicioChange = (e) => {
+        const selectedHoraInicio = e.target.value;
+        setHoraInicio(selectedHoraInicio);
+
+        const timeToMinutes = (time) => {
+            const [hours, minutes] = time.split(':');
+            return parseInt(hours) * 60 + parseInt(minutes);
+        };
+
+        if (timeToMinutes(horaFin) <= timeToMinutes(selectedHoraInicio)) {
+            setHoraInicio(horaFin);
+        }
+    };
+
+    const handleHoraFinChange = (e) => {
+        const selectedHoraFin = e.target.value;
+        setHoraFin(selectedHoraFin);
+
+        const timeToMinutes = (time) => {
+            const [hours, minutes] = time.split(':');
+            return parseInt(hours) * 60 + parseInt(minutes);
+        };
+
+        if (timeToMinutes(horaInicio) >= timeToMinutes(selectedHoraFin)) {
+            setHoraFin(horaInicio);
+        }
+    };
+    
     const handleFileChange = (event) => {
-        const file = event.target.files[0]; 
-        const allowedTypes = ['application/pdf']; 
+        const file = event.target.files[0];
+        const allowedTypes = ['application/pdf'];
 
         if (file && allowedTypes.includes(file.type)) {
-            setSelectedFile(file); 
-            setFileError(''); 
+            setSelectedFile(file);
+            setFileError('');
         } else {
-            setSelectedFile(null); 
-            setFileError('Por favor, selecciona un archivo PDF válido.'); 
+            setSelectedFile(null);
+            setFileError('Por favor, selecciona un archivo PDF válido.');
         }
     };
 
@@ -37,7 +78,7 @@ const EventoForm = ({ closeModal, register, handleSubmit, errors, reset }) => {
             const response = await dispatch(addNewEvento(formData)).unwrap();
             console.log('Evento registrado:', response);
             showSuccessMessage('Registro exitoso', 'El registro se ha realizado con éxito.');
-            dispatch(fetchEventos()); 
+            dispatch(fetchEventos());
             reset();
             closeModal();
             setSelectedFile(null);
@@ -70,9 +111,9 @@ const EventoForm = ({ closeModal, register, handleSubmit, errors, reset }) => {
                 </label>
                 <textarea
                     className="border border-gray-300 rounded-md w-full text-black p-2 focus:outline-none focus:ring focus:ring-indigo-500"
-                    {...register('eventoDescripcion', {require:true, maxLength: 255 })}
+                    {...register('eventoDescripcion', { required: true, maxLength: 255 })}
                 ></textarea>
-                {errors.eventoDescripcion && <span className="text-red-500">El descripcion del evento es requerido</span>}
+                {errors.eventoDescripcion && <span className="text-red-500">La descripcion del evento es requerido</span>}
             </div>
 
             {/* Fecha de Inicio */}
@@ -84,6 +125,9 @@ const EventoForm = ({ closeModal, register, handleSubmit, errors, reset }) => {
                     type="date"
                     className="border border-gray-300 rounded-md w-full text-black p-2 focus:outline-none focus:ring focus:ring-indigo-500"
                     {...register('eventoFechaInicio', { required: true })}
+                    value={startDate}
+                    max={endDate}
+                    onChange={handleStartDateChange}
                 />
                 {errors.eventoFechaInicio && <span className="text-red-500">La fecha de inicio es requerida</span>}
             </div>
@@ -96,9 +140,14 @@ const EventoForm = ({ closeModal, register, handleSubmit, errors, reset }) => {
                 <input
                     type="date"
                     className="border border-gray-300 rounded-md w-full text-black p-2 focus:outline-none focus:ring focus:ring-indigo-500"
-                    {...register('eventoFechaFin', { required: true })}
+                    value={endDate}
+                    min={startDate}
+                    {...register('eventoFechaFin', { required: "La fecha de fin es requerida", })}
+                    onChange={handleEndDateChange}
                 />
-                {errors.eventoFechaFin && <span className="text-red-500">La fecha de fin es requerida</span>}
+                {errors.eventoFechaFin && (
+                    <span className="text-red-500">{errors.eventoFechaFin.message}</span>
+                )}
             </div>
 
             {/* Hora de Inicio */}
@@ -110,6 +159,8 @@ const EventoForm = ({ closeModal, register, handleSubmit, errors, reset }) => {
                     type="time"
                     className="border border-gray-300 rounded-md w-full text-black p-2 focus:outline-none focus:ring focus:ring-indigo-500"
                     {...register('eventoHoraInicio', { required: true })}
+                    value={horaInicio}
+                    onChange={handleHoraInicioChange}
                 />
                 {errors.eventoHoraInicio && <span className="text-red-500">La hora de inicio es requerida</span>}
             </div>
@@ -123,6 +174,8 @@ const EventoForm = ({ closeModal, register, handleSubmit, errors, reset }) => {
                     type="time"
                     className="border border-gray-300 rounded-md w-full text-black p-2 focus:outline-none focus:ring focus:ring-indigo-500"
                     {...register('eventoHoraFin', { required: true })}
+                    value={horaFin}
+                    onChange={handleHoraFinChange}
                 />
                 {errors.eventoHoraFin && <span className="text-red-500">La hora de fin es requerida</span>}
             </div>
@@ -171,7 +224,9 @@ const EventoForm = ({ closeModal, register, handleSubmit, errors, reset }) => {
                 />
                 {fileError && <span className="text-red-500">{fileError}</span>}
             </div>
-
+            <p className="text-sm text-gray-700 mt-2">
+                * Solo se permiten archivos en formato PDF y con un tamaño máximo de 1 MB.
+            </p>
             <div className="flex justify-end mt-4">
                 <button
                     type="button"

@@ -143,6 +143,10 @@ const MarcaEditForm = ({ marcaId, closeModal }) => {
                 </div>
             </div>
 
+            <p className="text-sm text-gray-700 mt-2">
+                * Solo se aceptan imágenes en formato JPEG, PNG o GIF.
+            </p>
+
             <div className="flex justify-end mt-4">
                 <button
                     type="button"

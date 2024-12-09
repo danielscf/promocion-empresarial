@@ -5,8 +5,10 @@ const DatosPersonalesPage = () => {
 
     return (
         <>
-            <h1 className='mt-2 text-center text-2xl font-bold'>Datos Personales</h1>
-            <UserDataForm />
+            <h1 className='mt-2 text-center text-black text-2xl font-bold'>Datos Personales</h1>
+            <div className='bg-white shadow-lg border border-gray-300 p-6 my-5 rounded-xl'>
+                <UserDataForm />
+            </div>
         </>
     )
 }

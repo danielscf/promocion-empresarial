@@ -8,6 +8,7 @@ import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import Image from 'next/image';
 import axios from 'axios';
+import Link from 'next/link';
 
 function LoginPage() {
 
@@ -105,9 +106,22 @@ function LoginPage() {
             </button>
           </div>
           <div className="text-center mt-4">
-            <a href="#" className="text-sm text-red-500 hover:underline">
+            <Link
+              href="/registrar-emprendedor"
+              className="text-sm text-blue-600 hover:underline hover:text-blue-700"
+            >
+              ¿Nuevo? Registra tu emprendimiento aquí
+            </Link>
+          </div>
+          <div className="text-center mt-4">
+            <Link
+              href="/restablecer-contrasena"
+              className="text-sm text-red-500 hover:underline"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               ¿Olvidaste tu contraseña?
-            </a>
+            </Link>
           </div>
         </form>
       </div>

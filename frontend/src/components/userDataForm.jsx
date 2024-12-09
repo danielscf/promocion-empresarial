@@ -15,13 +15,14 @@ const UserDataForm = () => {
     const { register, handleSubmit, reset, setValue, formState: { errors } } = useForm();
     const dispatch = useDispatch()
     const [initialData, setInitialData] = useState(null);
+    const [telefonoError, setTelefonoError] = useState("");
 
     useEffect(() => {
         if (user?.usuarioId) {
             const cargarDatosUsuario = async () => {
                 const response = await getUsuarioById(user?.usuarioId);
                 const datos = response.data;
-    
+
                 const initialValues = {
                     usuarioUsuario: datos.usuarioUsuario,
                     usuarioNombre: datos.usuarioNombre,
@@ -31,7 +32,7 @@ const UserDataForm = () => {
                     usuarioTelefono: datos.usuarioTelefono,
                     usuarioCorreo: datos.usuarioCorreo
                 };
-    
+
                 setValue("usuarioUsuario", datos.usuarioUsuario);
                 setValue("usuarioNombre", datos.usuarioNombre);
                 setValue("usuarioApellidoPaterno", datos.usuarioApellidoPaterno);
@@ -39,13 +40,13 @@ const UserDataForm = () => {
                 setValue("usuarioDni", datos.usuarioDni);
                 setValue("usuarioTelefono", datos.usuarioTelefono);
                 setValue("usuarioCorreo", datos.usuarioCorreo);
-    
-                setInitialData(initialValues); 
+
+                setInitialData(initialValues);
             };
             cargarDatosUsuario();
         }
     }, [user, setValue]);
-    
+
 
     if (!user) {
         return <p>...Cargando</p>
@@ -56,7 +57,12 @@ const UserDataForm = () => {
 
         if (digitos.length > 9) {
             e.target.value = digitos.slice(0, 9);
-            alertPersonalizado('', 'El teléfono debe tener 9 dígitos');
+            setTelefonoError('El teléfono debe tener 9 dígitos');
+            setTimeout(() => {
+                setTelefonoError("");
+            }, 2000);
+        } else {
+            setTelefonoError('');
         }
     };
 
@@ -194,12 +200,12 @@ const UserDataForm = () => {
                                         message: "El teléfono debe tener 9 dígitos"
                                     }
                                 })}
-                                onChange={(e) => {
-                                    restringirCantidadDigitos(e);
-                                }}
+                                onInput={(e) => { e.target.value = e.target.value.replace(/\D/g, ""); }}
+                                onChange={(e) => { restringirCantidadDigitos(e); }}
                                 className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                             />
                             {errors.usuarioTelefono && <span className="text-red-500">{errors.usuarioTelefono.message}</span>}
+                            {telefonoError && <span className="text-red-500 text-sm mt-1">{telefonoError}</span>}
                         </div>
 
                         {/* Correo */}

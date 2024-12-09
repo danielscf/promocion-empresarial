@@ -4,7 +4,7 @@ import Image from 'next/image'
 const EmprendedorCard = ({ emprendedor }) => {
 
     return (
-        <div className="bg-white rounded-lg shadow-md p-4 text-center h-64 w-40">
+        <div className="bg-white shadow-lg border border-gray-300 my-5 rounded-xl p-4 text-center h-72 w-56">
             <Image
                 src={`${process.env.NEXT_PUBLIC_API_URL}/emprendedor/${emprendedor.emprendedorId}/foto`}
                 alt="Imagen del emprendedor"

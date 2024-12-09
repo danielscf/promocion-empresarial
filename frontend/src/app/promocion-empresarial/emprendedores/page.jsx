@@ -13,45 +13,48 @@ const EmprendedoresPage = () => {
     const [emprendedores, setEmprendedores] = useState([]);
     const [filteredEmprendedor, setFilteredEmprendedor] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
-    const [valueOption, setValueOption] = useState(null);
-    const itemsPerPage = 5;
+    const itemsPerPage = 10;
+    const [dniError, setDniError] = useState(null)
+    const [rucError, setRucError] = useState(null)
+    const [valueBusqueda, setvalueBusqueda] = useState(null)
 
-    const handleSelectChange = (event) => {
-        setSelectedOption(event.target.value);
-        setFilteredEmprendedor(null);
-    };
 
     const handleInputChange = (e) => {
-        const value = e.target.value.replace(/\D/g, ""); 
-        selectedOption === '' ? e.target.value = '' : e.target.value
-        setValueOption(value)
-        if (selectedOption === 'dni' && value.length > 8) {
-            alertPersonalizado('', 'El DNI debe tener máximo 8 dígitos.');
-            e.target.value =  value.slice(0, 8)
-        } else if (selectedOption === 'ruc' && value.length > 11) {
-            alertPersonalizado('', 'El RUC debe tener máximo 11 dígitos.');
-            e.target.value =  value.slice(0, 11)
-        } else {
-            setValueOption(value);
+        const digitos = e.target.value.replace(/\D/g, "");
+        const mensaje = selectedOption === 'dni' ? 'El DNI debe tener máximo 8 dígitos' :
+            'El RUC debe tener máximo 11 dígitos'
+        const limite = selectedOption === 'dni' ? 8 : 11
+
+        if (digitos.length > limite) {
+            e.target.value = digitos.slice(0, limite)
+            setvalueBusqueda(e.target.value)
+        }
+        if (digitos.length > limite) {
+            if (selectedOption === "dni") setDniError(mensaje);
+            if (selectedOption === "ruc") setRucError(mensaje)
+            setTimeout(() => {
+                if (selectedOption === "dni") setDniError("");
+                if (selectedOption === "ruc") setRucError("");
+            }, 2000);
         }
     };
-    
+
     const handleClickSearch = async () => {
-        if (!selectedOption || !valueOption) {
-            alertPersonalizado('Criterio no seleccionado', 'Por favor selecciona un criterio y proporciona un valor válido.');
+        if (!valueBusqueda || !selectedOption) {
+            alertPersonalizado('', 'Por favor proporciona un criterio o valor válido.');
             return;
         }
-    
+
         try {
             const searchFn = selectedOption === 'dni' ? findEmprendedorByDni : findEmprendedorByRuc;
-            const response = await searchFn(valueOption);
+            const response = await searchFn(valueBusqueda);
             setFilteredEmprendedor(response.data);
         } catch (error) {
             console.error('Error al buscar emprendedor:', error);
             alertPersonalizado('', 'No se encontró el emprendedor.');
         }
     };
-    
+
 
     useEffect(() => {
         const cargarEmprendedores = async () => {
@@ -84,15 +87,18 @@ const EmprendedoresPage = () => {
     };
 
     return (
-        <div className="text-center bg-gray-300 min-h-screen p-6">
+        <div className="text-center bg-gray-100 min-h-screen p-6">
             <h1 className="text-2xl font-bold text-black mb-4">CONSULTAR EMPRENDEDOR</h1>
             <div className="flex flex-col md:flex-row xl:flex-row sm:flex-row items-center justify-center gap-4 mb-6">
                 <select
                     className="p-2 border rounded-md text-gray-600"
                     value={selectedOption}
-                    onChange={handleSelectChange}
+                    onChange={(e) => {
+                        setSelectedOption(e.target.value)
+                        setFilteredEmprendedor(null);
+                    }}
                 >
-                    <option value="">SELECCIONAR BÚSQUEDA</option>
+                    <option value="">SELECCIONA UNA OPCION</option>
                     <option value="dni">Dni</option>
                     <option value="ruc">Ruc</option>
                 </select>
@@ -104,18 +110,26 @@ const EmprendedoresPage = () => {
                         onInput={(e) => {
                             e.target.value = e.target.value.replace(/\D/g, "");
                         }}
-                        onChange={handleInputChange}
+                        onChange={(e) => {
+                            setvalueBusqueda(e.target.value)
+                            handleInputChange(e);
+                        }}
                     />
+
                     <button className="p-2 bg-blue-800 text-white rounded-md" onClick={handleClickSearch}>
                         <FontAwesomeIcon className="mx-3 cursor-pointer" icon={faMagnifyingGlass} />
                     </button>
                 </div>
             </div>
+            <div>
+                {dniError && <span className="text-red-500 text-sm mt-1">{dniError}</span>}
+                {rucError && <span className="text-red-500 text-sm mt-1">{rucError}</span>}
+            </div>
 
             {filteredEmprendedor ? (
 
                 <div className="bg-white p-4 rounded-md shadow-md">
-                    <h2 className="text-xl font-bold mb-2">Resultado de la búsqueda:</h2>
+                    <h2 className="text-xl font-bold text-black mb-2">Resultado de la búsqueda:</h2>
                     <EmprendedorList emprendedores={[filteredEmprendedor]} />
                 </div>
             ) : (

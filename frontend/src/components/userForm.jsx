@@ -4,7 +4,8 @@ import { useDispatch } from 'react-redux';
 import { getAllRol } from '../api/rolApi';
 import { useState, useEffect } from 'react';
 import { showSuccessMessage, showErrorMessage, alertPersonalizado } from '../app/utils/messages';
-import { usuarios } from '@/app/utils/usuarios';
+import { fetchDniInfo } from '@/api/dniApi';
+
 
 const UserForm = ({ closeModal, register, handleSubmit, errors, reset, setValue }) => {
 
@@ -12,6 +13,44 @@ const UserForm = ({ closeModal, register, handleSubmit, errors, reset, setValue 
     const dispatch = useDispatch();
     const [busqueda, setbusqueda] = useState(null)
     const [disable, setdisable] = useState(false)
+    const [dniError, setDniError] = useState("");
+    const [telefonoError, setTelefonoError] = useState("");
+
+    const handleBuscar = async (e) => {
+        e.preventDefault();
+        console.log(busqueda);
+        if (!/^\d{8}$/.test(busqueda)) {
+            alertPersonalizado('', 'El DNI debe tener 8 dígitos.');
+            return;
+        }
+        try {
+            const response = await fetchDniInfo(busqueda);
+            const datos = response.data;
+            // console.log('Datos obtenidos:', datos);
+            if (datos) {
+                setdisable(true);
+                setValue("usuarioNombre", datos.nombres);
+                setValue("usuarioApellidoPaterno", datos.apellidoPaterno);
+                setValue("usuarioApellidoMaterno", datos.apellidoMaterno);
+            }
+        } catch (error) {
+            if (error.response) {
+                const { status } = error.response;
+                if (status === 404) {
+                    showErrorMessage('Error', 'El DNI ingresado no existe en la base de datos.');
+                } else if (status === 500) {
+                    showErrorMessage('Error', 'Error interno del servidor. Inténtelo más tarde.');
+                } else {
+                    showErrorMessage('Error', 'Ocurrió un error al procesar la solicitud.');
+                }
+            } else if (error.request) {
+                showErrorMessage('Error', 'No se pudo conectar con el servidor. Verifique su conexión a internet.');
+            } else {
+                showErrorMessage('Error', 'Ocurrió un error desconocido. Inténtelo de nuevo.');
+            }
+        }
+
+    };
 
     const onSubmit = async (data) => {
 
@@ -29,29 +68,6 @@ const UserForm = ({ closeModal, register, handleSubmit, errors, reset, setValue 
         });
     };
 
-    const handleBuscar = (e) => {
-        e.preventDefault();
-        console.log(busqueda)
-        if (!/^\d{8}$/.test(busqueda)) {
-            alertPersonalizado('', 'El DNI debe tener 8 dígitos.')
-            return;
-        }
-        const usuario = usuarios.find(e => e.usuarioDni === busqueda)
-
-        if (usuario) {
-            setdisable(true)
-            setValue("usuarioNombre", usuario.usuarioNombre)
-            setValue("usuarioApellidoPaterno", usuario.usuarioApellidoPaterno)
-            setValue("usuarioApellidoMaterno", usuario.usuarioApellidoPaterno)
-            setValue("usuarioCorreo", usuario.usuarioCorreo)
-            setValue("usuarioTelefono", usuario.usuarioTelefono)
-            setValue("usuarioFechaNacimiento", usuario.usuarioFechaNacimiento)
-        } else {
-            alertPersonalizado('', 'Usuario no encontrado')
-        }
-
-    }
-
     const restringirCantidadDigitos = (e, tipoAtributo) => {
         const digitos = e.target.value.replace(/\D/g, "");
         const limite = tipoAtributo === 'dni' ? 8 : 9;
@@ -59,7 +75,17 @@ const UserForm = ({ closeModal, register, handleSubmit, errors, reset, setValue 
 
         if (digitos.length > limite) {
             e.target.value = digitos.slice(0, limite);
-            alertPersonalizado('', mensaje);
+        }
+        if (digitos.length > limite) {
+            if (tipoAtributo === "dni") setDniError(mensaje);
+            if (tipoAtributo === "telefono") setTelefonoError(mensaje);
+            setTimeout(() => {
+                if (tipoAtributo === "dni") setDniError("");
+                if (tipoAtributo === "telefono") setTelefonoError("");
+            }, 2000);
+        } else {
+            if (tipoAtributo === "dni") setDniError("");
+            if (tipoAtributo === "telefono") setTelefonoError("");
         }
     };
 
@@ -94,7 +120,6 @@ const UserForm = ({ closeModal, register, handleSubmit, errors, reset, setValue 
                         setbusqueda(e.target.value);
                     }}
                 />
-                {errors.usuarioDni && <p className="text-red-600 text-sm mt-1">{errors.usuarioDni.message}</p>}
                 <button
                     type="button"
                     className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 mx-2"
@@ -114,19 +139,9 @@ const UserForm = ({ closeModal, register, handleSubmit, errors, reset, setValue 
                 </button>
             </div>
             <div className="mb-4">
-                <label htmlFor="nombreUsuario" className="block text-sm font-medium text-gray-700 mb-1">Nombre Usuario</label>
-                <input type="text" className="border border-gray-300 rounded-md w-full p-2 focus:outline-none focus:ring focus:ring-indigo-500"
-                    {...register('usuarioUsuario', { required: true })} />
-                {errors.usuarioUsuario && <span className="text-red-500">El nombre de usuario es requerido</span>}
+                {errors.usuarioDni && <p className="text-red-600 text-sm mt-1">{errors.usuarioDni.message}</p>}
+                {dniError && <span className="text-red-500 text-sm mt-1">{dniError}</span>}
             </div>
-
-            <div className="mb-4">
-                <label htmlFor="contrasena" className="block text-sm font-medium text-gray-700 mb-1">Contraseña</label>
-                <input type="password" className="border border-gray-300 rounded-md w-full p-2 focus:outline-none focus:ring focus:ring-indigo-500"
-                    {...register('usuarioContrasena', { required: true })} />
-                {errors.usuarioContrasena && <span className="text-red-500">La contraseña es requerido</span>}
-            </div>
-
             <div className="mb-4">
                 <label htmlFor="nombres" className="block text-sm font-medium text-gray-700 mb-1">Nombres</label>
                 <input type="text" className={`${disable ? 'bg-gray-100 text-gray-500 cursor-not-allowed' : ''} border border-gray-300 rounded-md w-full p-2 focus:outline-none focus:ring focus:ring-indigo-500`}
@@ -173,11 +188,15 @@ const UserForm = ({ closeModal, register, handleSubmit, errors, reset, setValue 
                             message: "El teléfono debe tener 9 dígitos"
                         }
                     })}
+                    onInput={(e) => {
+                        e.target.value = e.target.value.replace(/\D/g, "");
+                    }}
                     onChange={(e) => {
                         restringirCantidadDigitos(e, 'telefono');
                     }}
                 />
                 {errors.usuarioTelefono && <span className="text-red-500">{errors.usuarioTelefono.message}</span>}
+                {telefonoError && <span className="text-red-500 text-sm mt-1">{telefonoError}</span>}
             </div>
 
             <div className="mb-4">
@@ -193,9 +212,23 @@ const UserForm = ({ closeModal, register, handleSubmit, errors, reset, setValue 
 
             <div className="mb-4">
                 <label htmlFor="fecha_nacimiento" className="block text-sm font-medium text-gray-700 mb-1">Fecha Nacimiento</label>
-                <input type="date" className={`${disable ? 'bg-gray-100 text-gray-500 cursor-not-allowed' : ''} border border-gray-300 rounded-md w-full p-2 focus:outline-none focus:ring focus:ring-indigo-500`}
-                    {...register('usuarioFechaNacimiento', { required: true })} readOnly={disable} />
+                <input type="date" className='border border-gray-300 rounded-md w-full p-2 focus:outline-none focus:ring focus:ring-indigo-500'
+                    {...register('usuarioFechaNacimiento', { required: true })} />
                 {errors.usuarioFechaNacimiento && <span className="text-red-500">La fecha de nacimiento es requerida</span>}
+            </div>
+
+            <div className="mb-4">
+                <label htmlFor="nombreUsuario" className="block text-sm font-medium text-gray-700 mb-1">Nombre Usuario</label>
+                <input type="text" className="border border-gray-300 rounded-md w-full p-2 focus:outline-none focus:ring focus:ring-indigo-500"
+                    {...register('usuarioUsuario', { required: true })} />
+                {errors.usuarioUsuario && <span className="text-red-500">El nombre de usuario es requerido</span>}
+            </div>
+
+            <div className="mb-4">
+                <label htmlFor="contrasena" className="block text-sm font-medium text-gray-700 mb-1">Contraseña</label>
+                <input type="password" className="border border-gray-300 rounded-md w-full p-2 focus:outline-none focus:ring focus:ring-indigo-500"
+                    {...register('usuarioContrasena', { required: true })} />
+                {errors.usuarioContrasena && <span className="text-red-500">La contraseña es requerido</span>}
             </div>
 
             <div className="flex justify-end mt-4">

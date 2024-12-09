@@ -46,7 +46,7 @@ export default function EmprendedorLayout({ children }) {
                 </div>
             </NavbarUser >
 
-            <div className={`p-4 max-w-full w-full bg-gray-300 ${ishide ? 'hidden' : ''} overflow-x-hidden`}>
+            <div className={`p-4 max-w-full w-full bg-gray-100 ${ishide ? 'hidden' : ''} overflow-x-hidden`}>
                 {children}
             </div>
 

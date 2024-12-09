@@ -12,10 +12,54 @@ const EventoEditForm = ({ closeModal, eventoId }) => {
     const [selectedFile, setSelectedFile] = useState(null);
     const [evento, setevento] = useState(null)
     const dispatch = useDispatch()
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);    
+    const [horaInicio, setHoraInicio] = useState(null);
+    const [horaFin, setHoraFin] = useState(null);
 
     const [fileError, setFileError] = useState('');
     const [existingFileName, setExistingFileName] = useState('');
     const { register, handleSubmit, reset, setValue, formState: { errors } } = useForm()
+
+    const handleStartDateChange = (e) => {
+        const selectedStartDate = e.target.value;
+        console.log("Fecha inicio seleccionada:", selectedStartDate);
+        setStartDate(selectedStartDate);
+    };
+
+    const handleEndDateChange = (e) => {
+        const selectedEndDate = e.target.value;
+        console.log("Fecha fin seleccionada:", selectedEndDate);
+        setEndDate(selectedEndDate);
+    };
+
+    const handleHoraInicioChange = (e) => {
+        const selectedHoraInicio = e.target.value;
+        setHoraInicio(selectedHoraInicio);
+
+        const timeToMinutes = (time) => {
+            const [hours, minutes] = time.split(':');
+            return parseInt(hours) * 60 + parseInt(minutes);
+        };
+
+        if (timeToMinutes(horaFin) <= timeToMinutes(selectedHoraInicio)) {
+            setHoraInicio(horaFin);
+        }
+    };
+
+    const handleHoraFinChange = (e) => {
+        const selectedHoraFin = e.target.value;
+        setHoraFin(selectedHoraFin);
+
+        const timeToMinutes = (time) => {
+            const [hours, minutes] = time.split(':');
+            return parseInt(hours) * 60 + parseInt(minutes);
+        };
+
+        if (timeToMinutes(horaInicio) >= timeToMinutes(selectedHoraFin)) {
+            setHoraFin(horaInicio);
+        }
+    };
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
@@ -42,11 +86,14 @@ const EventoEditForm = ({ closeModal, eventoId }) => {
             setValue('eventoDescripcion', datos_evento?.eventoDescripcion)
             setValue('eventoFechaInicio', datos_evento?.eventoFechaInicio)
             setValue('eventoFechaFin', datos_evento?.eventoFechaFin)
-            setValue('eventoFechaFin', datos_evento?.eventoFechaFin)
             setValue('eventoHoraInicio', datos_evento?.eventoHoraInicio)
             setValue('eventoHoraFin', datos_evento?.eventoHoraFin)
             setValue('eventoLugar', datos_evento?.eventoLugar)
             setValue('tipoEvento', datos_evento?.tipoEvento)
+            setStartDate(datos_evento?.eventoFechaInicio)
+            setEndDate(datos_evento?.eventoFechaFin)
+            setHoraInicio(datos_evento?.eventoHoraInicio)
+            setHoraFin(datos_evento?.eventoHoraFin)
 
             if (datos_evento.eventoPlantillaDiploma) {
                 setExistingFileName(datos_evento?.eventoPlantillaDiploma);
@@ -72,7 +119,7 @@ const EventoEditForm = ({ closeModal, eventoId }) => {
 
         const formDataIsEqual = JSON.stringify(data) === JSON.stringify(initialData);
 
-        if (formDataIsEqual) {
+        if (formDataIsEqual && !selectedFile) {
             alertPersonalizado('Sin cambios', 'No se han realizado cambios en el formulario.');
             return;
         }
@@ -80,9 +127,9 @@ const EventoEditForm = ({ closeModal, eventoId }) => {
         const formData = new FormData();
         formData.append('plantillaArchivo', selectedFile);
         formData.append('eventoDto', JSON.stringify(data));
-        console.log("ID EVENTO:"+eventoId)
+        console.log("ID EVENTO:" + eventoId)
         try {
-            const response = await dispatch(editEvento({formData,eventoId})).unwrap();
+            const response = await dispatch(editEvento({ formData, eventoId })).unwrap();
             console.log('Evento Editado:', response);
             showSuccessMessage('Editado exitosamente', 'La edicion se ha realizado con éxito.');
             dispatch(fetchEventos());
@@ -96,10 +143,9 @@ const EventoEditForm = ({ closeModal, eventoId }) => {
         }
     };
 
-    if (!evento || !evento.tipoEvento) {
+    if (!evento || !evento.tipoEvento || !startDate || !endDate) {
         return <p>Cargando...</p>;
     }
-
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -123,7 +169,7 @@ const EventoEditForm = ({ closeModal, eventoId }) => {
                 </label>
                 <textarea
                     className="border border-gray-300 rounded-md text-black w-full p-2 focus:outline-none focus:ring focus:ring-indigo-500"
-                    {...register('eventoDescripcion', { require: true, maxLength: 255 })}
+                    {...register('eventoDescripcion', { required: true, maxLength: 255 })}
                 ></textarea>
                 {errors.eventoDescripcion && <span className="text-red-500">El descripcion del evento es requerido</span>}
             </div>
@@ -137,6 +183,9 @@ const EventoEditForm = ({ closeModal, eventoId }) => {
                     type="date"
                     className="border border-gray-300 rounded-md w-full p-2 text-black focus:outline-none focus:ring focus:ring-indigo-500"
                     {...register('eventoFechaInicio', { required: true })}
+                    value={startDate || ''}
+                    max={endDate}
+                    onChange={handleStartDateChange}
                 />
                 {errors.eventoFechaInicio && <span className="text-red-500">La fecha de inicio es requerida</span>}
             </div>
@@ -150,6 +199,9 @@ const EventoEditForm = ({ closeModal, eventoId }) => {
                     type="date"
                     className="border border-gray-300 rounded-md w-full p-2 text-black focus:outline-none focus:ring focus:ring-indigo-500"
                     {...register('eventoFechaFin', { required: true })}
+                    value={endDate || ''}
+                    min={startDate || undefined}
+                    onChange={handleEndDateChange}
                 />
                 {errors.eventoFechaFin && <span className="text-red-500">La fecha de fin es requerida</span>}
             </div>
@@ -161,8 +213,10 @@ const EventoEditForm = ({ closeModal, eventoId }) => {
                 </label>
                 <input
                     type="time"
-                    className="border border-gray-300 rounded-md w-ful text-black p-2 focus:outline-none focus:ring focus:ring-indigo-500"
+                    className="border border-gray-300 rounded-md w-full text-black p-2 focus:outline-none focus:ring focus:ring-indigo-500"
                     {...register('eventoHoraInicio', { required: true })}
+                    value={horaInicio}
+                    onChange={handleHoraInicioChange}
                 />
                 {errors.eventoHoraInicio && <span className="text-red-500">La hora de inicio es requerida</span>}
             </div>
@@ -176,6 +230,9 @@ const EventoEditForm = ({ closeModal, eventoId }) => {
                     type="time"
                     className="border border-gray-300 rounded-md w-full text-black p-2 focus:outline-none focus:ring focus:ring-indigo-500"
                     {...register('eventoHoraFin', { required: true })}
+                    value={horaFin}
+                    onChange={handleHoraFinChange}
+        
                 />
                 {errors.eventoHoraFin && <span className="text-red-500">La hora de fin es requerida</span>}
             </div>
@@ -210,10 +267,10 @@ const EventoEditForm = ({ closeModal, eventoId }) => {
                 {errors.tipoEvento && <span className="text-red-500">El tipo de evento es requerido</span>}
             </div>
 
-             {/* Plantilla de Diploma */}
-             <div className="mb-4">
+            {/* Plantilla de Diploma */}
+            <div className="mb-4">
                 <label htmlFor="eventoPlantillaDiploma" className="block text-sm font-medium text-black mb-1">
-                  Modificar Plantilla de Diploma
+                    Modificar Plantilla de Diploma
                 </label>
                 <input
                     type="file"
@@ -222,14 +279,17 @@ const EventoEditForm = ({ closeModal, eventoId }) => {
                     onChange={handleFileChange}
                 />
                 {fileError && <span className="text-red-500">{fileError}</span>}
+                <p className="text-sm text-gray-700 mt-2">
+                    * Solo se permiten archivos en formato PDF y con un tamaño máximo de 1 MB.
+                </p>
                 {existingFileName && (
                     <div className="flex items-center mt-2">
                         <p className="text-sm text-black mr-4">
                             Archivo actual: <strong>{existingFileName}</strong>
                         </p>
                         <a
-                            href={`${process.env.NEXT_PUBLIC_API_URL}/evento/ver/${existingFileName}`} 
-                            target="_blank" 
+                            href={`${process.env.NEXT_PUBLIC_API_URL}/evento/ver/${existingFileName}`}
+                            target="_blank"
                             rel="noopener noreferrer"
                             className="flex items-center text-indigo-600 hover:underline"
                         >
@@ -249,7 +309,7 @@ const EventoEditForm = ({ closeModal, eventoId }) => {
                     Cerrar
                 </button>
                 <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
-                    Registrar
+                    Editar
                 </button>
             </div>
         </form>

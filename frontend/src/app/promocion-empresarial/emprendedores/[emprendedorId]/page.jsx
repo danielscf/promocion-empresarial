@@ -59,7 +59,7 @@ const Page = ({ params }) => {
 
 
     return (
-        <div className="mx-auto p-6 w-screen bg-gray-300">
+        <div className="mx-auto p-6 w-screen bg-gray-100">
             {emprendedor ? (
                 <>
                     <div className="flex justify-start mb-4">
@@ -71,7 +71,7 @@ const Page = ({ params }) => {
                             Regresar
                         </button>
                     </div>
-                    <h2 className="mb-6 text-center text-2xl font-bold">Datos del Emprendedor</h2>
+                    <h2 className="mb-6 text-center text-2xl text-black font-bold">Datos del Emprendedor</h2>
                     <div className="flex flex-col items-center justify-center space-y-6 mb-3 md:space-y-0 md:space-x-6">
                         <Image
                             className="h-44 w-44 mb-4 rounded-full shadow-md"
@@ -80,7 +80,7 @@ const Page = ({ params }) => {
                             width={120}
                             height={150} 
                         />
-                        <div className="w-full max-w-sm rounded-lg border bg-white p-4 shadow-md">
+                        <div className="w-full max-w-sm rounded-lg border text-black bg-white p-4 shadow-md">
                             <p className="mb-2 text-lg"><strong>Nombre: </strong>{emprendedor.usuario.usuarioNombre}</p>
                             <p className="mb-2 text-lg"><strong>Apellidos: </strong>{emprendedor.usuario.usuarioApellidoMaterno} {emprendedor.usuario.usuarioApellidoPaterno}</p>
                             <p className="mb-2 text-lg"><strong>RUC: </strong>{emprendedor.emprendedorRuc}</p>
@@ -88,7 +88,8 @@ const Page = ({ params }) => {
                             <p className="text-lg"><strong>Rubro: </strong>{emprendedor.rubro.rubroNombre}</p>
                         </div>
                     </div>
-                    <h2 className='text-xl my-6 text-center'>Lista de Productos</h2>
+
+                    <h2 className='text-xl my-6 text-black text-center'>Lista de Productos</h2>
 
                     <ProductoList productos={currentProductos} showCheckbox={true} />
                     
@@ -101,7 +102,7 @@ const Page = ({ params }) => {
                             onPageChange={handlePageChange}
                         />
                     ) : (
-                        <p className='text-center'>Ningun producto por mostrar</p>
+                        <p className='text-center text-black'>Ningun producto por mostrar</p>
                     )}
                 </>
             ) : (

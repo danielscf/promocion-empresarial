@@ -97,7 +97,7 @@ const MarcaTable = () => {
     const marcasFiltradas = marcas?.filter(marca => marca?.marcaEstado === 0 )
 
     return (
-        <div className="overflow-hidden max-w-full border border-gray-300 rounded-lg shadow-md">
+        <div className="overflow-hidden max-w-full border border-gray-300 rounded-lg shadow-lg">
             <DataTable
                 title="Lista de Marcas"
                 columns={columns}

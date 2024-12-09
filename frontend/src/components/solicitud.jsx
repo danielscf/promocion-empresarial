@@ -25,15 +25,15 @@ const Solicitud = ({ solicitudes }) => {
             {solicitudes.map((solicitud) => (
                 <div
                     key={solicitud.solicitudId}
-                    className={`flex flex-row items-center justify-center w-full max-w-xs lg:max-w-none lg:w-full p-6 ${solicitud.solicitudEstado === 2
+                    className={`flex flex-row items-center justify-center w-full lg:max-w-none lg:w-full p-6 ${solicitud.solicitudEstado === 2
                             ? 'bg-lime-300'
                             : solicitud.solicitudEstado === 1
-                                ? 'bg-red-400'
-                                : 'bg-white'
-                        } border-gray-200 rounded-lg shadow hover:bg-gray-100 overflow-hidden`}
+                            ? 'bg-red-400'
+                            : 'bg-blue-300'
+                        } shadow-lg border border-gray-300 p-6 my-5 rounded-xl hover:bg-white overflow-hidden`}
                 >
                     <Link
-                        href={`/promocion-empresarial/mis-datos/solicitudes/${solicitud.solicitudId}`}
+                        href={`/promocion-empresarial/solicitudes/${solicitud.solicitudId}`}
                         className="block w-full"
                     >
                         <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white truncate">

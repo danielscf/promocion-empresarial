@@ -47,7 +47,7 @@ const ParticipantesPage = ({ params }) => {
     };
 
     const eliminarParticipante = useCallback(async (participacionEventoId) => {
-        setCargando(true);
+    
         try {
             const confirmed = await showConfirmation();
             if (confirmed) {
@@ -55,24 +55,20 @@ const ParticipantesPage = ({ params }) => {
             }
         } catch (error) {
             console.error('Error al eliminar la participación:', error);
-        } finally {
-            setCargando(false);
-        }
+        } 
     }, [dispatch]);
 
-    const actualizarAsistenciaParticipante = async (participacionEventoId, estado) => {
-        setCargando(true);
-        try {
-
-            await actualizarAsistencia(participacionEventoId, estado);
-
-            dispatch(fetchParticipacionByEvento(params.eventoId));
-        } catch (error) {
-            console.error('Error al actualizar la asistencia:', error);
-        } finally {
-            setCargando(false);
-        }
-    };
+    const actualizarAsistenciaParticipante = useCallback(
+        async (participacionEventoId, estado) => {
+            try {
+                await actualizarAsistencia(participacionEventoId, estado);
+                dispatch(fetchParticipacionByEvento(params.eventoId));
+            } catch (error) {
+                console.error('Error al actualizar la asistencia:', error);
+            }
+        },
+        [dispatch, params.eventoId]
+    );
 
     const columns = useMemo(() => [
         {
@@ -126,7 +122,7 @@ const ParticipantesPage = ({ params }) => {
     const participacionesFiltradas = participantes.filter(participante => participante.estado !== 3 )
 
     return (
-        <div className="p-4 bg-gray-300">
+        <div className="p-4 h-screen bg-gray-100">
             <div className="flex justify-start mb-4">
                 <button
                     onClick={() => router.push('/promocion-empresarial/eventos')}
@@ -136,7 +132,7 @@ const ParticipantesPage = ({ params }) => {
                     Regresar
                 </button>
             </div>
-            <h1 className="mt-2 text-center text-2xl font-bold">Participantes del Evento</h1>
+            <h1 className="mt-2 text-center text-black text-2xl font-bold">Participantes del Evento</h1>
 
             <div className="flex justify-end mb-4">
 
@@ -150,7 +146,7 @@ const ParticipantesPage = ({ params }) => {
                 </button>
 
             </div>
-            <div className="bg-white p-4 mt-6 shadow-md rounded">
+            <div className="bg-white p-4 mt-6 shadow-lg border border-gray-300  rounded-lg">
                 <DataTable
                     columns={columns}
                     data={participacionesFiltradas}

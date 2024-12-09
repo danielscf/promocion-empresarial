@@ -102,7 +102,7 @@ const UserTable = () => {
     const usuariosFiltrados = usuarios?.filter(usuario => usuario?.usuarioEstado !== 3) || [];
     const validData = usuariosFiltrados.filter(item => item && typeof item.usuarioId !== "undefined");
     return (
-        <div className="overflow-hidden max-w-full border border-gray-300 rounded-lg shadow-md">
+        <div className="overflow-hidden max-w-full border border-gray-300 rounded-lg shadow-lg">
             <DataTable
                 title="Lista de Usuarios"
                 columns={columns}

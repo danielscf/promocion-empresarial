@@ -43,16 +43,20 @@ const SolicitudesPage = () => {
   }, [dispatch])
 
   return (
-    <div className={`w-full h-screen px-4`}>
-      <h1 className='my-6 text-center text-2xl font-bold'>Solicitudes</h1>
+    <div className={`${currentSolicitudes.length < 3 ? 'h-screen' : ''} p-4 bg-gray-100`}>
+      <h1 className="my-6 text-center text-2xl text-black font-bold">Solicitudes</h1>
+
       <Solicitud solicitudes={currentSolicitudes} />
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        handleNextPage={handleNextPage}
-        handlePreviousPage={handlePreviousPage}
-        onPageChange={handlePageChange}
-      />
+
+      <div className="flex flex-col justify-center w-full">
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          handleNextPage={handleNextPage}
+          handlePreviousPage={handlePreviousPage}
+          onPageChange={handlePageChange}
+        />
+      </div>
     </div>
 
   )
