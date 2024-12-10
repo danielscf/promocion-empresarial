@@ -1,23 +1,13 @@
 import axios from "axios";
-import Cookies from "js-cookie";
+
 
 const productoApi = axios.create({
 
     baseURL: process.env.NEXT_PUBLIC_API_URL + '/producto',
-    withCredentials: true,
+
 
 })
 
-productoApi.interceptors.request.use(
-    (config) => {
-        const token = Cookies.get('token');
-        if (token) {
-            config.headers.Authorization = `Bearer ${token}`;
-        }
-        return config;
-    },
-    (error) => Promise.reject(error)
-);
 
 export const registrarProducto = (producto) => productoApi.post('',producto)
 

@@ -1,23 +1,14 @@
 import axios from 'axios'
-import Cookies from "js-cookie";
+
 
 const solicitudApi = axios.create({
 
     baseURL:process.env.NEXT_PUBLIC_API_URL+'/solicitud',
-    withCredentials: true,
+    
 
 }) 
 
-solicitudApi.interceptors.request.use(
-    (config) => {
-        const token = Cookies.get('token');
-        if (token) {
-            config.headers.Authorization = `Bearer ${token}`;
-        }
-        return config;
-    },
-    (error) => Promise.reject(error)
-);
+
 
 export const createSolicitud = async (solicitud, selectedFile, emprendedorRuc) => {
     const formData = new FormData();

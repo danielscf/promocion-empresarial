@@ -1,5 +1,5 @@
 import axios from 'axios'
-import Cookies from "js-cookie";
+
 
 const registroApi = axios.create({
 
@@ -8,16 +8,6 @@ const registroApi = axios.create({
 
 }) 
 
-registroApi.interceptors.request.use(
-    (config) => {
-        const token = Cookies.get('token');
-        if (token) {
-            config.headers.Authorization = `Bearer ${token}`;
-        }
-        return config;
-    },
-    (error) => Promise.reject(error)
-);
 
 export const linkTerminarRegistro = (correo) => 
     registroApi.post('/enviar-link', JSON.stringify(correo), {
