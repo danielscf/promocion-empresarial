@@ -4,8 +4,6 @@ import { faMagnifyingGlass,faArrowLeft } from '@fortawesome/free-solid-svg-icons
 import { addNewSolicitud } from '../store/solicitudSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchRubros } from '../store/rubroSlice';
-import { fetchTipoContribuyente } from '../store/tipoContribuyenteSlice';
-import { fetchTipoActividad } from '../store/tipoActividadSlice';
 import { alertPersonalizado, showErrorMessage, showSuccessMessage } from '../app/utils/messages';
 import { fetchRucInfo } from '@/api/rucApi';
 import { useRouter } from 'next/navigation';
@@ -48,9 +46,7 @@ const RegistrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
     useEffect(() => {
 
         dispatch(fetchRubros())
-        dispatch(fetchTipoContribuyente())
-        dispatch(fetchTipoActividad())
-
+       
     }, [dispatch])
 
     const handleBuscarEmprendedor = async (e) => {
