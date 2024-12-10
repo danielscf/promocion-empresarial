@@ -16,10 +16,15 @@ export const linkTerminarRegistro = (correo) =>
         }
     });
 
-export const linkRestablecerContrasena = (correo) => {
-    registroApi.post('enviar-link-cambio-contrasena',JSON.stringify(correo),{
-        headers:{
-               'Content-Type': 'application/json'
-        }
-    })
-}
+    export const linkRestablecerContrasena = (correo) => {
+        return registroApi.post(
+            'enviar-link-cambio-contrasena',
+            JSON.stringify(correo ),
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            }
+        );
+    };
+    

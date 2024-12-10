@@ -59,13 +59,13 @@ const CompletarRegistro = () => {
         <div className="h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200">
             <form onSubmit={handleSubmit(onSubmit)} className="bg-white shadow-lg rounded-xl p-8 max-w-sm w-full">
                 <div className="mb-5 w-full">
-                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                    <label className="block mb-2 text-sm font-medium text-black">
                         Nombre de Usuario
                     </label>
                     <input
                         type="text"
                         {...register("usuarioUsuario", { required: "El nombre de usuario es obligatorio." })}
-                        className="bg-gray-50 border text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                        className="bg-gray-50 border text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                     />
                     {errors.usuarioUsuario && (
                         <p className="text-red-500 text-sm mt-1">{errors.usuarioUsuario.message}</p>
@@ -73,13 +73,13 @@ const CompletarRegistro = () => {
                 </div>
 
                 <div className="mb-5 w-full">
-                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                    <label className="block mb-2 text-sm font-medium text-black">
                         Nueva Contraseña
                     </label>
                     <input
                         type="password"
                         {...register("usuarioContrasena", { required: "La nueva contraseña es obligatoria." })}
-                        className="bg-gray-50 border text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                        className="bg-gray-50 border text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                     />
                     {errors.usuarioContrasena && (
                         <p className="text-red-500 text-sm mt-1">{errors.usuarioContrasena.message}</p>
@@ -87,7 +87,7 @@ const CompletarRegistro = () => {
                 </div>
 
                 <div className="mb-5 w-full">
-                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                    <label className="block mb-2 text-sm font-medium text-black">
                         Repetir Nueva Contraseña
                     </label>
                     <input
@@ -97,7 +97,7 @@ const CompletarRegistro = () => {
                             validate: (value) =>
                                 value === watch("usuarioContrasena") || "Las contraseñas no coinciden.",
                         })}
-                        className="bg-gray-50 border text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                        className="bg-gray-50 border text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                     />
                     {errors.repetirContrasena && (
                         <p className="text-red-500 text-sm mt-1">{errors.repetirContrasena.message}</p>

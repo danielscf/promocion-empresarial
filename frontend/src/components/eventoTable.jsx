@@ -17,7 +17,7 @@ const EventoTable = () => {
     const dispatch = useDispatch();
     const eventos = useSelector((state) => state.eventos.eventos)
     const [eventoId, seteventoId] = useState(null)
-
+    const [isdisable ,setIsdisable] = useState(false)
     const [activeModal, setActiveModal] = useState(null);
 
     const openModal = (modalName) => setActiveModal(modalName);
@@ -110,12 +110,18 @@ const EventoTable = () => {
         {
             name: 'EDITAR',
             cell: row => {
+                const fechaActual = new Date();
+                const fechaFin = new Date(row.eventoFechaFin);
+
+                const disable = fechaActual > fechaFin;
+             
                 return (
                     <FontAwesomeIcon
                         className='cursor-pointer h-6 w-6 ml-8'
                         icon={faPenToSquare}
                         onClick={() => {
                             seteventoId(row.eventoId);
+                            setIsdisable(disable)
                             openModal("editarEvento");
                         }}
                     />
@@ -150,6 +156,7 @@ const EventoTable = () => {
                 <EventoEditForm
                     closeModal={closeModal}
                     eventoId={eventoId}
+                    isdisable={isdisable}
                 />
             </Modal>
             <Modal isOpen={activeModal === "registrarParticipantes"} handleClose={closeModal} title="Registrar Participantes">

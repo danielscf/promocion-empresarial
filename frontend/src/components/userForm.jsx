@@ -5,7 +5,7 @@ import { getAllRol } from '../api/rolApi';
 import { useState, useEffect } from 'react';
 import { showSuccessMessage, showErrorMessage, alertPersonalizado } from '../app/utils/messages';
 import { fetchDniInfo } from '@/api/dniApi';
-
+import { getAllUsuarios } from '@/api/userApi';
 
 const UserForm = ({ closeModal, register, handleSubmit, errors, reset, setValue }) => {
 
@@ -15,6 +15,9 @@ const UserForm = ({ closeModal, register, handleSubmit, errors, reset, setValue 
     const [disable, setdisable] = useState(false)
     const [dniError, setDniError] = useState("");
     const [telefonoError, setTelefonoError] = useState("");
+    const [dni, setDni] = useState("");
+    const [usuarios, setUsuarios] = useState([])
+    const [usuarioError, setUsuarioError] = useState("");
 
     const handleBuscar = async (e) => {
         e.preventDefault();
@@ -34,22 +37,53 @@ const UserForm = ({ closeModal, register, handleSubmit, errors, reset, setValue 
                 setValue("usuarioApellidoMaterno", datos.apellidoMaterno);
             }
         } catch (error) {
-            if (error.response) {
-                const { status } = error.response;
-                if (status === 404) {
-                    showErrorMessage('Error', 'El DNI ingresado no existe en la base de datos.');
-                } else if (status === 500) {
-                    showErrorMessage('Error', 'Error interno del servidor. Inténtelo más tarde.');
-                } else {
-                    showErrorMessage('Error', 'Ocurrió un error al procesar la solicitud.');
-                }
-            } else if (error.request) {
-                showErrorMessage('Error', 'No se pudo conectar con el servidor. Verifique su conexión a internet.');
-            } else {
-                showErrorMessage('Error', 'Ocurrió un error desconocido. Inténtelo de nuevo.');
-            }
+            showErrorMessage('Error', 'No se encontro a ninguna persona con ese dni. Por favor, verifique el número y vuelva a intentarlo.')
         }
 
+    };
+
+    const obtenerUsuarios = async () => {
+        try {
+            const response = await getAllUsuarios()
+            setUsuarios(response.data);
+        } catch (error) {
+            console.error("Error al obtener los usuarios", error);
+        }
+    };
+
+    const verificarDniExistente = (dni) => {
+        const usuarioExistente = usuarios.find(usuario => usuario.usuarioDni === dni);
+        if (usuarioExistente) {
+            setDniError("Ya hay una persona registrada con este DNI.");
+        } else {
+            setDniError("");
+        }
+    };
+
+    const handleChangeDni = (e) => {
+        const value = e.target.value.replace(/\D/g, "");
+        setDni(value);
+        restringirCantidadDigitos(e, 'dni');
+
+        if (value.length === 8) {
+            verificarDniExistente(value);
+        }
+    };
+    const verificarUsuarioExistente = (usuario) => {
+        const usuarioExistente = usuarios.find(usuarioRegistrado => usuarioRegistrado.usuarioUsuario === usuario);
+        if (usuarioExistente) {
+            setUsuarioError("El nombre de usuario ya está registrado.");
+        } else {
+            setUsuarioError("");
+        }
+    };
+
+    const handleChangeUsuario = (e) => {
+        const value = e.target.value;
+
+        if (value.length > 0) {
+            verificarUsuarioExistente(value);
+        }
     };
 
     const onSubmit = async (data) => {
@@ -98,7 +132,7 @@ const UserForm = ({ closeModal, register, handleSubmit, errors, reset, setValue 
 
         }
         cargarRoles()
-
+        obtenerUsuarios();
     }, [])
 
     return (
@@ -108,6 +142,7 @@ const UserForm = ({ closeModal, register, handleSubmit, errors, reset, setValue 
                     type="text"
                     className={`${disable ? 'bg-gray-100 text-gray-500 cursor-not-allowed' : ''} border border-gray-300 rounded-md w-full p-2 focus:outline-none focus:ring focus:ring-indigo-500`}
                     readOnly={disable}
+                    value={dni}
                     placeholder="Ingresa el DNI"
                     {...register("usuarioDni", {
                         required: "El DNI es requerido",
@@ -118,6 +153,7 @@ const UserForm = ({ closeModal, register, handleSubmit, errors, reset, setValue 
                     onChange={(e) => {
                         restringirCantidadDigitos(e, 'dni');
                         setbusqueda(e.target.value);
+                        handleChangeDni(e)
                     }}
                 />
                 <button
@@ -220,14 +256,16 @@ const UserForm = ({ closeModal, register, handleSubmit, errors, reset, setValue 
             <div className="mb-4">
                 <label htmlFor="nombreUsuario" className="block text-sm font-medium text-gray-700 mb-1">Nombre Usuario</label>
                 <input type="text" className="border border-gray-300 rounded-md w-full p-2 focus:outline-none focus:ring focus:ring-indigo-500"
-                    {...register('usuarioUsuario', { required: true })} />
+                    {...register('usuarioUsuario', { required: true })}  onChange={handleChangeUsuario}/>
                 {errors.usuarioUsuario && <span className="text-red-500">El nombre de usuario es requerido</span>}
+                {usuarioError && <span className="text-red-500 text-sm mt-1">{usuarioError}</span>}
             </div>
 
             <div className="mb-4">
                 <label htmlFor="contrasena" className="block text-sm font-medium text-gray-700 mb-1">Contraseña</label>
                 <input type="password" className="border border-gray-300 rounded-md w-full p-2 focus:outline-none focus:ring focus:ring-indigo-500"
-                    {...register('usuarioContrasena', { required: true })} />
+                    {...register('usuarioContrasena', { required: true })}
+                   />
                 {errors.usuarioContrasena && <span className="text-red-500">La contraseña es requerido</span>}
             </div>
 
@@ -239,7 +277,8 @@ const UserForm = ({ closeModal, register, handleSubmit, errors, reset, setValue 
                     }}>
                     Cerrar
                 </button>
-                <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                    disabled={dniError || usuarioError}>
                     Registrar
                 </button>
             </div>

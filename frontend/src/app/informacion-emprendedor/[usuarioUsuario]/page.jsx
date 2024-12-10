@@ -75,7 +75,7 @@ const Page = ({params}) => {
                         </div>
                     </div>
 
-                    <h2 className='text-xl my-6 text-center'>Lista de Productos</h2>
+                    <h2 className='text-xl my-6 text-black text-center'>Lista de Productos</h2>
 
                     <ProductoList productos={currentProductos} />
                     

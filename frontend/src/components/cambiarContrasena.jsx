@@ -53,7 +53,7 @@ const CambiarContrasena = () => {
             <div className="mb-5">
                 <label
                     htmlFor="contrasenaActual"
-                    className="block mb-2 text-sm font-medium text-black dark:text-white"
+                    className="block mb-2 text-sm font-medium text-black "
                 >
                     Contraseña Actual
                 </label>
@@ -70,7 +70,7 @@ const CambiarContrasena = () => {
             <div className="mb-5">
                 <label
                     htmlFor="nuevaContrasena"
-                    className="block mb-2 text-sm font-medium text-black dark:text-white"
+                    className="block mb-2 text-sm font-medium text-black"
                 >
                     Nueva Contraseña
                 </label>
@@ -87,7 +87,7 @@ const CambiarContrasena = () => {
             <div className="mb-5">
                 <label
                     htmlFor="repetirContrasena"
-                    className="block mb-2 text-sm font-medium text-black dark:text-white"
+                    className="block mb-2 text-sm font-medium text-black"
                 >
                     Repetir Nueva Contraseña
                 </label>

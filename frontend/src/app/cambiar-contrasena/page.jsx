@@ -29,7 +29,7 @@ const CambiarContrasenaPage = () => {
         try {
             const response = await axios.post(
                 `${process.env.NEXT_PUBLIC_API_URL}/registro/cambiar-contrasena?token=${token}`,
-                nuevaContrasena,
+                { nuevaContrasena },
                 {
                     headers: {
                         "Content-Type": "application/json",

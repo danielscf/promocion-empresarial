@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMagnifyingGlass,faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { faMagnifyingGlass, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { addNewSolicitud } from '../store/solicitudSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchRubros } from '../store/rubroSlice';
 import { alertPersonalizado, showErrorMessage, showSuccessMessage } from '../app/utils/messages';
 import { fetchRucInfo } from '@/api/rucApi';
 import { useRouter } from 'next/navigation';
+import { getAllUsuarios } from '@/api/userApi';
 
 const RegistrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset }) => {
 
@@ -14,10 +15,13 @@ const RegistrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
     const { rubros } = useSelector((state) => state.rubros)
     const [selectedFile, setSelectedFile] = useState(null);
     const [rucEmprendedor, setrucEmprendedor] = useState(null)
-    const [disable, setdisable] = useState(false)
+    const [disable, setdisable] = useState(true)
+    const [disableInput, setDisableInput] = useState(false)
     const [dniError, setDniError] = useState("");
+    const [dni, setDni] = useState("");
     const [rucError, setRucError] = useState("");
     const [telefonoError, setTelefonoError] = useState("");
+    const [usuarios, setUsuarios] = useState([])
     const router = useRouter();
 
     const handleFileChange = (e) => {
@@ -25,9 +29,9 @@ const RegistrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
 
         if (file) {
 
-            const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
+            const allowedTypes = ["image/jpeg", "image/png"];
             if (!allowedTypes.includes(file.type)) {
-                showErrorMessage('Archivo no válido', 'Por favor selecciona una imagen en formato JPEG, PNG o GIF.');
+                showErrorMessage('Archivo no válido', 'Por favor selecciona una imagen en formato JPEG o PNG.');
                 e.target.value = '';
                 setSelectedFile(null);
                 return;
@@ -46,7 +50,7 @@ const RegistrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
     useEffect(() => {
 
         dispatch(fetchRubros())
-       
+
     }, [dispatch])
 
     const handleBuscarEmprendedor = async (e) => {
@@ -61,7 +65,7 @@ const RegistrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
             const datos = response.data
 
             if (datos) {
-                setdisable(true);
+                setDisableInput(true)
                 setValue("emprendedorDireccion", datos.direccion)
                 setValue("emprendedorRazonSocial", datos.razonSocial)
                 setValue("emprendedorEstadoContribuyente", datos.estado)
@@ -71,7 +75,7 @@ const RegistrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
 
             }
         } catch (error) {
-            showErrorMessage(error.message)
+            showErrorMessage('Error', 'El RUC ingresado no está registrado. Por favor, verifique el número y vuelva a intentarlo.')
         }
 
     }
@@ -130,12 +134,12 @@ const RegistrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
                 },
                 emprendedor: {
                     emprendedorRuc: data.emprendedorRuc,
-                    emprendedorDireccion: data.emprendedorDireccion,
-                    emprendedorRazonSocial: data.emprendedorRazonSocial,
-                    emprendedorEstadoContribuyente: data.emprendedorCondicionContribuyente,
-                    emprendedorCondicionContribuyente: data.emprendedorCondicionContribuyente,
-                    tipoContribuyente: data.tipoContribuyente,
-                    tipoActividad: data.tipoActividad,
+                    emprendedorDireccion: data.emprendedorDireccion ?? "-",
+                    emprendedorRazonSocial: data.emprendedorRazonSocial ?? "-",
+                    emprendedorEstadoContribuyente: data.emprendedorCondicionContribuyente ?? "-",
+                    emprendedorCondicionContribuyente: data.emprendedorCondicionContribuyente ?? "-",
+                    tipoContribuyente: data.tipoContribuyente ?? "-",
+                    tipoActividad: data.tipoActividad ?? "-",
                     rubro: {
                         rubroId: data.rubroId,
                         rubroNombre: data.rubroNombre,
@@ -163,6 +167,7 @@ const RegistrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
                 if (response.type === "solicitudes/addNewSolicitud/fulfilled") {
                     showSuccessMessage("Registro exitoso", "El registro se ha realizado con éxito");
                     setdisable(false)
+                    setDisableInput(false)
                     reset();
                 } else if (response.type === "solicitudes/addNewSolicitud/rejected") {
                     const backendMessage = response?.payload?.message || "Hubo un problema al realizar el registro.";
@@ -266,7 +271,7 @@ const RegistrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
                                             message: "El teléfono debe tener 9 dígitos"
                                         }
                                     })}
-                                    onInput={(e) => { e.target.value = e.target.value.replace(/\D/g, "")}}
+                                    onInput={(e) => { e.target.value = e.target.value.replace(/\D/g, "") }}
                                     onChange={(e) => restringirCantidadDigitos(e, 'telefono')}
                                 />
                                 {errors.usuarioTelefono && (
@@ -298,18 +303,46 @@ const RegistrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
                             </div>
 
                             {/* Datos de Emprendedor */}
-                            <h3 className="text-xl font-bold mb-4 col-span-6">Datos de Emprendedor</h3>
+                            <h3 className="text-xl font-bold text-black mb-4 col-span-6">Datos de Emprendedor</h3>
 
                             <div className="flex md:flex-row justify-center items-center col-span-6">
-                                <input type="text" placeholder="Ingresar ruc" className={`${disable ? 'bg-gray-100 text-gray-500 cursor-not-allowed' : ''} border border-gray-300 rounded-md w-full text-black p-2 focus:outline-none 
-                                focus:ring focus:ring-indigo-500`} readOnly={disable} {...register('emprendedorRuc', {required: 'El RUC es requerido',})}
-                                    onInput={(e) => {e.target.value = e.target.value.replace(/\D/g, "");}}
-                                    onChange={(e) => {restringirCantidadDigitos(e, 'ruc');setrucEmprendedor(e.target.value)}}
-                                />
-                                <button className="p-2 ml-1 bg-black text-white rounded-md" onClick={handleBuscarEmprendedor}>
-                                    <FontAwesomeIcon className="mx-3 cursor-pointer" icon={faMagnifyingGlass} />
+                                <div className="relative w-full">
+                                    <input
+                                        type="text"
+                                        placeholder="Ingresar ruc"
+                                        className={`${disableInput ? 'bg-gray-100 text-gray-500 cursor-not-allowed' : ''} border border-gray-300 rounded-md w-full text-black p-2 pr-10 focus:outline-none 
+            focus:ring focus:ring-indigo-500`}
+                                        readOnly={disableInput}
+                                        {...register('emprendedorRuc', { required: true })}
+                                        onInput={(e) => { e.target.value = e.target.value.replace(/\D/g, ""); }}
+                                        onChange={(e) => { restringirCantidadDigitos(e, 'ruc'); setrucEmprendedor(e.target.value) }}
+                                    />
+                                    <button
+                                        type="button"
+                                        disable={disableInput}
+                                        className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-red-500 focus:outline-none"
+                                        onClick={() => {
+                                            setValue("emprendedorDireccion", "")
+                                            setValue("emprendedorRazonSocial", "")
+                                            setValue("emprendedorEstadoContribuyente", "" )
+                                            setValue("emprendedorCondicionContribuyente", "")
+                                            setValue("tipoActividad", "")
+                                            setValue("tipoContribuyente", "")
+                                            setDisableInput(false);
+                                        }}
+                                    >
+                                        ✕
+                                    </button>
+                                </div>
+                                {/* Botón de búsqueda */}
+                                <button
+                                    className="ml-2 p-2 bg-black text-white rounded-md hover:bg-gray-800 focus:outline-none"
+                                    onClick={handleBuscarEmprendedor}
+                                >
+                                    <FontAwesomeIcon className="mx-2 cursor-pointer" icon={faMagnifyingGlass} />
                                 </button>
                             </div>
+
                             <div className="flex md:flex-row justify-center items-center col-span-6">
                                 {(errors.emprendedorRuc || rucError) && (
                                     <span className="text-red-500 text-sm mt-1">
@@ -390,8 +423,8 @@ const RegistrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
                                 </label>
                                 <input type="text" className={`${disable ? 'bg-gray-100 text-gray-500 cursor-not-allowed' : ''} border border-gray-300 rounded-md w-full text-black p-2 focus:outline-none 
                                  focus:ring focus:ring-indigo-500`} readOnly={disable}
-                                    {...register('tipoContribuyente', { required: true })} />
-                                {errors.tipoContribuyente && <span className="text-red-500">El tipo contribuyente es requerido</span>}
+                                    {...register('tipoContribuyente')} />
+                                {/* {errors.tipoContribuyente && <span className="text-red-500">El tipo contribuyente es requerido</span>} */}
                             </div>
 
                             {/* Tipo Actividad */}
@@ -401,8 +434,8 @@ const RegistrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
                                 </label>
                                 <input type="text" className={`${disable ? 'bg-gray-100 text-gray-500 cursor-not-allowed' : ''} border border-gray-300 rounded-md w-full text-black p-2 focus:outline-none 
                                  focus:ring focus:ring-indigo-500`} readOnly={disable}
-                                    {...register('tipoActividad', { required: true })} />
-                                {errors.tipoActividad && <span className="text-red-500">El tipo de actividad es requerido</span>}
+                                    {...register('tipoActividad')} />
+                                {/* {errors.tipoActividad && <span className="text-red-500">El tipo de actividad es requerido</span>} */}
                             </div>
 
                             {/* Foto del Emprendedor */}
@@ -415,9 +448,11 @@ const RegistrarEmprendedor = ({ register, handleSubmit, errors, setValue, reset 
                                     onChange={handleFileChange}
                                 />
                                 {errors.emprendedorFoto && <span className="text-red-500">La foto es requerida</span>}
+                                <p className="text-sm w-full text-gray-700 mt-2">
+                                    * Solo se aceptan imágenes en formato JPEG  o PNG.
+                                </p>
                             </div>
-
-                            <div className="mt-6 flex justify-end col-span-6">
+                            <div className="mt-2 flex justify-end col-span-6">
                                 <button type="submit" className="rounded-md w-full bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Registrar</button>
                             </div>
                         </div>

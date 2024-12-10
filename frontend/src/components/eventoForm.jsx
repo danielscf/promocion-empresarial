@@ -13,6 +13,7 @@ const EventoForm = ({ closeModal, register, handleSubmit, errors, reset }) => {
     const [endDate, setEndDate] = useState("");
     const [horaInicio, setHoraInicio] = useState("");
     const [horaFin, setHoraFin] = useState("");
+    const currentDate = new Date().toISOString().split('T')[0];
 
     const handleStartDateChange = (e) => {
         const selectedStartDate = e.target.value;
@@ -126,6 +127,7 @@ const EventoForm = ({ closeModal, register, handleSubmit, errors, reset }) => {
                     className="border border-gray-300 rounded-md w-full text-black p-2 focus:outline-none focus:ring focus:ring-indigo-500"
                     {...register('eventoFechaInicio', { required: true })}
                     value={startDate}
+                    min={currentDate}
                     max={endDate}
                     onChange={handleStartDateChange}
                 />
@@ -141,7 +143,7 @@ const EventoForm = ({ closeModal, register, handleSubmit, errors, reset }) => {
                     type="date"
                     className="border border-gray-300 rounded-md w-full text-black p-2 focus:outline-none focus:ring focus:ring-indigo-500"
                     value={endDate}
-                    min={startDate}
+                    min={ startDate || currentDate}
                     {...register('eventoFechaFin', { required: "La fecha de fin es requerida", })}
                     onChange={handleEndDateChange}
                 />

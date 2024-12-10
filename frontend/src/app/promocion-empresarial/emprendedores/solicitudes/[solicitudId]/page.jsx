@@ -32,7 +32,7 @@ const Page = ({ params }) => {
                 linkTerminarRegistro(solicitud.usuario.usuarioCorreo)
                 dispatch(habilitarUsuario(solicitud.usuario.usuarioId))
                 showSuccessMessage('Accion exitosa', 'La solicitud a sido aprobada')
-                router.push('/promocion-empresarial/solicitudes')
+                router.push('/promocion-empresarial/emprendedores/solicitudes')
             } else if (response.type === "solicitudes/approveSolicitud/rejected") {
                 showErrorMessage('Error', 'Hubo un problema en aprobar la solicitud');
             }

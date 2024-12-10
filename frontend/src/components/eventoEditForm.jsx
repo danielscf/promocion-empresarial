@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDownload } from '@fortawesome/free-solid-svg-icons';
 import { useDispatch } from 'react-redux';
 
-const EventoEditForm = ({ closeModal, eventoId }) => {
+const EventoEditForm = ({ closeModal, eventoId,isdisable }) => {
 
     const [selectedFile, setSelectedFile] = useState(null);
     const [evento, setevento] = useState(null)
@@ -16,7 +16,7 @@ const EventoEditForm = ({ closeModal, eventoId }) => {
     const [endDate, setEndDate] = useState(null);    
     const [horaInicio, setHoraInicio] = useState(null);
     const [horaFin, setHoraFin] = useState(null);
-
+    const currentDate = new Date().toISOString().split('T')[0];
     const [fileError, setFileError] = useState('');
     const [existingFileName, setExistingFileName] = useState('');
     const { register, handleSubmit, reset, setValue, formState: { errors } } = useForm()
@@ -155,10 +155,10 @@ const EventoEditForm = ({ closeModal, eventoId }) => {
                     Nombre del Evento
                 </label>
                 <input
-                    type="text"
-                    className="border border-gray-300 rounded-md text-black w-full p-2 focus:outline-none focus:ring focus:ring-indigo-500"
-                    {...register('eventoNombre', { required: true, maxLength: 150 })}
-                />
+                    type="text" className={`${isdisable ? 'bg-gray-100 text-gray-500 cursor-not-allowed' : ''} border
+                     border-gray-300 rounded-md w-full p-2 focus:outline-none focus:ring focus:ring-indigo-500`}
+                     readOnly={isdisable} 
+                     {...register('eventoNombre', { required: true, maxLength: 150 })}/>
                 {errors.eventoNombre && <span className="text-red-500">El nombre del evento es requerido</span>}
             </div>
 
@@ -168,7 +168,9 @@ const EventoEditForm = ({ closeModal, eventoId }) => {
                     Descripción
                 </label>
                 <textarea
-                    className="border border-gray-300 rounded-md text-black w-full p-2 focus:outline-none focus:ring focus:ring-indigo-500"
+                   className={`${isdisable ? 'bg-gray-100 text-gray-500 cursor-not-allowed' : ''} border
+                   border-gray-300 rounded-md w-full p-2 focus:outline-none focus:ring focus:ring-indigo-500`}
+                   readOnly={isdisable}
                     {...register('eventoDescripcion', { required: true, maxLength: 255 })}
                 ></textarea>
                 {errors.eventoDescripcion && <span className="text-red-500">El descripcion del evento es requerido</span>}
@@ -181,9 +183,12 @@ const EventoEditForm = ({ closeModal, eventoId }) => {
                 </label>
                 <input
                     type="date"
-                    className="border border-gray-300 rounded-md w-full p-2 text-black focus:outline-none focus:ring focus:ring-indigo-500"
+                    className={`${isdisable ? 'bg-gray-100 text-gray-500 cursor-not-allowed' : ''} border
+                    border-gray-300 rounded-md w-full p-2 focus:outline-none focus:ring focus:ring-indigo-500`}
+                    readOnly={isdisable}
                     {...register('eventoFechaInicio', { required: true })}
                     value={startDate || ''}
+                    min={currentDate}
                     max={endDate}
                     onChange={handleStartDateChange}
                 />
@@ -197,10 +202,12 @@ const EventoEditForm = ({ closeModal, eventoId }) => {
                 </label>
                 <input
                     type="date"
-                    className="border border-gray-300 rounded-md w-full p-2 text-black focus:outline-none focus:ring focus:ring-indigo-500"
+                    className={`${isdisable ? 'bg-gray-100 text-gray-500 cursor-not-allowed' : ''} border
+                    border-gray-300 rounded-md w-full p-2 focus:outline-none focus:ring focus:ring-indigo-500`}
+                    readOnly={isdisable}
                     {...register('eventoFechaFin', { required: true })}
                     value={endDate || ''}
-                    min={startDate || undefined}
+                    min={ startDate || currentDate}
                     onChange={handleEndDateChange}
                 />
                 {errors.eventoFechaFin && <span className="text-red-500">La fecha de fin es requerida</span>}
@@ -213,7 +220,9 @@ const EventoEditForm = ({ closeModal, eventoId }) => {
                 </label>
                 <input
                     type="time"
-                    className="border border-gray-300 rounded-md w-full text-black p-2 focus:outline-none focus:ring focus:ring-indigo-500"
+                    className={`${isdisable ? 'bg-gray-100 text-gray-500 cursor-not-allowed' : ''} border
+                    border-gray-300 rounded-md w-full p-2 focus:outline-none focus:ring focus:ring-indigo-500`}
+                    readOnly={isdisable}
                     {...register('eventoHoraInicio', { required: true })}
                     value={horaInicio}
                     onChange={handleHoraInicioChange}
@@ -228,7 +237,9 @@ const EventoEditForm = ({ closeModal, eventoId }) => {
                 </label>
                 <input
                     type="time"
-                    className="border border-gray-300 rounded-md w-full text-black p-2 focus:outline-none focus:ring focus:ring-indigo-500"
+                    className={`${isdisable ? 'bg-gray-100 text-gray-500 cursor-not-allowed' : ''} border
+                    border-gray-300 rounded-md w-full p-2 focus:outline-none focus:ring focus:ring-indigo-500`}
+                    readOnly={isdisable}
                     {...register('eventoHoraFin', { required: true })}
                     value={horaFin}
                     onChange={handleHoraFinChange}
@@ -244,7 +255,9 @@ const EventoEditForm = ({ closeModal, eventoId }) => {
                 </label>
                 <input
                     type="text"
-                    className="border border-gray-300 rounded-md w-full text-black p-2 focus:outline-none focus:ring focus:ring-indigo-500"
+                    className={`${isdisable ? 'bg-gray-100 text-gray-500 cursor-not-allowed' : ''} border
+                    border-gray-300 rounded-md w-full p-2 focus:outline-none focus:ring focus:ring-indigo-500`}
+                    readOnly={isdisable}
                     {...register('eventoLugar', { required: true, maxLength: 255 })}
                 />
                 {errors.eventoLugar && <span className="text-red-500">El lugar es requerido</span>}
@@ -256,7 +269,9 @@ const EventoEditForm = ({ closeModal, eventoId }) => {
                     Tipo de Evento
                 </label>
                 <select
-                    className="border border-gray-300 rounded-md w-full text-black p-2 focus:outline-none focus:ring focus:ring-indigo-500"
+                  className={`${isdisable ? 'bg-gray-100 text-gray-500 cursor-not-allowed' : ''} border
+                  border-gray-300 rounded-md w-full p-2 focus:outline-none focus:ring focus:ring-indigo-500`}
+                   disabled={isdisable}
                     {...register('tipoEvento', { required: true })}
                 >
                     <option value="">Selecciona un tipo de evento</option>
@@ -274,7 +289,9 @@ const EventoEditForm = ({ closeModal, eventoId }) => {
                 </label>
                 <input
                     type="file"
-                    className="border border-gray-300 rounded-md w-full text-black p-2 focus:outline-none focus:ring focus:ring-indigo-500"
+                    className={`${isdisable ? 'bg-gray-100 text-gray-500 cursor-not-allowed' : ''} border
+                    border-gray-300 rounded-md w-full p-2 focus:outline-none focus:ring focus:ring-indigo-500`}
+                    disabled={isdisable}
                     accept="application/pdf"
                     onChange={handleFileChange}
                 />

@@ -1,6 +1,6 @@
 'use client'
 
-import React,{useState,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { Bar, Pie } from "react-chartjs-2";
 import "chart.js/auto";
 import { getAllEvento } from "@/api/eventoApi";
@@ -12,21 +12,21 @@ export default function DashboardPage() {
     const [eventos, setEventos] = useState([])
 
     useEffect(() => {
-      
-        const fetchData = async() => {
- 
+
+        const fetchData = async () => {
+
             const resEvento = await getAllEvento()
             const resEmprendedor = await getAllEmprendedores()
             setEmprendedores(resEmprendedor.data)
             setEventos(resEvento.data)
-        
+
         }
-       fetchData()
-      
+        fetchData()
+
     }, [])
 
     const filtroEmprendedores = emprendedores.filter(e => e.usuario.usuarioEstado === 2)
-    
+
     // Datos para gráficos
     const eventosPorTipo = eventos.reduce((acc, evento) => {
         acc[evento.tipoEvento] = (acc[evento.tipoEvento] || 0) + 1;
@@ -35,10 +35,10 @@ export default function DashboardPage() {
 
     //console.log(eventosPorTipo)
 
-    const today = new Date(); 
+    const today = new Date();
     const eventosFuturos = eventos.filter((evento) => {
-        const eventoFechaInicio = new Date(evento.eventoFechaInicio); 
-        return eventoFechaInicio >= today; 
+        const eventoFechaInicio = new Date(evento.eventoFechaInicio);
+        return eventoFechaInicio >= today;
     });
 
     const tiposEventoLabels = Object.keys(eventosPorTipo);
@@ -114,31 +114,33 @@ export default function DashboardPage() {
 
             </div>
 
-             {/* Tabla de Eventos */}
-             <div className="bg-white shadow rounded-lg p-6 mt-6">
+            {/* Tabla de Eventos */}
+            <div className="bg-white shadow rounded-lg p-6 mt-6">
                 <h2 className="text-lg font-semibold mb-4">Eventos Próximos</h2>
-                <table className="min-w-full table-auto border-collapse">
-                    <thead>
-                        <tr className="bg-gray-100 text-left">
-                            <th className="px-4 py-2">Nombre</th>
-                            <th className="px-4 py-2">Fecha</th>
-                            <th className="px-4 py-2">Lugar</th>
-                            <th className="px-4 py-2">Tipo</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {eventosFuturos.map((evento) => (
-                            <tr key={evento.eventoId} className="border-t">
-                                <td className="px-4 py-2">{evento.eventoNombre}</td>
-                                <td className="px-4 py-2">
-                                    {evento.eventoFechaInicio} - {evento.eventoFechaFin}
-                                </td>
-                                <td className="px-4 py-2">{evento.eventoLugar}</td>
-                                <td className="px-4 py-2">{evento.tipoEvento}</td>
+                <div className="overflow-x-auto">
+                    <table className="min-w-full table-auto border-collapse">
+                        <thead>
+                            <tr className="bg-gray-100 text-left">
+                                <th className="px-4 py-2 text-sm font-medium text-gray-600">Nombre</th>
+                                <th className="px-4 py-2 text-sm font-medium text-gray-600">Fecha</th>
+                                <th className="px-4 py-2 text-sm font-medium text-gray-600">Lugar</th>
+                                <th className="px-4 py-2 text-sm font-medium text-gray-600">Tipo</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {eventosFuturos.map((evento) => (
+                                <tr key={evento.eventoId} className="border-t hover:bg-gray-50">
+                                    <td className="px-4 py-2 text-sm text-gray-800">{evento.eventoNombre}</td>
+                                    <td className="px-4 py-2 text-sm text-gray-800">
+                                        {evento.eventoFechaInicio} - {evento.eventoFechaFin}
+                                    </td>
+                                    <td className="px-4 py-2 text-sm text-gray-800">{evento.eventoLugar}</td>
+                                    <td className="px-4 py-2 text-sm text-gray-800">{evento.tipoEvento}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     );

@@ -30,9 +30,9 @@ const ProductoForm = ({ register, handleSubmit, reset, errors, closeModal }) => 
 
         if (file) {
 
-            const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
+            const allowedTypes = ["image/jpeg", "image/png"];
             if (!allowedTypes.includes(file.type)) {
-                showErrorMessage('Archivo no válido', 'Por favor selecciona una imagen en formato JPEG, PNG o GIF.');
+                showErrorMessage('Archivo no válido', 'Por favor selecciona una imagen en formato JPEG o PNG.');
                 e.target.value = '';
                 setSelectedFoto(null);
                 setFotoUrl(null);
@@ -145,7 +145,7 @@ const ProductoForm = ({ register, handleSubmit, reset, errors, closeModal }) => 
                 </div>
             </div>
             <p className="text-sm text-gray-700 mt-2">
-                * Solo se aceptan imágenes en formato JPEG, PNG o GIF.
+                * Solo se aceptan imágenes en formato JPEG o PNG.
             </p>
             <div className="flex justify-end mt-4">
                 <button type="button" className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 mr-2" onClick={() => { reset(); closeModal() }}>
