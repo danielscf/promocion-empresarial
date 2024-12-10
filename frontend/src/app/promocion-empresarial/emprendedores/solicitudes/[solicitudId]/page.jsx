@@ -44,7 +44,7 @@ const Page = ({ params }) => {
             if (response.type === "solicitud/declineSolicitud/fulfilled") {
                 dispatch(deleteUsuario(solicitud.usuario.usuarioId))
                 showSuccessMessage('Accion exitosa', 'La solicitud a sido rechazada')
-                router.push('/promocion-empresarial/solicitudes')
+                router.push('/promocion-empresarial/emprendedores/solicitudes')
             } else if (response.type === "solicitud/declineSolicitud/rejected") {
                 showErrorMessage('Error', 'Hubo un problema en rechazar la solicitud');
             }

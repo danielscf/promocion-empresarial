@@ -33,7 +33,7 @@ const Solicitud = ({ solicitudes }) => {
                         } shadow-lg border border-gray-300 p-6 my-5 rounded-xl hover:bg-white overflow-hidden`}
                 >
                     <Link
-                        href={`/promocion-empresarial/solicitudes/${solicitud.solicitudId}`}
+                        href={`/promocion-empresarial/emprendedores/solicitudes/${solicitud.solicitudId}`}
                         className="block w-full"
                     >
                         <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white truncate">

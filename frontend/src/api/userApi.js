@@ -1,19 +1,24 @@
 import axios from 'axios'
+import Cookies from "js-cookie";
 
 const usuarioApi = axios.create({
 
-    baseURL:process.env.NEXT_PUBLIC_API_URL+'/usuario'
+    baseURL:process.env.NEXT_PUBLIC_API_URL+'/usuario',
+    withCredentials: true,
 
 }) 
 
 usuarioApi.interceptors.request.use(
     (config) => {
-        
-        config.withCredentials = true;
+        const token = Cookies.get('token');
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
         return config;
     },
     (error) => Promise.reject(error)
 );
+
 
 export const getAllUsuarios = () => usuarioApi.get('')
 export const getUsuarioById = (usuarioId) => usuarioApi.get(`/${usuarioId}`)

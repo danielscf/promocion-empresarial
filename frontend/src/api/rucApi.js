@@ -1,15 +1,19 @@
 import axios from "axios";
+import Cookies from "js-cookie";
 
 const rucApi = axios.create({
 
-    baseURL: process.env.NEXT_PUBLIC_API_URL + '/ruc'
+    baseURL: process.env.NEXT_PUBLIC_API_URL + '/ruc',
+    withCredentials: true,
 
 })
 
 rucApi.interceptors.request.use(
     (config) => {
-     
-        config.withCredentials = true;
+        const token = Cookies.get('token');
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
         return config;
     },
     (error) => Promise.reject(error)

@@ -59,12 +59,12 @@ const Page = ({ params }) => {
 
 
     return (
-        <div className="mx-auto p-6 w-screen bg-gray-100">
+        <div className="mx-auto p-6 bg-gray-100">
             {emprendedor ? (
                 <>
                     <div className="flex justify-start mb-4">
                         <button
-                            onClick={() => router.push('/promocion-empresarial/emprendedores')}
+                            onClick={() => router.push('/promocion-empresarial/emprendedores/consultar-emprendedor')}
                             className="flex items-center px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors"
                         >
                             <FontAwesomeIcon icon={faArrowLeft} className="mr-2" />

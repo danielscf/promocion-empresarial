@@ -8,7 +8,8 @@ import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { getAllEmprendedores, findEmprendedorByDni, findEmprendedorByRuc } from '@/api/emprendedorApi';
 import { alertPersonalizado } from '@/app/utils/messages';
 
-const EmprendedoresPage = () => {
+const ConsultarEmprendedorPage = () => {
+    
     const [selectedOption, setSelectedOption] = useState('');
     const [emprendedores, setEmprendedores] = useState([]);
     const [filteredEmprendedor, setFilteredEmprendedor] = useState(null);
@@ -147,6 +148,6 @@ const EmprendedoresPage = () => {
             )}
         </div>
     );
-};
+}
 
-export default EmprendedoresPage;
+export default ConsultarEmprendedorPage

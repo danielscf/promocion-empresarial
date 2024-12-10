@@ -7,7 +7,7 @@ const EmprendedorList = ({ emprendedores }) => {
     <div className="flex flex-wrap gap-4 justify-center">
       {emprendedores.map((emprendedor) => (
         <Link
-          href={`/promocion-empresarial/emprendedores/${emprendedor.emprendedorId}`}
+          href={`/promocion-empresarial/emprendedores/consultar-emprendedor/${emprendedor.emprendedorId}`}
           key={emprendedor.emprendedorId} 
         >
           <EmprendedorCard emprendedor={emprendedor} />

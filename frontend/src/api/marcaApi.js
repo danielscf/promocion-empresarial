@@ -1,14 +1,19 @@
 import axios from 'axios'
+import Cookies from "js-cookie";
 
 const marcaApi = axios.create({
 
-    baseURL:process.env.NEXT_PUBLIC_API_URL+'/marca'
+    baseURL:process.env.NEXT_PUBLIC_API_URL+'/marca',
+    withCredentials: true,
 
 }) 
+
 marcaApi.interceptors.request.use(
     (config) => {
-        
-        config.withCredentials = true;
+        const token = Cookies.get('token');
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
         return config;
     },
     (error) => Promise.reject(error)

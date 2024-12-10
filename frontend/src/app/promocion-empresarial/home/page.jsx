@@ -11,7 +11,7 @@ const HomePage = () => {
     return (
         <div className="flex flex-col bg-gradient-to-br from-gray-100 to-gray-200 justify-center items-center p-6 min-h-screen">
             <div className="flex w-full max-w-[900px] mb-8">
-                <p className="text-3xl font-semibold text-left p-4 text-gray-800 bg-blue-200 rounded-lg shadow-lg w-full">
+                <p className="text-3xl font-semibold text-left p-4 text-white bg-blue-200 rounded-lg shadow-lg w-full">
                     Bienvenido <span className="font-bold">{user?.usuarioNombre} {user?.usuarioApellidoPaterno} {user?.usuarioApellidoMaterno}</span>
                 </p>
             </div>

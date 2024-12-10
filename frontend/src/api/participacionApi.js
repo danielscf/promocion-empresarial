@@ -1,14 +1,19 @@
 import axios from 'axios'
+import Cookies from "js-cookie";
 
 const participacionApi = axios.create({
 
-    baseURL:process.env.NEXT_PUBLIC_API_URL+'/participacion'
+    baseURL:process.env.NEXT_PUBLIC_API_URL+'/participacion',
+    withCredentials: true,
 
 }) 
+
 participacionApi.interceptors.request.use(
     (config) => {
-        
-        config.withCredentials = true;
+        const token = Cookies.get('token');
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
         return config;
     },
     (error) => Promise.reject(error)
